@@ -1,12 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-
+import GoogleLink from './GoogleLink';
 import '../../styles/header.css';
 
-const Header = () => {
+function Header() {
+
     return(
         <header>
-        
             <div>
                 <nav>
                     <Link to="/">Home</Link>
@@ -18,7 +18,7 @@ const Header = () => {
         
             <div>
                 <div>GitHub Code</div>
-                <div>Sign In With Google</div>
+                <GoogleLink />
             </div>
         </header>
     )
