@@ -3,12 +3,17 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 //Import des components
 import Home from './Home';
-import Header from './layouts/Header';
+import Header from './layouts/Header/Header';
 import Footer from './layouts/Footer';
 import MyWalls from './myWalls/MyWalls';
 import Wall from './wall/Wall';
 import PostItPriority from './postItPriority/PostItPriority';
 import My404 from './My404';
+
+//Import des fonts utilisés partout du le site
+import '../fonts/Roboto/Roboto-Regular.ttf';
+import '../fonts/Roboto/Roboto-Bold.ttf';
+import '../fonts/Roboto/Roboto-Italic.ttf';
 
 function App()
 {
