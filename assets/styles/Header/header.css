@@ -16,6 +16,7 @@ header > nav{
 header > nav > div{
     display: flex;
     gap: 30px;
+    align-items: center;
 }
 
 .navigationLink{
