@@ -16,5 +16,9 @@ https://console.developers.google.com/apis/dashboard
 
 4) Se rendre sur https://console.cloud.google.com/apis/credentials?project=wallstit et créer un nouvel identifiant oauth2 (Créer des identifiants -> ID client OAuth2)
 Mettre le nom du projet: wallstit
-Ajouter l'URL de redirection qui doit être https://127.0.0.1:8000/api/google-callback
+Ajouter l'URL de redirection qui doit être https://127.0.0.1:8000/auth/google-callback
+
+### Lexik/JWT
+
+Avoir installé l'extension PHP extension=sodium
 

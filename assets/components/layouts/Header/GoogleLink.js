@@ -3,13 +3,13 @@ import axios from "axios";
 import '../../../styles/Header/googleLink.css';
 
 
-const GoogleLink = () => {
-
+function GoogleLink()
+{
     function getGoogleOAuthHref(e)
     {
         e.preventDefault();
         //Request to the controller
-        axios.get('/api/get-google-oauth2-url')
+        axios.get('/auth/get-google-oauth2-url')
         .then(function (response) {
             
             // handle success
@@ -26,6 +26,7 @@ const GoogleLink = () => {
         });*/
     }
 
+    
     return(
         <button onClick={getGoogleOAuthHref} className="gsi-material-button">
         <div className="gsi-material-button-state"></div>
