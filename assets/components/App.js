@@ -9,6 +9,7 @@ import MyWalls from './myWalls/MyWalls';
 import Wall from './wall/Wall';
 import PostItPriority from './postItPriority/PostItPriority';
 import My404 from './My404';
+import GoogleCallback from './GoogleCallback';
 
 //Import des fonts utilisés partout du le site
 import '../fonts/Roboto/Roboto-Regular.ttf';
@@ -22,8 +23,13 @@ function App()
             <Header />
 
             <Routes>
-                <Route path="/" element={<Home />} />
+                <Route index path="/" element={<Home />} />
+                
                 <Route path="/my-walls" element={<MyWalls />} />
+                
+                <Route path="/google-callback" element={<GoogleCallback />} />
+                
+                
                 <Route path="/post-it-priority" element={<PostItPriority />} />
                 <Route path="/wall/:id" element={<Wall />} />
                 <Route path="*" element={<My404 />} />

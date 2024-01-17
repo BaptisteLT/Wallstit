@@ -95,12 +95,12 @@ class GoogleOAuthService
      * @param Request $request
      * @return string Bearer token
      */
-    private function getBearerToken(Request $request): string
+    private function getBearerToken(string $code, string $state): string
     {
         $session = $this->requestStack->getSession();
 
         //Destructuring the array into variables
-        ['state' => $state, 'code' => $code, 'scope' => $scope, 'authuser' => $authuser, 'prompt' => $prompt] = $request->query->all();
+        //['state' => $state, 'code' => $code, 'scope' => $scope, 'authuser' => $authuser, 'prompt' => $prompt] = $request->query->all();
 
         //On vérifie que le state est le même qu'en session. Si ce n'est pas le cas, alors la requête n'est pas authentique ne vient pas de Google
         if(!($state === $session->get('state')))
@@ -140,16 +140,18 @@ class GoogleOAuthService
      * @param Request $request
      * @return string
      */
-    public function authenticate($request): string
+    public function authenticate(string $code, string $state): string
     {
         // Exchange the code present in the Request for a Bearer token
-        $bearerToken = $this->getBearerToken($request);
+        $bearerToken = $this->getBearerToken($code, $state);
         // Retrieve user data from Google OAuth service using the Bearer token
         $userData = $this->retrieveUserData($bearerToken);
         // Create or update user based on retrieved data
         $user = $this->getOrCreateUser($userData);
         // Generate JWT token based on user
         $jwtToken = $this->tokenManagerService->generateJWTToken($user);
+        // Generate the refresh token
+        
 
         return $jwtToken;
     }

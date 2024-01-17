@@ -21,9 +21,12 @@ use Psr\Log\LoggerInterface;
 #[Route('/auth', name: 'auth_')]
 class GoogleAuthController extends AbstractController
 {
-    public function __construct(private LoggerInterface $logger, private RequestStack $requestStack, private GoogleOAuthService $googleOAuthService, private TokenManagerService $tokenManager) {
-
-    }
+    public function __construct(
+        private LoggerInterface $logger, 
+        private RequestStack $requestStack, 
+        private GoogleOAuthService $googleOAuthService, 
+        private TokenManagerService $tokenManager
+    ) {}
 
     #[Route('/get-google-oauth2-url', name: 'get-google-oauth2-url')]
     public function generateGoogleOAuth2Url(): JsonResponse
@@ -62,28 +65,27 @@ class GoogleAuthController extends AbstractController
 
 
     /*Cette route est appelée après que l'utilisateur se soit login sur Google*/
-    #[Route('/google-callback', name: 'google-callback')]
-    public function googleAuthCallback(Request $request): Response
+    #[Route('/getJwt', name: 'getJwt')]
+    public function getJwt(Request $request): JsonResponse
     {
         try
         {
-            $jwtToken = $this->googleOAuthService->authenticate($request);
 
-            $response = new RedirectResponse('/');
-            $response->headers->setCookie(new Cookie('jwtToken', $jwtToken, new \DateTime('+5 hour')));
+            $requestData = json_decode($request->getContent(), true);
+            $code = $requestData['code'];
+            $state = $requestData['state'];
+    
+            $jwtToken = $this->googleOAuthService->authenticate($code, $state);
+
+            $response = new JsonResponse(['jwtToken' => $this->tokenManager->decodeJwtToken($jwtToken)]);//TODO: send error to client
+            $response->headers->setCookie(new Cookie('jwtToken', $jwtToken)); //SameSite=strict to defeat CSRF. Of course, keep secure and httpOnly too.
         }
         catch(\Exception $e)
         {
             $this->logger->error('An error occurred during the google authentication: ' . $e->getMessage());
-            $response = new RedirectResponse('/');//TODO: send error to client
+            $response = new JsonResponse(['error' => 'An error occurred during the Google authentication.']);//TODO: send error to client
         }
 
         return $response;
     }
-
-    /*private function getUserToken(UserInterface $user, JWTTokenManagerInterface $JWTManager)
-    {
-        return $JWTManager->create($user);
-    }*/
-
 }
