@@ -27,5 +27,12 @@ GOOGLE_OAUTH2_REDIRECT_URI=https://127.0.0.1:8000/google-callback
 
 ### Lexik/JWT
 
-Avoir installé l'extension PHP extension=sodium
+1) Avoir installé l'extension PHP extension=sodium
+
+2) Et générer les clés ainsi que la passphrase:
+###> lexik/jwt-authentication-bundle ###
+JWT_SECRET_KEY=%kernel.project_dir%/config/jwt/private.pem
+JWT_PUBLIC_KEY=%kernel.project_dir%/config/jwt/public.pem
+JWT_PASSPHRASE=YOUR_STRONG_PASSPHRASE
+###< lexik/jwt-authentication-bundle ###
 
