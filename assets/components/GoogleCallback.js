@@ -1,8 +1,12 @@
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
+import { AuthContext } from './useAuth';
+
 
 function GoogleCallback() {
+    const { setUser } = useContext(AuthContext);
+
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -28,6 +32,7 @@ function GoogleCallback() {
             // handle success
             //On récupère le jwt
             const jwt = response.data.jwtToken;
+            setUser(jwt);
         })
         .catch(function (error) {
             // handle error
