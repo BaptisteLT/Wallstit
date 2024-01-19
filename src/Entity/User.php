@@ -29,6 +29,9 @@ class User implements UserInterface
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $locale = null;
 
+    #[ORM\OneToOne(mappedBy: 'user', cascade: ['persist', 'remove'])]
+    private ?RefreshToken $refreshToken = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -116,6 +119,28 @@ class User implements UserInterface
     public function setLocale(?string $locale): static
     {
         $this->locale = $locale;
+
+        return $this;
+    }
+
+    public function getRefreshToken(): ?RefreshToken
+    {
+        return $this->refreshToken;
+    }
+
+    public function setRefreshToken(?RefreshToken $refreshToken): static
+    {
+        // unset the owning side of the relation if necessary
+        if ($refreshToken === null && $this->refreshToken !== null) {
+            $this->refreshToken->setUser(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($refreshToken !== null && $refreshToken->getUser() !== $this) {
+            $refreshToken->setUser($this);
+        }
+
+        $this->refreshToken = $refreshToken;
 
         return $this;
     }

@@ -65,8 +65,8 @@ class GoogleAuthController extends AbstractController
 
 
     /*Cette route est appelée après que l'utilisateur se soit login sur Google*/
-    #[Route('/getJwt', name: 'getJwt')]
-    public function getJwt(Request $request): JsonResponse
+    #[Route('/getTokens', name: 'getTokens')]
+    public function getTokens(Request $request): JsonResponse
     {
         try
         {
@@ -75,15 +75,20 @@ class GoogleAuthController extends AbstractController
             $code = $requestData['code'];
             $state = $requestData['state'];
     
-            $jwtToken = $this->googleOAuthService->authenticate($code, $state);
+            $tokens = $this->googleOAuthService->authenticate($code, $state);
 
-            $response = new JsonResponse(['jwtToken' => $this->tokenManager->decodeJwtToken($jwtToken)]);//TODO: send error to client
-            $response->headers->setCookie(new Cookie('jwtToken', $jwtToken)); //SameSite=strict to defeat CSRF. Of course, keep secure and httpOnly too.
+            $response = new JsonResponse([
+                'refreshTokenExpiresAt' => $tokens['refreshToken']['expiresAt'], 
+                'jwtToken' => $this->tokenManager->decodeJwtToken($tokens['jwtToken'])
+            ], 200);//TODO: display error to client
+
+            $response->headers->setCookie(new Cookie('jwtToken', $tokens['jwtToken'], 0, '/', null, true, true)); //SameSite=strict to defeat CSRF. Of course, keep secure and httpOnly too.
+            $response->headers->setCookie(new Cookie('refreshToken', $tokens['refreshToken']['refreshToken'], 0, '/', null, true, true)); //SameSite=strict to defeat CSRF. Of course, keep secure and httpOnly too.
         }
         catch(\Exception $e)
         {
             $this->logger->error('An error occurred during the google authentication: ' . $e->getMessage());
-            $response = new JsonResponse(['error' => 'An error occurred during the Google authentication.']);//TODO: send error to client
+            $response = new JsonResponse(['error' => 'An error occurred during the Google authentication.'], 500);//TODO: send error to client
         }
 
         return $response;

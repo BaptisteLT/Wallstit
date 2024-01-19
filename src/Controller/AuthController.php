@@ -11,11 +11,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class AuthController extends AbstractController
 {
-    #[Route('/api/get-user-roles', name: 'api_get_user_roles')]
+    #[Route('/api/refresh-jwt', name: 'api_refresh_jwt')]
     public function index(TokenManagerService $tokenManagerService, Request $request): JsonResponse
     {
         $token = $request->cookies->get('jwtToken');
-
 
         //Récupérer le jwtToken
         $decodedToken = $tokenManagerService->decodeJwtToken($token);

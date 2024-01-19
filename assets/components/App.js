@@ -28,6 +28,7 @@ function App()
     //Au rendu de App, useAuth est utilisé pour fetch l'utilisateur depuis le localStorage. Puis l'utilisateur peut être utilisé dans toute l'application puisqu'on le passe au AuthContext.Provider
     const { user, setUser } = useAuth();
 
+    //TODO: on App load, il faut checker que le jwt en localStorage est encore valide, si il ne l'est plus il faut faire setUser(null)
     return(
         <AuthContext.Provider value={{user, setUser}}>
             {/*JwtInvalidInterceptor va permettre de regénérer le token JWT lorsqu'il est expiré, 

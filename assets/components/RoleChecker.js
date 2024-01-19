@@ -16,7 +16,7 @@ function RoleChecker({roles = [], children})
     function userHasPermission()
     {
         //On regarde si user ou jwtPayload est null ou undefined, si c'est le cas on retourne []
-        const userRoles = user?.jwtPayload?.roles || [];
+        const userRoles = user?.jwtToken?.jwtPayload?.roles || [];
         
         //Va boucler sur roles et regarde si le role est dans userRoles, si c'est le cas on retourne true. Si aucun rôle n'est trouvé on retourne false
         return roles.some((role) => userRoles.includes(role));

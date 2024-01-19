@@ -24,15 +24,15 @@ function GoogleCallback() {
         // Use code and state as needed
         const { code, state } = queryParams;
       
-        axios.post('/auth/getJwt', {
+        axios.post('/auth/getTokens', {
             code: code,
             state: state
         })
         .then(function (response) {
             // handle success
             //On récupère le jwt
-            const jwt = response.data.jwtToken;
-            setUser(jwt);
+            const jwtAndRefreshTokenExpiration = response.data;
+            setUser(jwtAndRefreshTokenExpiration);
         })
         .catch(function (error) {
             // handle error

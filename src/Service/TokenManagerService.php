@@ -1,43 +1,61 @@
 <?php
 namespace App\Service;
 
-use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
+use DateInterval;
+use App\Entity\User;
+use DateTimeImmutable;
+use App\Entity\RefreshToken;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 class TokenManagerService
 {
-    private JWTTokenManagerInterface $JWTManager;
+    public function __construct(
+        private JWTTokenManagerInterface $JWTManager,
+        private ParameterBagInterface $params, 
+        private EntityManagerInterface $em
+    ){}
 
-    public function __construct(JWTTokenManagerInterface $JWTManager)
-    {
-        $this->JWTManager = $JWTManager;
-    }
-
-    public function generateJWTToken(UserInterface $user)
+    public function generateJWTToken(User $user): string
     {
         return $this->JWTManager->create($user);
     }
 
-    public function generateRefreshToken(UserInterface $user)
+    public function generateRefreshToken(User $user): array
     {
-        //todo Générer un UUID encodé avec un truc dans le .env
         // Generate a random token
-        $token = bin2hex(random_bytes(32));
-/*
-        // Set expiration time (e.g., 30 days)
-        $expiresAt = new \DateTime();
-        $expiresAt->modify('+30 days');
+        $token = (Uuid::v1())->__toString();
 
-        // Save the refresh token to the database
-        $refreshToken = new RefreshToken();
-        $refreshToken->setToken($token);
-        $refreshToken->setExpiresAt($expiresAt);
-        $refreshToken->setUser($user);
+        // Encode the token using HMAC with the pepper
+        $pepper = $this->params->get('refresh.token.encoding.passphrase');
+        $encodedRefreshToken = hash_hmac('sha256', $token, $pepper);
 
-        $this->entityManager->persist($refreshToken);
-        $this->entityManager->flush();
+        //Define the expiration date
+        $expirationInSeconds = $this->params->get('refresh.token.expiration.seconds');
+        $expiresAt = (new DateTimeImmutable('now'))->add(DateInterval::createFromDateString($expirationInSeconds.' seconds'));
 
-        return $token;*/
+        //Create the token (or update it with the new value)
+        $refreshToken = $user->getRefreshToken();
+        if(!$refreshToken)
+        {
+            $refreshToken = new RefreshToken();
+            $user->setRefreshToken($refreshToken);
+        }
+        $refreshToken->setValue($encodedRefreshToken)
+                     ->setExpiresAt($expiresAt);
+        
+        $this->em->persist($refreshToken);
+        $this->em->persist($user);
+        $this->em->flush();
+
+        return [
+            'refreshToken' => $encodedRefreshToken, 
+            'expiresAt' => $refreshToken->getExpiresAt()->getTimestamp()
+        ];//TODO faire le refresh du jwt avec ce refreshToken (check expiration date) + bouton logout pour kill les cookies + TTL du jwt à 15min
     }
 
     public function decodeJwtToken($token)

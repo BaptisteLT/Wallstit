@@ -49,7 +49,7 @@ class GoogleOAuthService
      * Trouve l'utilisateur en base de données ou le crée
      *
      * @param \stdClass $userData
-     * @return UserInterface
+     * @return User
      */
     private function getOrCreateUser($userData): User
     {
@@ -138,9 +138,9 @@ class GoogleOAuthService
      * Returns the JWT (check period of validity in config file)
      *
      * @param Request $request
-     * @return string
+     * @return array
      */
-    public function authenticate(string $code, string $state): string
+    public function authenticate(string $code, string $state): array
     {
         // Exchange the code present in the Request for a Bearer token
         $bearerToken = $this->getBearerToken($code, $state);
@@ -151,8 +151,8 @@ class GoogleOAuthService
         // Generate JWT token based on user
         $jwtToken = $this->tokenManagerService->generateJWTToken($user);
         // Generate the refresh token
-        
+        $refreshToken = $this->tokenManagerService->generateRefreshToken($user);
 
-        return $jwtToken;
+        return ['jwtToken' => $jwtToken, 'refreshToken' => $refreshToken];
     }
 }
