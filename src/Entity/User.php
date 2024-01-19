@@ -60,6 +60,16 @@ class User implements UserInterface
     }
 
     /**
+     * J'ai implémenté cette méthode, autrement le JWT ne voulait pas se générer quand l'entité était dans un Proxy
+     *
+     * @return string
+     */
+    public function getUsername(): string
+    {
+        return (string) $this->email;
+    }
+
+    /**
      * @see UserInterface
      */
     public function getRoles(): array
@@ -144,4 +154,6 @@ class User implements UserInterface
 
         return $this;
     }
+
+    
 }

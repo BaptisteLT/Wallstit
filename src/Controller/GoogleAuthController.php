@@ -65,7 +65,7 @@ class GoogleAuthController extends AbstractController
 
 
     /*Cette route est appelée après que l'utilisateur se soit login sur Google*/
-    #[Route('/getTokens', name: 'getTokens')]
+    #[Route('/get-tokens', name: 'getTokens')]
     public function getTokens(Request $request): JsonResponse
     {
         try
@@ -82,8 +82,8 @@ class GoogleAuthController extends AbstractController
                 'jwtToken' => $this->tokenManager->decodeJwtToken($tokens['jwtToken'])
             ], 200);//TODO: display error to client
 
-            $response->headers->setCookie(new Cookie('jwtToken', $tokens['jwtToken'], 0, '/', null, true, true)); //SameSite=strict to defeat CSRF. Of course, keep secure and httpOnly too.
-            $response->headers->setCookie(new Cookie('refreshToken', $tokens['refreshToken']['refreshToken'], 0, '/', null, true, true)); //SameSite=strict to defeat CSRF. Of course, keep secure and httpOnly too.
+            $response->headers->setCookie(new Cookie('jwtToken', $tokens['jwtToken'], 0, '/', null, true, true));
+            $response->headers->setCookie(new Cookie('refreshToken', $tokens['refreshToken']['refreshToken'], 0, '/', null, true, true));
         }
         catch(\Exception $e)
         {

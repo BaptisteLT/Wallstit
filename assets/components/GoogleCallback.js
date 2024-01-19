@@ -24,7 +24,7 @@ function GoogleCallback() {
         // Use code and state as needed
         const { code, state } = queryParams;
       
-        axios.post('/auth/getTokens', {
+        axios.post('/auth/get-tokens', {
             code: code,
             state: state
         })

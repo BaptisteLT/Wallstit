@@ -5,7 +5,10 @@ import { AuthContext } from './useAuth';
 
 
 
-
+/* 
+* Va envoyer une requête vers le serveur dans le cas où le call API intercepté retourne 401 pour demander un nouveau JWT token (en utilisant le refresh token en cookie) 
+*
+*/
 function JwtInvalidInterceptor({ children }) {
     //Récupération du contexte afin d'accéder à user et setUser
     const { user, setUser } = useContext(AuthContext);
@@ -13,8 +16,23 @@ function JwtInvalidInterceptor({ children }) {
 
     async function refreshJwtAndRefreshTokens()
     {
-        //todo: coté back retourner un nouveau token jwt en cookie et un nouveau refresh token en cookie
-        return {jwtToken: 'theJwtToken'};//todo: setUser
+        try {
+            const response = await axios.get('/auth/refresh-jwt-token');
+            console.log(response.status);
+            if (response.status === 200) {
+                return {
+                    data: response.data.data,
+                    jwtToken: response.data.jwtToken
+                };
+            } else {
+                // Handle unexpected status codes
+                throw new Error('Error refreshing tokens (refresh token expired)');
+            }
+        } catch (error) {
+            setUser(null);
+            console.error(error)
+            throw error;
+        }
     }
     
 
@@ -28,23 +46,25 @@ function JwtInvalidInterceptor({ children }) {
                     {
                         isRetried = true;
                         // Attempt to refresh the jwtToken using the refresh token
-                        const { jwtToken } = await refreshJwtAndRefreshTokens();
+                        const { data, jwtToken } = await refreshJwtAndRefreshTokens();
     
-                        setUser(jwtToken);
-                        console.log(user);
-    
-                        console.log(jwtToken);
+                        //Pour être sûr qu'on enregistre pas un undefined
+                        if(data)
+                        {
+                            setUser(data);    
+                        }
+
                         // Retry the original request with the new access token
                         const originalRequest = error.config;
-                        //originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+                        originalRequest.headers.Authorization = `Bearer ${jwtToken}`;
                         return axios(originalRequest);
                     }
                 } 
                 catch (refreshError) {
-                    //TODO: logout the user because the refresh token has become invalid
+                    //We logout the user because the refresh token has become invalid or an error occured
                     setUser(null);
                     // Handle refresh error (e.g., logout the user)
-                    console.error('Error fetching data after token refresh:', refreshError);
+                    console.log('Error fetching data after token refresh:', refreshError);
                     // La requête axios initiale va intercepter l'erreur
                     return Promise.reject(refreshError);
                 }

@@ -10,13 +10,16 @@ function MyWalls()
     // Fetch data when the component mounts
     const fetchData = async () => {
         try {
-            const response = await axios.get('/api');
+            const response = await axios.get('/api', {
+                withCredentials: true,
+            });
             // Assuming the response.data is an array of walls
             console.log(response);
             //setWalls(response.data);
         } catch (error) {
-            console.error('Error fetching walls:', error);
+            console.log('Error fetching walls:', error);
         }
+        console.log('/api call done');
     };
     
     
