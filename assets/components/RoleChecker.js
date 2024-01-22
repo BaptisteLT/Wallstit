@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { AuthContext } from "./useAuth";
 
 /**
@@ -7,6 +7,7 @@ import { AuthContext } from "./useAuth";
 function RoleChecker({roles = [], children})
 {
     const { user } = useContext( AuthContext );
+
 
     return(
         userHasPermission() ? <>{ children }</> : null
@@ -21,7 +22,6 @@ function RoleChecker({roles = [], children})
         //Va boucler sur roles et regarde si le role est dans userRoles, si c'est le cas on retourne true. Si aucun rôle n'est trouvé on retourne false
         return roles.some((role) => userRoles.includes(role));
     }
-
 
 }
 

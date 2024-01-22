@@ -1,4 +1,4 @@
-import React,{ useEffect, useContext } from 'react';
+import React,{ useEffect, useContext, useState } from 'react';
 import axios from 'axios';
 
 import { AuthContext } from './useAuth';
@@ -12,13 +12,14 @@ import { AuthContext } from './useAuth';
 function JwtInvalidInterceptor({ children }) {
     //Récupération du contexte afin d'accéder à user et setUser
     const { user, setUser } = useContext(AuthContext);
-    let isRetried = false;
+    const [isRetried, setIsRetried] = useState(false);
 
     async function refreshJwtAndRefreshTokens()
     {
         try {
-            const response = await axios.get('/auth/refresh-jwt-token');
-            console.log(response.status);
+            const response = await axios.get('/auth/refresh-jwt-token', {
+                validateStatus: null //Permet que cette requête ne soit pas catch pas l'interceptor. Car si elle retournait 401, ça faisait une boucle infinie.
+            });
             if (response.status === 200) {
                 return {
                     data: response.data.data,
@@ -28,9 +29,10 @@ function JwtInvalidInterceptor({ children }) {
                 // Handle unexpected status codes
                 throw new Error('Error refreshing tokens (refresh token expired)');
             }
+        //On entre ici quand le refresh token est expiré
         } catch (error) {
             setUser(null);
-            console.error(error)
+ 
             throw error;
         }
     }
@@ -44,7 +46,8 @@ function JwtInvalidInterceptor({ children }) {
                     //Afin d'éviter une boucle infinie dans le cas où le refresh token est invalide ou qu'il y a une erreur côté serveur
                     if(!isRetried)
                     {
-                        isRetried = true;
+                        setIsRetried(true);
+                        //isRetried = true;
                         // Attempt to refresh the jwtToken using the refresh token
                         const { data, jwtToken } = await refreshJwtAndRefreshTokens();
     
@@ -59,8 +62,10 @@ function JwtInvalidInterceptor({ children }) {
                         originalRequest.headers.Authorization = `Bearer ${jwtToken}`;
                         return axios(originalRequest);
                     }
+                    setIsRetried(false);
                 } 
                 catch (refreshError) {
+                    //isRetried = false;//????
                     //We logout the user because the refresh token has become invalid or an error occured
                     setUser(null);
                     // Handle refresh error (e.g., logout the user)

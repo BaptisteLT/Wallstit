@@ -1,5 +1,6 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+
 
 //Import des components
 import Home from './home/Home';
@@ -10,6 +11,7 @@ import Wall from './wall/Wall';
 import PostItPriority from './postItPriority/PostItPriority';
 import My404 from './layouts/My404';
 import GoogleCallback from './GoogleCallback';
+import UserCheckComponent from './UserCheckComponent';
 
 //Composant axios interceptor pour renouveler les tokens JWT expirés
 import JwtInvalidInterceptor from './JwtInvalidInterceptor';
@@ -25,6 +27,7 @@ import { AuthContext, useAuth } from './useAuth';
 
 function App()
 {
+    
     //Au rendu de App, useAuth est utilisé pour fetch l'utilisateur depuis le localStorage. Puis l'utilisateur peut être utilisé dans toute l'application puisqu'on le passe au AuthContext.Provider
     const { user, setUser } = useAuth();
 
@@ -38,16 +41,19 @@ function App()
             3) Si la requête passe alors c'est bon, si elle ne passe pas cela signifie que le refresh token a expiré et que l'utilisateur doit se reconnecter*/}
             <JwtInvalidInterceptor>
                 <Router>
-                    <Header />
-                    <Routes>
-                        <Route index path="/" element={<Home />} /> 
-                        <Route path="/my-walls" element={<MyWalls />} />
-                        <Route path="/google-callback" element={<GoogleCallback />} />
-                        <Route path="/post-it-priority" element={<PostItPriority />} />
-                        <Route path="/wall/:id" element={<Wall />} />
-                        <Route path="*" element={<My404 />} />
-                    </Routes>
-                    <Footer />
+                    {/* UserCheckComponent Va vérifier que le refresh token en localStorage n'est pas expiré, afin de déconnecter l'utilisateur dans le cas présent */}
+                    <UserCheckComponent>
+                        <Header />
+                        <Routes>
+                            <Route index path="/" element={<Home />} /> 
+                            <Route path="/my-walls" element={<MyWalls />} />
+                            <Route path="/google-callback" element={<GoogleCallback />} />
+                            <Route path="/post-it-priority" element={<PostItPriority />} />
+                            <Route path="/wall/:id" element={<Wall />} />
+                            <Route path="*" element={<My404 />} />
+                        </Routes>
+                        <Footer />
+                    </UserCheckComponent>
                 </Router>
             </JwtInvalidInterceptor>
         </AuthContext.Provider>

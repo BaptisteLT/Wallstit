@@ -6,6 +6,7 @@ function MyWalls()
 {
     const [walls, setWalls] = useState([]);
 
+    //TODO: trait created_at et updated_at
 
     // Fetch data when the component mounts
     const fetchData = async () => {
