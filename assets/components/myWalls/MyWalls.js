@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import axios from 'axios';
+import Card from './Card';
+import CreateCard from './CreateCard';
+import '../../styles/MyWalls/mainPage.css';
 
 function MyWalls()
 {
@@ -30,9 +32,14 @@ function MyWalls()
 
 
     return(
-        <div>
-            <h1>This is my MyWalls</h1>
-            <Link to="/wall/1">Wall 1</Link>
+        <div id="main-wrapper">
+            <CreateCard />
+            <Card index={1} title={"Card title"} description={"Description"} href={"/wall/" + 1} />
+            <Card index={2} title={"Card title"}  description={"Description"} href={"/wall/" + 2}/>
+            <Card index={3} title={"Card title"} description={"Description"} href={"/wall/" + 3} />
+            <Card index={4} title={"Card title"} description={"Description"} href={"/wall/" + 4} />
+            <Card index={5} title={"Card title"} description={"Description"} href={"/wall/" + 5} />
+            <Card index={6} title={"Card title"} description={"Description"} href={"/wall/" + 6} />
         </div>
     )
 }

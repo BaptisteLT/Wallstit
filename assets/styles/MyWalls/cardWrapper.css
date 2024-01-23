@@ -1,0 +1,19 @@
+
+
+.card-wrapper{
+    min-width: 250px;
+    flex: 1;
+}
+
+h2{
+    margin: 0;
+    text-decoration: none;
+}
+
+a{
+    text-decoration: none;
+    color: #1F1F1F;
+}
+
+
+

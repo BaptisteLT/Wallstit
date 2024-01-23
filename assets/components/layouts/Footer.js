@@ -1,10 +1,11 @@
 import React from 'react';
+import '../../styles/Footer/main.css';
 
 const Footer = () => {
     return(
-        <div>
-            <h1>This is my footer</h1>
-        </div>
+        <footer>
+            <p>2023 © Baptiste LANTRAN. Made with love using Symfony & React ❤️</p>
+        </footer>
     )
 }
 export default Footer;

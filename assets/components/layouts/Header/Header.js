@@ -31,8 +31,10 @@ function Header() {
             
                 <div>
                     <GitHubLink />
-                    //TODO ne pas afficher google si l'utilisateur est login et afficher l'icone et le menu déroulant
-                    <GoogleLink />
+                    <RoleChecker removedIfLoggedIn={true}>
+                        <GoogleLink />
+                    </RoleChecker>
+                    TODO logout
                 </div>
             </nav>
         </header>
