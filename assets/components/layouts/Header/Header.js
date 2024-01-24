@@ -31,7 +31,7 @@ function Header() {
             
                 <div>
                     <GitHubLink />
-                    <RoleChecker removedIfLoggedIn={true}>
+                    <RoleChecker removeIfLoggedIn={true}>
                         <GoogleLink />
                     </RoleChecker>
                     TODO logout

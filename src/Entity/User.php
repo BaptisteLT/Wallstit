@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -31,6 +33,14 @@ class User implements UserInterface
 
     #[ORM\OneToOne(mappedBy: 'user', cascade: ['persist', 'remove'])]
     private ?RefreshToken $refreshToken = null;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Wall::class, orphanRemoval: true)]
+    private Collection $walls;
+
+    public function __construct()
+    {
+        $this->walls = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -151,6 +161,36 @@ class User implements UserInterface
         }
 
         $this->refreshToken = $refreshToken;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Wall>
+     */
+    public function getWalls(): Collection
+    {
+        return $this->walls;
+    }
+
+    public function addWall(Wall $wall): static
+    {
+        if (!$this->walls->contains($wall)) {
+            $this->walls->add($wall);
+            $wall->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeWall(Wall $wall): static
+    {
+        if ($this->walls->removeElement($wall)) {
+            // set the owning side to null (unless already changed)
+            if ($wall->getUser() === $this) {
+                $wall->setUser(null);
+            }
+        }
 
         return $this;
     }

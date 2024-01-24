@@ -17,9 +17,9 @@ function RoleChecker({removeIfLoggedIn=false, roles = [], children})
     function userHasPermission()
     {
         //Si l'utilisateur est connecté et que removeIfLoggedIn vaut true, alors on n'affiche pas l'élément
-        if(user && removeIfLoggedIn)
+        if(removeIfLoggedIn && user === null)
         {
-            return false;
+            return true;
         }
 
         //On regarde si user ou jwtPayload est null ou undefined, si c'est le cas on retourne []

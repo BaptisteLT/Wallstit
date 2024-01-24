@@ -30,6 +30,33 @@ class TokenManagerService
     }
 
     /**
+     * Retourne un utilisateur en prenant la requête et les cookies contenus dans celle-ci
+     *
+     * @param Request $request
+     * @return ?User
+     */
+    public function findUserInRequest($request): ?User
+    {
+        //TODO: faire un middleware qui récupère directement le User de préférence
+        if(!$request->cookies->has('jwtToken'))
+        {
+            throw new AccessDeniedException('jwtToken not found');
+        }
+
+        $jwtToken = $request->cookies->get('jwtToken');
+        $decodedJwt = $this->decodeJwtToken($jwtToken);
+        
+        $user = $this->userRepository->findOneBy(['email' => $decodedJwt['jwtPayload']->username]);
+        
+        if(!$user)
+        {
+            throw new AccessDeniedException('User not found');
+        }
+        
+        return $user;
+    }
+
+    /**
      * Encrypt or decrypt the refresh token
      *
      * @param string $token
