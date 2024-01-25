@@ -1,11 +1,9 @@
 .card{
     height: 250px;
     width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     border-radius: 3px;
     background: #e6e6e6;
+    position: relative;
 }
 
 .card:hover {
@@ -15,6 +13,27 @@
 
 .card>svg{
     font-size: 30px;
+}
+
+.card>a{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.deleteConfirm{
+    visibility: hidden;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #c9c9c9;
+    z-index: 2;
 }
 
 .card.loading{
@@ -36,4 +55,42 @@
     100%{
         background-position: 468px 0
     }
+}
+.initialDeleteIcon > *{
+    color: #1F1F1F;
+    scale: 1;
+}
+
+.initialDeleteIcon > *:hover{
+    color: #000000;
+    scale: 1.1;
+}
+
+
+.deleteIcon > *{
+    color: #ff0015;
+    scale: 1.4;
+}
+
+.deleteIcon > *:hover{
+    color: #db0012;
+    scale: 1.6;
+}
+
+.closeIcon > *{
+    color: #1F1F1F;
+    scale: 1.2;
+}
+
+.closeIcon > *:hover{
+    color: #000000;
+    scale: 1.4;
+}
+
+
+.topRight{
+    z-index: 2;
+    position: absolute;
+    top: 8px;
+    right: 8px;
 }

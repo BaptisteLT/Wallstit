@@ -7,12 +7,7 @@ function LoadingCard()
 {
 
     return(
-        <CardWrapper style={{marginBottom: '18px'}}>
-            <Link to='#'>
-                <CardContent isLoading={true}></CardContent>
-            </Link>
-            <p>&nbsp;</p>
-        </CardWrapper>
+        <CardWrapper isLoading={true}></CardWrapper>
     )
 }
 export default LoadingCard;

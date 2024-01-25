@@ -1,11 +1,16 @@
 import React from 'react';
 import '../../styles/MyWalls/cardWrapper.css';
+import DeleteIcon from '@mui/icons-material/Delete';
 
-function CardWrapper({children})
+function CardWrapper({isLoading = false, description, children})
 {
     return(
         <div className="card-wrapper">
-           {children}
+            <span className="initialDeleteIcon topRight"><DeleteIcon /></span>
+            <div className={'card '+ (isLoading ? 'loading' : '')}>
+                {children}
+            </div>
+            <p>{description ? description : <>&nbsp;</>}</p>
         </div>
     )
 }

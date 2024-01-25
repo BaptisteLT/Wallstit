@@ -32,13 +32,12 @@ function CardCreate()
     }
 
     return(
-        <CardWrapper style={{marginBottom: '18px'}}>
+        <CardWrapper description={'Create a new Wall.'}>
             <Link onClick={createAndRedirect} to='#'>
                 <CardContent>
                     <AddIcon />
                 </CardContent>
             </Link>
-            <p>Create a new Wall.</p>
         </CardWrapper>
     )
 }

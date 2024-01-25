@@ -3,6 +3,7 @@
 .card-wrapper{
     min-width: 250px;
     flex: 1;
+    position: relative;
 }
 
 h2{

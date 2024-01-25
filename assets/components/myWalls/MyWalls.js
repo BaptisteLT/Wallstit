@@ -3,7 +3,6 @@ import axios from 'axios';
 import Card from './Card';
 import CreateCard from './CreateCard';
 import LoadingCards from './LoadingCards';
-import PlaceholderLoading from 'react-placeholder-loading'
 import '../../styles/MyWalls/mainPage.css';
 
 function MyWalls()
