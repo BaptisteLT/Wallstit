@@ -1,20 +1,25 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import CardWrapper from './CardWrapper';
 import CardContent from './CardContent';
 import '../../styles/MyWalls/card.css';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CloseIcon from '@mui/icons-material/Close';
+import { Visibility } from '@mui/icons-material';
 
 function Card({href, title, description})
 {
-    function handleDelete()
+    const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+
+    function handleDeleteOpen()
     {
+        setIsDeleteOpen(!isDeleteOpen);
+        console.log(isDeleteOpen);
         //todo: cliquer sur le bouton doit pouvoir ouvrir le menu de suppression
     }
 
     return(
-        <CardWrapper description={description} handleDelete={handleDelete}>
+        <CardWrapper description={description} handleDelete={handleDeleteOpen}>
 
             <Link to={href}>
                 <CardContent>
@@ -22,9 +27,9 @@ function Card({href, title, description})
                 </CardContent>
             </Link>
 
-            <div className='deleteConfirm'>
-                <span className="deleteIcon"><DeleteIcon /></span>
-                <span className="closeIcon topRight"><CloseIcon /></span>
+            <div className='deleteConfirm' style={{visibility: (isDeleteOpen ? 'visible' :  'hidden')}}>
+                <span className="deleteIcon icon"><DeleteIcon /></span>
+                <span className="closeIcon icon topRight" onClick={handleDeleteOpen}><CloseIcon /></span>
             </div>
 
 

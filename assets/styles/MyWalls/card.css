@@ -25,7 +25,6 @@
 }
 
 .deleteConfirm{
-    visibility: hidden;
     position: absolute;
     width: 100%;
     height: 100%;
@@ -84,13 +83,15 @@
 
 .closeIcon > *:hover{
     color: #000000;
-    scale: 1.4;
 }
-
 
 .topRight{
     z-index: 2;
     position: absolute;
     top: 8px;
     right: 8px;
+}
+
+.icon{
+    cursor: pointer;
 }

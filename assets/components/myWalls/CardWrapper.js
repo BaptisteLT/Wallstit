@@ -2,11 +2,11 @@ import React from 'react';
 import '../../styles/MyWalls/cardWrapper.css';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-function CardWrapper({isLoading = false, description, children})
+function CardWrapper({handleDelete = null, isLoading = false, description, children})
 {
     return(
         <div className="card-wrapper">
-            <span className="initialDeleteIcon topRight"><DeleteIcon /></span>
+            { handleDelete ? <span onClick={handleDelete} className="initialDeleteIcon icon topRight"><DeleteIcon /></span> : null }
             <div className={'card '+ (isLoading ? 'loading' : '')}>
                 {children}
             </div>
