@@ -1,9 +1,9 @@
 import React from 'react';
 
-function CardContent({children})
+function CardContent({isLoading = false,children})
 {
     return(
-        <div className='card'>
+        <div className={'card ' + (isLoading === true ? 'loading' : '')}>
             {children}
         </div> 
     )

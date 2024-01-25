@@ -1,14 +1,39 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import AddIcon from '@mui/icons-material/Add';
+import axios from "axios";
+
 import CardWrapper from './CardWrapper';
 import CardContent from './CardContent';
-import AddIcon from '@mui/icons-material/Add';
 
 function CardCreate()
 {
+    const navigate = useNavigate();
+
+    function createAndRedirect()
+    {
+        axios.post('/api/my-wall')
+        .then(function(response){
+            if(response.status === 200)
+            {
+                const newWallId = response.data.id;
+                //Permet de se rendre sur le nouveau mur crée
+                navigate('/wall/' + newWallId);
+            }
+            else
+            {
+                throw new Error;
+            }
+            console.log(response);
+        })
+        .catch(function(error){
+            alert('error while trying to create a new wall');
+        })
+    }
+
     return(
         <CardWrapper style={{marginBottom: '18px'}}>
-            <Link to='#'>
+            <Link onClick={createAndRedirect} to='#'>
                 <CardContent>
                     <AddIcon />
                 </CardContent>

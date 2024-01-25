@@ -3,9 +3,9 @@
 namespace App\Controller\Api;
 
 use App\Entity\Wall;
+use Doctrine\ORM\EntityManager;
 use App\Repository\UserRepository;
 use App\Service\TokenManagerService;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,6 +14,9 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\AccessDeniedException;
+use Symfony\Component\Messenger\Transport\Serialization\Serializer;
+use Symfony\Component\Serializer\Context\Normalizer\ObjectNormalizerContextBuilder;
+use Symfony\Component\Serializer\SerializerInterface;
 
 #[Route('/api')]
 class MyWallsController extends AbstractController
@@ -22,11 +25,12 @@ class MyWallsController extends AbstractController
         private TokenManagerService $tokenManager,
         private RequestStack $requestStack,
         private UserRepository $userRepository,
-        private EntityManagerInterface $em
+        private EntityManagerInterface $em,
+        private SerializerInterface $serializer
     ){}
 
     //En création
-    #[Route('/my-wall', name: 'my-wall'/*, methods: ['POST']*/)]
+    #[Route('/my-wall', name: 'create-my-wall', methods: ['POST'])]
     public function createWall(Request $request): JsonResponse
     {
         try
@@ -54,6 +58,36 @@ class MyWallsController extends AbstractController
         {
             $response = new JsonResponse(['error' => 'Server error while trying to create a new wall.'], Response::HTTP_INTERNAL_SERVER_ERROR);
         } 
+
+        return $response;
+    }
+
+    //En création
+    #[Route('/my-walls', name: 'get-my-walls'/*, methods: ['POST']*/)]
+    public function getWalls(Request $request): JsonResponse
+    {
+        try
+        {
+            $user = $this->tokenManager->findUserInRequest($request);
+
+            $walls = $user->getWalls();
+
+            $context = (new ObjectNormalizerContextBuilder())
+            ->withGroups('get-walls')
+            ->toArray();
+            
+            $json = $this->serializer->serialize($walls, 'json', $context);
+
+            $response = new JsonResponse(['walls' => $json], Response::HTTP_OK);
+        }
+        catch(AccessDeniedException $e)
+        {
+            $response = new JsonResponse(['error' => 'Session has expired.'], Response::HTTP_UNAUTHORIZED);
+        }
+        catch(\Exception $e)
+        {
+            $response = new JsonResponse(['error' => 'Server error while trying to create a new wall.'], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
 
         return $response;
     }

@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Symfony\Component\Serializer\Annotation\Groups;
 use App\Entity\Traits\CreateUpdateTrait;
 use App\Repository\WallRepository;
 use Doctrine\ORM\Mapping as ORM;
@@ -12,11 +13,13 @@ class Wall
 {
     use CreateUpdateTrait;
 
+    #[Groups(['get-walls'])]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Groups(['get-walls'])]
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
@@ -26,9 +29,11 @@ class Wall
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $borderColor = null;
 
+    #[Groups(['get-walls'])]
     #[ORM\Column]
     private ?int $width = null;
 
+    #[Groups(['get-walls'])]
     #[ORM\Column(nullable: true)]
     private ?int $height = null;
 
@@ -36,6 +41,7 @@ class Wall
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 
+    #[Groups(['get-walls'])]
     #[ORM\Column(length: 100, nullable: true)]
     private ?string $description = null;
 

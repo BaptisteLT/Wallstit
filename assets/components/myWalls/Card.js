@@ -14,7 +14,7 @@ function Card({href, title, description})
                 </CardContent>
             </Link>
             
-            <p>{description}</p>
+            <p>{description ? description : <>&nbsp;</>}</p>
         </CardWrapper>
     )
 }
