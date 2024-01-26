@@ -18,13 +18,14 @@ header > nav{
 
 header > nav > div{
     display: flex;
-    gap: 30px;
+    gap: 4px;
     align-items: center;
 }
 
 .navigationLink{
     text-decoration: none;
     color: #1f1f1f;
+    padding: 12px 20px;
 }
 .navigationLink.active{
     font-weight: bold;
