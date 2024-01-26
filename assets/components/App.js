@@ -20,6 +20,8 @@ import JwtInvalidInterceptor from './JwtInvalidInterceptor';
 import '../fonts/Roboto/Roboto-Regular.ttf';
 import '../fonts/Roboto/Roboto-Bold.ttf';
 import '../fonts/Roboto/Roboto-Italic.ttf';
+import '../fonts/Roboto/Roboto-Black.ttf';
+import '../fonts/Roboto/Roboto-Medium.ttf';
 
 //Contexte qui permet à toute l'application de bénéficier de user et setUser
 import { AuthContext, useAuth } from './useAuth';

@@ -5,7 +5,7 @@ import CardContent from './CardContent';
 import '../../styles/MyWalls/card.css';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CloseIcon from '@mui/icons-material/Close';
-import { Visibility } from '@mui/icons-material';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
 function Card({href, title, description})
 {
@@ -28,7 +28,7 @@ function Card({href, title, description})
             </Link>
 
             <div className='deleteConfirm' style={{visibility: (isDeleteOpen ? 'visible' :  'hidden')}}>
-                <span className="deleteIcon icon"><DeleteIcon /></span>
+                <span className="deleteIcon icon"><DeleteForeverIcon /></span>
                 <span className="closeIcon icon topRight" onClick={handleDeleteOpen}><CloseIcon /></span>
             </div>
 

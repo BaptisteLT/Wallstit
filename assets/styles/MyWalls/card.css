@@ -33,6 +33,7 @@
     align-items: center;
     background-color: #c9c9c9;
     z-index: 2;
+    border-radius: 3px;
 }
 
 .card.loading{
