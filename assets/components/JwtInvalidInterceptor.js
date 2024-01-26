@@ -1,6 +1,6 @@
 import React,{ useEffect, useContext, useState } from 'react';
 import axios from 'axios';
-
+import { toast } from 'react-toastify';
 import { AuthContext } from './useAuth';
 
 
@@ -65,6 +65,7 @@ function JwtInvalidInterceptor({ children }) {
                     setIsRetried(false);
                 } 
                 catch (refreshError) {
+                    toast.error('Session has expired. Please log-in again.');
                     //isRetried = false;//????
                     //We logout the user because the refresh token has become invalid or an error occured
                     setUser(null);

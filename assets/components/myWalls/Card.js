@@ -1,15 +1,39 @@
-import React, { useState } from 'react';
+import React, { useState, unmountComponentAtNode } from 'react';
 import { Link } from 'react-router-dom';
 import CardWrapper from './CardWrapper';
 import CardContent from './CardContent';
 import '../../styles/MyWalls/card.css';
-import DeleteIcon from '@mui/icons-material/Delete';
 import CloseIcon from '@mui/icons-material/Close';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import axios from 'axios';
+import { toast } from 'react-toastify';
 
-function Card({href, title, description})
+function Card({href, title, description, id})
 {
     const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+    const [isCardVisible, setIsCardVisible] = useState(true);
+
+    function handleWallDeletion() {
+        //TODO: CSRF
+        axios.delete('/api/my-wall/delete/'+id)
+        .then(function(response){
+            if(response.status === 200)
+            {
+                setIsCardVisible(false);
+                toast.success("Wall removed successfully!")
+            }
+            else
+            {
+                throw new Error;
+            }
+        })
+        .catch(function(error){
+            toast.error('An error occured while trying to delete the wall.');
+        })
+
+
+
+    }
 
     function handleDeleteOpen()
     {
@@ -19,7 +43,7 @@ function Card({href, title, description})
     }
 
     return(
-        <CardWrapper description={description} handleDelete={handleDeleteOpen}>
+        <CardWrapper styling={{ display: isCardVisible ? 'block' : 'none' }} description={description} handleDelete={handleDeleteOpen}>
 
             <Link to={href}>
                 <CardContent>
@@ -28,7 +52,7 @@ function Card({href, title, description})
             </Link>
 
             <div className='deleteConfirm' style={{visibility: (isDeleteOpen ? 'visible' :  'hidden')}}>
-                <span className="deleteIcon icon"><DeleteForeverIcon /></span>
+                <span onClick={handleWallDeletion} className="deleteIcon icon"><DeleteForeverIcon /></span>
                 <span className="closeIcon icon topRight" onClick={handleDeleteOpen}><CloseIcon /></span>
             </div>
 

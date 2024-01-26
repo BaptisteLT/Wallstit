@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from "axios";
 import '../../../styles/Header/googleLink.css';
+import { toast } from 'react-toastify';
 
 
 function GoogleLink()
@@ -19,11 +20,8 @@ function GoogleLink()
         })
         .catch(function (error) {
             // handle error
-            alert('Impossible de se connecter avec Google pour le moment :/')
+            toast.error("Impossible to login with Google at the moment.")
         })
-        /*.finally(function () {
-            // always executed
-        });*/
     }
 
     

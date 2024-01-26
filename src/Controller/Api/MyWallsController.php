@@ -5,6 +5,7 @@ namespace App\Controller\Api;
 use App\Entity\Wall;
 use Doctrine\ORM\EntityManager;
 use App\Repository\UserRepository;
+use App\Repository\WallRepository;
 use App\Service\TokenManagerService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,7 +27,8 @@ class MyWallsController extends AbstractController
         private RequestStack $requestStack,
         private UserRepository $userRepository,
         private EntityManagerInterface $em,
-        private SerializerInterface $serializer
+        private SerializerInterface $serializer,
+        private WallRepository $wallRepository
     ){}
 
     //En création
@@ -63,7 +65,7 @@ class MyWallsController extends AbstractController
     }
 
     //En création
-    #[Route('/my-walls', name: 'get-my-walls'/*, methods: ['POST']*/)]
+    #[Route('/my-walls', name: 'get-my-walls', methods: ['GET'])]
     public function getWalls(Request $request): JsonResponse
     {
         try
@@ -79,6 +81,38 @@ class MyWallsController extends AbstractController
             $json = $this->serializer->serialize($walls, 'json', $context);
 
             $response = new JsonResponse(['walls' => $json], Response::HTTP_OK);
+        }
+        catch(AccessDeniedException $e)
+        {
+            $response = new JsonResponse(['error' => 'Session has expired.'], Response::HTTP_UNAUTHORIZED);
+        }
+        catch(\Exception $e)
+        {
+            $response = new JsonResponse(['error' => 'Server error while trying to create a new wall.'], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
+        return $response;
+    }
+
+    
+    //En création
+    #[Route('/my-wall/delete/{id}', name: 'delete-my-wall', methods: ['DELETE'])]
+    public function deleteWall(int $id, Request $request): JsonResponse
+    {
+        try
+        {
+            $user = $this->tokenManager->findUserInRequest($request);
+
+            $wall = $this->wallRepository->findOneBy(['user'=>$user->getId(), 'id' => $id]);
+
+            if(!$wall)
+            {
+                $response = new JsonResponse(['error' => 'Wall not found.'], Response::HTTP_FORBIDDEN);
+            }
+            $this->em->remove($wall);
+            $this->em->flush();
+
+            $response = new JsonResponse(['response' => 'ok'], Response::HTTP_OK);
         }
         catch(AccessDeniedException $e)
         {

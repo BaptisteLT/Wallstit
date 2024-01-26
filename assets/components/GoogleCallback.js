@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { AuthContext } from './useAuth';
-
+import { toast } from 'react-toastify';
 
 function GoogleCallback() {
     const { setUser } = useContext(AuthContext);
@@ -36,7 +36,7 @@ function GoogleCallback() {
         })
         .catch(function (error) {
             // handle error
-            alert('An error occured while authenticating with Google');
+            toast.error('An error occured while authenticating with Google');
         })
 
         // Redirect to the main page (maybe todo last page?)

@@ -1,6 +1,7 @@
 import React, { useEffect, useContext } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { AuthContext } from './useAuth';
+import { toast } from 'react-toastify';
 
 /**
  * Va vérifier que le refresh token en localStorage n'est pas expiré, afin de déconnecter l'utilisateur dans le cas présent
@@ -25,6 +26,7 @@ function UserCheckComponent({ children }) {
       if(refreshTokenExpiresAt < currentTimeStamp)
       {
         console.log('refresh token expired.');
+        toast.error('Session has expired. Please log-in again.')
         setUser(null);
       }
     }

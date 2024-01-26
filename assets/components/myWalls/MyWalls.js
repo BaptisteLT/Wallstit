@@ -4,6 +4,7 @@ import Card from './Card';
 import CreateCard from './CreateCard';
 import LoadingCards from './LoadingCards';
 import '../../styles/MyWalls/mainPage.css';
+import { toast } from 'react-toastify';
 
 function MyWalls()
 {
@@ -27,10 +28,9 @@ function MyWalls()
             {
                 throw new Error;
             }
-            console.log(response);
         })
         .catch(function(error){
-            alert('error while trying to create a new wall');
+            toast.error('An error occured while trying to retrieve your walls.')
         })
     }
 
@@ -49,7 +49,7 @@ function MyWalls()
             {isLoading && <LoadingCards />}
 
             {walls.map((wall) => (
-                <Card key={wall.id} title={wall.name} description={wall.description} href={"/wall/" + wall.id} />
+                <Card id={wall.id} key={wall.id} title={wall.name} description={wall.description} href={"/wall/" + wall.id} />
             ))}
         </div>
     )

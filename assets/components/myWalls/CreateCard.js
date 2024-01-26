@@ -2,6 +2,7 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import AddIcon from '@mui/icons-material/Add';
 import axios from "axios";
+import { toast } from 'react-toastify';
 
 import CardWrapper from './CardWrapper';
 import CardContent from './CardContent';
@@ -24,10 +25,9 @@ function CardCreate()
             {
                 throw new Error;
             }
-            console.log(response);
         })
         .catch(function(error){
-            alert('error while trying to create a new wall');
+            toast.error('An error occured while trying to create a new wall.');
         })
     }
 

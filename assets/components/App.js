@@ -1,6 +1,7 @@
-import React, { useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
-import Emotion from '@emotion/styled';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 //Import des components
 import Home from './home/Home';
@@ -27,6 +28,7 @@ import '../fonts/Roboto/Roboto-Medium.ttf';
 import { AuthContext, useAuth } from './useAuth';
 
 
+
 function App()
 {
     
@@ -45,6 +47,7 @@ function App()
                 <Router>
                     {/* UserCheckComponent Va vérifier que le refresh token en localStorage n'est pas expiré, afin de déconnecter l'utilisateur dans le cas présent */}
                     <UserCheckComponent>
+                        <ToastContainer autoClose={2500} />
                         <Header />
                         <Routes>
                             <Route index path="/" element={<Home />} /> 
