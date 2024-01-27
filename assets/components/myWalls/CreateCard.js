@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import AddIcon from '@mui/icons-material/Add';
 import axios from "axios";
@@ -10,25 +10,35 @@ import CardContent from './CardContent';
 function CardCreate()
 {
     const navigate = useNavigate();
+    const [isCreateRequestProcessed, setIsCreateRequestProcessed] = useState(false);
 
+    //TODO: use the state to do only 1 only max
     function createAndRedirect()
     {
-        axios.post('/api/my-wall')
-        .then(function(response){
-            if(response.status === 200)
-            {
-                const newWallId = response.data.id;
-                //Permet de se rendre sur le nouveau mur crée
-                navigate('/wall/' + newWallId);
-            }
-            else
-            {
-                throw new Error;
-            }
-        })
-        .catch(function(error){
-            toast.error('An error occured while trying to create a new wall.');
-        })
+        if(!isCreateRequestProcessed)
+        {
+            setIsCreateRequestProcessed(true);
+            axios.post('/api/my-wall')
+            .then(function(response){
+                if(response.status === 200)
+                {
+                    const newWallId = response.data.id;
+                    //Permet de se rendre sur le nouveau mur crée
+                    navigate('/wall/' + newWallId);
+                }
+                else
+                {
+                    throw new Error;
+                }
+            })
+            .catch(function(error){
+                toast.error('An error occured while trying to create a new wall.');
+            })
+            .finally(function(){
+                setIsCreateRequestProcessed(false);
+            });
+        }
+
     }
 
     return(

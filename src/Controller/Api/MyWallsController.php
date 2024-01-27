@@ -95,7 +95,7 @@ class MyWallsController extends AbstractController
     }
 
     
-    //En création
+    //suppression
     #[Route('/my-wall/delete/{id}', name: 'delete-my-wall', methods: ['DELETE'])]
     public function deleteWall(int $id, Request $request): JsonResponse
     {
@@ -107,7 +107,7 @@ class MyWallsController extends AbstractController
 
             if(!$wall)
             {
-                $response = new JsonResponse(['error' => 'Wall not found.'], Response::HTTP_FORBIDDEN);
+                return new JsonResponse(['error' => 'Wall not found.'], Response::HTTP_FORBIDDEN);
             }
             $this->em->remove($wall);
             $this->em->flush();
