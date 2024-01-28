@@ -42,8 +42,8 @@ class MyWallsController extends AbstractController
             $wall = new Wall();
             $wall->setName('My Wall');
             $wall->setUser($user);
-            $wall->setHeight(1080);
-            $wall->setWidth(1920);
+            $wall->setHeight(1000);
+            $wall->setWidth(1400);
 
             $this->em->persist($wall);
             $this->em->flush();
