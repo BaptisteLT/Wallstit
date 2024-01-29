@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import '../../styles/Wall/wall.css';
 import Grid from './components/Grid';
 import Zoom from './components/Zoom';
+import PostIt from './components/PostIt';
 
 function Wall() {
   // Access the 'id' parameter from the route
@@ -17,6 +18,7 @@ function Wall() {
   return (
       <Zoom>
         <Grid id={id}>
+          <PostIt />
           <h1>Grid Component</h1>
           <p>ID: {id}</p> {/* Display the 'id' parameter value */}
         </Grid>

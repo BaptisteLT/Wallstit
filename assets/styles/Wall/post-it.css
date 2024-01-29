@@ -1,0 +1,16 @@
+.post-it
+{
+    width: 220px;
+}
+
+.post-it-header{
+    height: 30px;
+    background: #ffd980;
+}
+
+.post-it-content
+{
+    min-height: 154px;
+    padding: 10px;
+    background: #FCCF67;
+}

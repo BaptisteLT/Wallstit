@@ -16,7 +16,8 @@ function Zoom({children}) {
             //Défini jusqu'à quel zoomIn on peut aller
             maxScale={5}
             //Défini jusqu'à quel zoomOut on peut aller
-            minScale={0.6} 
+            minScale={0.6}
+            panning={{excluded: ['panning-disabled']}}
         >
             {({ zoomIn, zoomOut, centerView }) => (
                 /*Pour que le tools se retrouve dans la grid*/
@@ -29,7 +30,9 @@ function Zoom({children}) {
                         width: "100vw",
                         /*On enlève la hauteur du header et footer*/
                         height: "calc(100vh - 140px)",
-                    }}>
+                    }}
+                    
+                    >
                         <div style={{width: '3840px', height: '2160px'}}>
                             {children}
                         </div>
