@@ -4,7 +4,7 @@ import '../../../styles/Wall/zoom.css';
 import Tools from '../components/Tools';
 
 function Zoom({children}) {
-  return (
+    return (
         <TransformWrapper
             initialScale={1}
             //Centrer à l'initialisation
@@ -19,24 +19,22 @@ function Zoom({children}) {
             minScale={0.6} 
         >
             {({ zoomIn, zoomOut, centerView }) => (
-            /*Pour que le tools se retrouve dans la grid*/
-            <div style={{position: 'relative'}}>
-                <Tools zoomIn={zoomIn} zoomOut={zoomOut} centerView={centerView} />
-                
-                <TransformComponent
-                //Style du composant TransformWrapper
-                wrapperStyle={{
-                    width: "100vw",
-                    /*On enlève la hauteur du header et footer*/
-                    height: "calc(100vh - 140px)",
-                }}
-                >
-                <div style={{width: '3840px', height: '2160px'}}>
-                    {children}
+                /*Pour que le tools se retrouve dans la grid*/
+                <div style={{position: 'relative'}}>
+                    <Tools zoomIn={zoomIn} zoomOut={zoomOut} centerView={centerView} />
+                    
+                    <TransformComponent
+                    //Style du composant TransformWrapper
+                    wrapperStyle={{
+                        width: "100vw",
+                        /*On enlève la hauteur du header et footer*/
+                        height: "calc(100vh - 140px)",
+                    }}>
+                        <div style={{width: '3840px', height: '2160px'}}>
+                            {children}
+                        </div>
+                    </TransformComponent>
                 </div>
-    
-                </TransformComponent>
-            </div>
             )}
         </TransformWrapper>
     );

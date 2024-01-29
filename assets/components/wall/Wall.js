@@ -12,6 +12,8 @@ function Wall() {
   //Pour resize la div: https://www.npmjs.com/package/react-resizable
   let { id } = useParams();
 
+  /*TODO: lister les postits à gauche et pouvoir cliquer dessus grâce à ZoomToElement de la librairie react-zoom-pan-pinch?*/
+
   return (
       <Zoom>
         <Grid id={id}>
