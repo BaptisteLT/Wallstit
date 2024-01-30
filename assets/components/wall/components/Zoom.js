@@ -3,7 +3,7 @@ import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import '../../../styles/Wall/zoom.css';
 import Tools from '../components/Tools';
 
-function Zoom({initialScale, handleTransform, children}) {
+function Zoom({initialScale, handleTransform, pageDimensions, children}) {
 
 
     //Cette fonction permet de récupérer le scale pour le passer au post-it afin que le curseur de la souris s'adapte au scale actuel quand on déplace un post-it
@@ -36,10 +36,8 @@ function Zoom({initialScale, handleTransform, children}) {
                         width: "100vw",
                         /*On enlève la hauteur du header et footer*/
                         height: "calc(100vh - 140px)",
-                    }}
-                    
-                    >
-                        <div style={{width: '3840px', height: '2160px'}}>
+                    }}>
+                        <div style={{width: pageDimensions.width+'px', height: pageDimensions.height+'px'}}>
                             {children}
                         </div>
                     </TransformComponent>

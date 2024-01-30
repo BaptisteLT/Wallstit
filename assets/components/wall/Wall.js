@@ -17,6 +17,7 @@ function Wall() {
   /*TODO: lister les post-its à gauche et pouvoir cliquer dessus grâce à ZoomToElement de la librairie react-zoom-pan-pinch?*/
 
   const [scale, setScale] = useState(1);
+  const pageDimensions = {width: 3840, height: 2160}
 
   //On met à jour le scale pour le passer au post-it qui en a besoin
   function updateScale(elements)
@@ -26,9 +27,9 @@ function Wall() {
   }
 
   return (
-      <Zoom handleTransform={updateScale} initialScale={scale}>
+      <Zoom handleTransform={updateScale} initialScale={scale} pageDimensions={pageDimensions}>
         <Grid id={id}>
-            <PostIt scale={scale} />
+            <PostIt scale={scale} pageDimensions={pageDimensions} />
             <h1>Grid Component</h1>
             <p>ID: {id}</p> {/* Display the 'id' parameter value */}
         </Grid>
