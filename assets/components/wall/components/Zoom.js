@@ -1,12 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import '../../../styles/Wall/zoom.css';
 import Tools from '../components/Tools';
 
-function Zoom({children}) {
+function Zoom({initialScale, handleTransform, children}) {
+
+
+    //Cette fonction permet de récupérer le scale pour le passer au post-it afin que le curseur de la souris s'adapte au scale actuel quand on déplace un post-it
+
+
     return (
         <TransformWrapper
-            initialScale={1}
+            initialScale={initialScale}
             //Centrer à l'initialisation
             centerOnInit={true}
             //On ne peut pas sortir des limites
@@ -18,6 +23,7 @@ function Zoom({children}) {
             //Défini jusqu'à quel zoomOut on peut aller
             minScale={0.6}
             panning={{excluded: ['panning-disabled']}}
+            onTransformed={handleTransform}
         >
             {({ zoomIn, zoomOut, centerView }) => (
                 /*Pour que le tools se retrouve dans la grid*/

@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useContext, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import '../../styles/Wall/wall.css';
 import Grid from './components/Grid';
 import Zoom from './components/Zoom';
 import PostIt from './components/PostIt';
+
 
 function Wall() {
   // Access the 'id' parameter from the route
@@ -13,14 +14,23 @@ function Wall() {
   //Pour resize la div: https://www.npmjs.com/package/react-resizable
   let { id } = useParams();
 
-  /*TODO: lister les postits à gauche et pouvoir cliquer dessus grâce à ZoomToElement de la librairie react-zoom-pan-pinch?*/
+  /*TODO: lister les post-its à gauche et pouvoir cliquer dessus grâce à ZoomToElement de la librairie react-zoom-pan-pinch?*/
+
+  const [scale, setScale] = useState(1);
+
+  //On met à jour le scale pour le passer au post-it qui en a besoin
+  function updateScale(elements)
+  {
+    const scale = elements.state.scale;
+    setScale(scale);
+  }
 
   return (
-      <Zoom>
+      <Zoom handleTransform={updateScale} initialScale={scale}>
         <Grid id={id}>
-          <PostIt />
-          <h1>Grid Component</h1>
-          <p>ID: {id}</p> {/* Display the 'id' parameter value */}
+            <PostIt scale={scale} />
+            <h1>Grid Component</h1>
+            <p>ID: {id}</p> {/* Display the 'id' parameter value */}
         </Grid>
       </Zoom>
   );
