@@ -1,7 +1,8 @@
-.post-it{
+.post-it-container{
+    position: absolute;
     cursor: grab;
 }
-.post-it:active{
+.post-it-container:active{
     cursor: grabbing;
 }
 

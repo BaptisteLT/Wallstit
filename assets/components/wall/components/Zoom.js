@@ -4,7 +4,7 @@ import '../../../styles/Wall/zoom.css';
 import Tools from '../components/Tools';
 import SideBar from './SideBar';
 
-function Zoom({initialScale, handleTransform, pageDimensions, children}) {
+function Zoom({initialScale, handleTransform, pageDimensions, handleAddPostIt, children}) {
 
 
     //Cette fonction permet de récupérer le scale pour le passer au post-it afin que le curseur de la souris s'adapte au scale actuel quand on déplace un post-it
@@ -31,7 +31,7 @@ function Zoom({initialScale, handleTransform, pageDimensions, children}) {
                 <div style={{position: 'relative'}}>
                     <Tools zoomIn={zoomIn} zoomOut={zoomOut} centerView={centerView} />
 
-                    <SideBar />
+                    <SideBar addPostIt={handleAddPostIt} />
 
                     <TransformComponent
                     //Style du composant TransformWrapper

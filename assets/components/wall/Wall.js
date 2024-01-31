@@ -15,6 +15,10 @@ function Wall() {
 
   /*TODO: lister les post-its à gauche et pouvoir cliquer dessus grâce à ZoomToElement de la librairie react-zoom-pan-pinch?*/
 
+  const [postIts, setPostIts] = useState([{
+    positionX: 1000,
+    positionY: 1000
+  }]);
   const [scale, setScale] = useState(1);
   const pageDimensions = {width: 3840, height: 2160}
 
@@ -25,10 +29,25 @@ function Wall() {
     setScale(scale);
   }
 
+  function addPostIt(positionX, positionY, content)
+  {
+
+    setPostIts([
+      ...postIts,
+      {
+        positionX: positionX,
+        positionY: positionY,
+        content: content
+      }
+    ]);
+  }
+
   return (
-      <Zoom handleTransform={updateScale} initialScale={scale} pageDimensions={pageDimensions}>
+      <Zoom handleAddPostIt={addPostIt} handleTransform={updateScale} initialScale={scale} pageDimensions={pageDimensions}>
         <Grid id={id}>
-            <PostIt scale={scale} pageDimensions={pageDimensions} />
+            {postIts.map((postIt) => (
+              <PostIt scale={scale} pageDimensions={pageDimensions} postItData={postIt} />
+            ))}
             <h1>Grid Component</h1>
             <p>ID: {id}</p> {/* Display the 'id' parameter value */}
         </Grid>
