@@ -5,7 +5,6 @@ import Grid from './components/Grid';
 import Zoom from './components/Zoom';
 import PostIt from './components/PostIt';
 
-
 function Wall() {
   // Access the 'id' parameter from the route
   //https://github.com/BetterTyped/react-zoom-pan-pinch pour le zoom in and out

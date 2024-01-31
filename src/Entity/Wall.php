@@ -29,14 +29,6 @@ class Wall
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $borderColor = null;
 
-    #[Groups(['get-walls'])]
-    #[ORM\Column]
-    private ?int $width = null;
-
-    #[Groups(['get-walls'])]
-    #[ORM\Column(nullable: true)]
-    private ?int $height = null;
-
     #[ORM\ManyToOne(inversedBy: 'walls')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
@@ -82,30 +74,6 @@ class Wall
     public function setBorderColor(?string $borderColor): static
     {
         $this->borderColor = $borderColor;
-
-        return $this;
-    }
-
-    public function getWidth(): ?int
-    {
-        return $this->width;
-    }
-
-    public function setWidth(int $width): static
-    {
-        $this->width = $width;
-
-        return $this;
-    }
-
-    public function getHeight(): ?int
-    {
-        return $this->height;
-    }
-
-    public function setHeight(?int $height): static
-    {
-        $this->height = $height;
 
         return $this;
     }

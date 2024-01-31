@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import '../../../styles/Wall/zoom.css';
 import Tools from '../components/Tools';
+import SideBar from './SideBar';
 
 function Zoom({initialScale, handleTransform, pageDimensions, children}) {
 
@@ -29,7 +30,9 @@ function Zoom({initialScale, handleTransform, pageDimensions, children}) {
                 /*Pour que le tools se retrouve dans la grid*/
                 <div style={{position: 'relative'}}>
                     <Tools zoomIn={zoomIn} zoomOut={zoomOut} centerView={centerView} />
-                    
+
+                    <SideBar />
+
                     <TransformComponent
                     //Style du composant TransformWrapper
                     wrapperStyle={{

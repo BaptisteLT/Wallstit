@@ -6,6 +6,9 @@ header{
     /*background: #fff9dc;*/
     /*box-shadow: 0px -4px 6px 2px rgb(0 0 0);*/
     border-bottom: 1px solid #E6E6E6;
+    z-index: 2;
+    position: relative;
+    background: white;
 }
 
 header > nav{
@@ -14,6 +17,7 @@ header > nav{
     justify-content: space-between;
     align-items: center;
     margin: 0px 20px;
+    
 }
 
 header > nav > div{
