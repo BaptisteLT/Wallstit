@@ -71,11 +71,7 @@ class MyWallsController extends AbstractController
 
             $walls = $user->getWalls();
 
-            $context = (new ObjectNormalizerContextBuilder())
-            ->withGroups('get-walls')
-            ->toArray();
-            
-            $json = $this->serializer->serialize($walls, 'json', $context);
+            $json = $this->serializer->serialize($walls, 'json', ['groups' => 'get-walls']);
 
             $response = new JsonResponse(['walls' => $json], Response::HTTP_OK);
         }
