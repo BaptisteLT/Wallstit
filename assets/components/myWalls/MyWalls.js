@@ -15,7 +15,9 @@ function MyWalls()
 
     function fetchData()
     {
-        // Fetch data when the component mounts
+        //TODO: le problème du 401 qui ne passe pas par l'interceptor est que le useEffect de l'interceptor est chargé après la requête
+        //setTimeout(() => {
+            // Fetch data when the component mounts
         axios.get('/api/my-walls')
         .then(function(response){
             if(response.status === 200)
@@ -32,6 +34,10 @@ function MyWalls()
         .catch(function(error){
             toast.error('An error occured while trying to retrieve your walls.')
         })
+        //  }, 5000);
+          
+
+        
     }
 
     

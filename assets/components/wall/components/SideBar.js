@@ -7,7 +7,7 @@ function SideBar({addPostIt})
     const [collapsed, setCollapsed] = useState(false);
 
     function handleAddPostIt(){
-        addPostIt(null, null, 'Change me');
+        addPostIt();
     }
 
     return(

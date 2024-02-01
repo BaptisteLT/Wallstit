@@ -56,7 +56,7 @@ function PostIt({scale, postItData, pageDimensions}){
 
                 </div>
 
-                <div className="post-it-content panning-disabled" style={{height: innerDimensions.contentHeight+'px'}}>
+                <div className="post-it-content panning-disabled" style={{minHeight: innerDimensions.contentHeight+'px'}}>
                     {postIt.content}
                 </div>
             </div>

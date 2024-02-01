@@ -15,12 +15,4 @@ class HomeController extends AbstractController
     {
         return $this->render('index.html.twig');
     }
-
-    #[Route('/api', name: 'api_endpoint')]
-    public function apiEndpoint()
-    {
-        // Handle your API logic here
-        // For example, return a JSON response
-        return new JsonResponse(['message' => 'This is an API endpoint']);
-    }
 }

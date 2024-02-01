@@ -2,12 +2,16 @@
 
 namespace App\Entity;
 
-use App\Repository\RefreshTokenRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\Traits\CreateUpdateTrait;
+use App\Repository\RefreshTokenRepository;
 
+#[ORM\HasLifecycleCallbacks]
 #[ORM\Entity(repositoryClass: RefreshTokenRepository::class)]
 class RefreshToken
 {
+    use CreateUpdateTrait;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]

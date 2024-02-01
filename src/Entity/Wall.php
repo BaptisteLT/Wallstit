@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Serializer\Annotation\Groups;
 use App\Entity\Traits\CreateUpdateTrait;
 use App\Repository\WallRepository;
@@ -36,6 +38,15 @@ class Wall
     #[Groups(['get-walls'])]
     #[ORM\Column(length: 100, nullable: true)]
     private ?string $description = null;
+
+    #[Groups(['get-post-its'])]
+    #[ORM\OneToMany(mappedBy: 'wall', targetEntity: PostIt::class, orphanRemoval: true)]
+    private Collection $postIts;
+
+    public function __construct()
+    {
+        $this->postIts = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -98,6 +109,36 @@ class Wall
     public function setDescription(?string $description): static
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, PostIt>
+     */
+    public function getPostIts(): Collection
+    {
+        return $this->postIts;
+    }
+
+    public function addPostIt(PostIt $postIt): static
+    {
+        if (!$this->postIts->contains($postIt)) {
+            $this->postIts->add($postIt);
+            $postIt->setWall($this);
+        }
+
+        return $this;
+    }
+
+    public function removePostIt(PostIt $postIt): static
+    {
+        if ($this->postIts->removeElement($postIt)) {
+            // set the owning side to null (unless already changed)
+            if ($postIt->getWall() === $this) {
+                $postIt->setWall(null);
+            }
+        }
 
         return $this;
     }
