@@ -28,32 +28,6 @@ function Wall() {
     setScale(scale);
   }
 
-  useEffect(() => {
-    retrieveWallPostIts();
-  }, [])
-
-  function retrieveWallPostIts()
-  {
-    axios.get('/api/wall/'+id+'/post-its')
-    .then(function (response) {
-      console.log(response); //TODO: setPostIts: ...postIts, nouveau post-it
-    })
-    .catch(function (error) {
-      console.log(error)
-      // handle error
-      toast.error('An error occured while trying to retrieve the post-its.');
-    })
-  }
-
-
-
-
-
-
-
-
-
-
   function addPostIt(positionX, positionY)
   {
     axios.post('/api/post-it', {
@@ -74,15 +48,51 @@ function Wall() {
       // handle error
       toast.error('An error occured while creating the new post-it.');
     })
-
-
   }
+
+
+  function retrieveWallPostIts() {
+    axios.get('/api/wall/' + id + '/post-its')
+    .then(function (response) {
+      const newPostIts = JSON.parse(response.data).postIts;
+
+      // Merging current post-its with new Post-its
+      setPostIts((prevPostIts) => [
+        ...prevPostIts,
+        ...newPostIts
+      ]);
+    })
+    .catch(function (error) {
+      console.log(error);
+      // handle error
+      toast.error('An error occurred while trying to retrieve the post-its.');
+    });
+  }
+  
+  console.log(postIts)
+
+  useEffect(() => {
+    retrieveWallPostIts();
+  }, [])
+
 
   return (
       <Zoom handleAddPostIt={addPostIt} handleTransform={updateScale} initialScale={scale} pageDimensions={pageDimensions}>
         <Grid id={id}>
             {postIts.map((postIt) => (
-              <PostIt scale={scale} pageDimensions={pageDimensions} postItData={postIt} key={postIt.uuid} />
+              <PostIt 
+                scale={scale}
+                pageDimensions={pageDimensions} 
+                key={postIt.uuid} 
+                color={postIt.color} 
+                content={postIt.content} 
+                deadline={postIt.deadline}
+                fontSizePixels={postIt.fontSizePixels}
+                positionX={postIt.positionX}
+                positionY={postIt.positionY}
+                size={postIt.size}
+                uuid={postIt.uuid}
+              />
             ))}
             <h1>Grid Component</h1>
             <p>ID: {id}</p> {/* Display the 'id' parameter value */}

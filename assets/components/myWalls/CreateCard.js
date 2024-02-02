@@ -12,7 +12,6 @@ function CardCreate()
     const navigate = useNavigate();
     const [isCreateRequestProcessed, setIsCreateRequestProcessed] = useState(false);
 
-    //TODO: use the state to do only 1 only max
     function createAndRedirect()
     {
         if(!isCreateRequestProcessed)

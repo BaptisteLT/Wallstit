@@ -32,6 +32,8 @@ class PostItController extends AbstractController
         private SerializerInterface $serializer,
     ){}
 
+    //TODO: implémenter une gestion des erreurs avec un listener: https://openclassrooms.com/fr/courses/7709361-construisez-une-api-rest-avec-symfony/7795134-gerez-les-erreurs-et-ajoutez-la-validation
+
     //En création
     #[Route('/post-it', name: 'create-post-it', methods: ['POST'])]
     public function createWall(Request $request): JsonResponse
@@ -63,7 +65,7 @@ class PostItController extends AbstractController
             $this->em->persist($postIt);
             $this->em->flush();
 
-            $response = new JsonResponse(['uuid' => $postIt->getUuid()], Response::HTTP_OK);
+            $response = new JsonResponse(['uuid' => $postIt->getUuid()], Response::HTTP_CREATED);
         }
         catch(AccessDeniedException $e)
         {
@@ -99,7 +101,7 @@ class PostItController extends AbstractController
 
             $json = $this->serializer->serialize($wall, 'json', ['groups' => 'get-post-its']);
 
-            $response = new JsonResponse(['walls' => $json], Response::HTTP_OK);
+            $response = new JsonResponse($json, Response::HTTP_OK);
         }
         catch(AccessDeniedException $e)
         {
@@ -107,7 +109,6 @@ class PostItController extends AbstractController
         }
         catch(\Exception $e)
         {
-            dump($e);die;
             $response = new JsonResponse(['error' => 'Server error while trying to create a new wall.'], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 

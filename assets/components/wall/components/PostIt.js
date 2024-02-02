@@ -3,19 +3,54 @@ import '../../../styles/Wall/post-it.css'
 import Draggable from 'react-draggable';
 
 //Dragable: https://www.npmjs.com/package/react-draggable#controlled-vs-uncontrolled
-function PostIt({scale, postItData, pageDimensions}){
+function PostIt({ scale, pageDimensions, color, content, deadline, fontSizePixels, positionX, positionY, size, uuid })
+{
+    const { postItDimensions, innerDimensions } = getDimensionsFromSize(size);
 
-    const postItDimensions = {width: 220, height: 190};
-    const innerDimensions = {headerHeight: 30, contentHeight: 154}
-
-
+    //Les datas du post-it
     const [postIt, setPostIt] = useState({
         //Permet de centrer le post-it horizontalement par défaut (moitié de l'écran moins la largeur du post-it)
-        x: postItData.positionX ? postItData.positionX : (pageDimensions.width/2)-(postItDimensions.width/2),
+        positionX: positionX ? positionX : (pageDimensions.width/2)-(postItDimensions.width/2),
         //Permet de centrer le post-it verticalement par défaut (moitié de l'écran moins la hauteur du post-it)
-        y: postItData.positionY ? postItData.positionY : (pageDimensions.height/2)-((innerDimensions.headerHeight + innerDimensions.contentHeight)/2),
-        content: postItData.content
+        positionY: positionY ? positionY : (pageDimensions.height/2)-((innerDimensions.headerHeight + innerDimensions.contentHeight)/2),
+        fontSizePixels: fontSizePixels,
+        content: content,
+        color: color,
+        deadline: deadline,
+        size: size,
+        uuid: uuid
     });
+
+    /**
+     * @param {string} sizeString - Size of the post-it ('small', 'large', or default is 'medium').
+     * @returns {{ postItDimensions: {width: number, height: number}, innerDimensions: {headerHeight: number, contentHeight: number} }} - Object containing post-it and inner dimensions.
+     */
+    function getDimensionsFromSize(sizeString){
+
+        let dimensions = {};
+
+        switch (sizeString) {
+            case 'small':
+                dimensions = {
+                    postItDimensions: {width: 180, height: 170},
+                    innerDimensions: {headerHeight: 30, contentHeight: 134}
+                };
+                break;
+            case 'large':
+                dimensions = {
+                    postItDimensions: {width: 240, height: 210},
+                    innerDimensions: {headerHeight: 30, contentHeight: 174}
+                };
+                break;
+            //Medium size by default
+            default:
+                dimensions = {
+                    postItDimensions: {width: 210, height: 190},
+                    innerDimensions: {headerHeight: 30, contentHeight: 154}
+                };
+        }
+        return dimensions;
+    }
 
     const handleStart = (() => {
 
@@ -28,8 +63,8 @@ function PostIt({scale, postItData, pageDimensions}){
     const handleStop = ((e) => {
         setPostIt({
             ...postIt,
-            x: e.screenX,
-            y: e.screenY
+            positionX: e.screenX,
+            positionY: e.screenY
         })
         //Sauvegarder la position avec un fetch en BDD
         console.log(postIt)
@@ -41,8 +76,8 @@ function PostIt({scale, postItData, pageDimensions}){
             handle=".post-it-container"
             defaultPosition={
                 {
-                    x: postIt.x,
-                    y: postIt.y
+                    x: postIt.positionX,
+                    y: postIt.positionY
                 }
             }
             grid={[1, 1]}
