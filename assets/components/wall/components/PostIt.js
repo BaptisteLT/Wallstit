@@ -87,11 +87,11 @@ function PostIt({ scale, pageDimensions, color, content, deadline, fontSizePixel
             onStop={handleStop}
         >
             <div className="panning-disabled post-it-container" style={{width: postItDimensions.width+'px'}}>
-                <div className="post-it-header panning-disabled" style={{height: innerDimensions.headerHeight+'px'}}>
+                <div className={"panning-disabled header-"+color} style={{height: innerDimensions.headerHeight+'px'}}>
 
                 </div>
 
-                <div className="post-it-content panning-disabled" style={{minHeight: innerDimensions.contentHeight+'px'}}>
+                <div className={"post-it-content panning-disabled content-"+color} style={{minHeight: innerDimensions.contentHeight+'px'}}>
                     {postIt.content}
                 </div>
             </div>

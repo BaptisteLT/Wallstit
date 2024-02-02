@@ -1,17 +1,49 @@
 .post-it-container{
     position: absolute;
     cursor: grab;
-}
-.post-it-container:active{
-    cursor: grabbing;
+    /*box-shadow: rgba(0, 0, 0, 0.09) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;*/
+    /*box-shadow: rgba(0, 0, 0, 0.09) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.07) 0px 11px 8px, rgba(0, 0, 0, 0.02) 0px 8px 16px;*/
+    box-shadow: rgba(0, 0, 0, 0.08) 0px 2px 1px, rgba(0, 0, 0, 0.08) 0px 3px 2px, rgba(0, 0, 0, 0.08) 0px 7px 4px, rgba(0, 0, 0, 0.06) 0px 10px 8px, rgba(0, 0, 0, 0.01) 0px 7px 16px;
 }
 
-.post-it-header{
-    background: #ffd980;
+.post-it-container:active{
+    cursor: grabbing;
 }
 
 .post-it-content
 {
     padding: 10px;
+}
+
+
+/****COLORING****/
+.header-yellow{
+    background: #ffd980;
+}
+.content-yellow{
     background: #FCCF67;
+}
+.header-green{
+    background: #a8ff80;
+}
+.content-green{
+    background: #7afc67;
+}
+.header-orange{
+    background: #ffbc80;
+}
+.content-orange{
+    background: #fcad67;
+}
+.header-blue{
+    background: #80d5ff;
+}
+.content-blue{
+    background: #67cdfc;
+}
+.header-pink{
+    background: #f980ff;
+}
+.content-pink{
+    background: #f467fc;
 }

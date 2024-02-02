@@ -48,8 +48,7 @@ function Card({href, title, description, id})
         
     }
 
-
-
+    //Ouvre ou ferme la sidebar
     function handleDeleteOpen()
     {
         setIsDeleteOpen(!isDeleteOpen);

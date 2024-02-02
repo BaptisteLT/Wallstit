@@ -16,8 +16,8 @@ function SideBar({addPostIt})
                 {
                     position: 'absolute', 
                     height: '100%',
-                    boxShadow: 'rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px',
-                    borderRightStyle: 'unset'
+                    borderRightWidth: '2px',
+                    borderColor: '#E6E6E6'
                 }
             }
             backgroundColor='rgb(251 251 251 / 94%)'
@@ -30,7 +30,7 @@ function SideBar({addPostIt})
                     <MenuItem> DESC </MenuItem>
                 </SubMenu>
 
-                <SubMenu label="Wall settings">
+                <SubMenu label="Wall settings (plus un chargement des items)">
                     <MenuItem> setting 1 </MenuItem>
                     <MenuItem> setting 2 </MenuItem>
                 </SubMenu>
