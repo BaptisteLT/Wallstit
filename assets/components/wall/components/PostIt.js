@@ -1,13 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import '../../../styles/Wall/post-it.css'
 import Draggable from 'react-draggable';
+import CountDown from "./CountDown";
+import { getDimensionsFromSize } from '../utils/postItUtils';
 
 //Dragable: https://www.npmjs.com/package/react-draggable#controlled-vs-uncontrolled
 function PostIt({ scale, pageDimensions, color, content, deadline, fontSizePixels, positionX, positionY, size, uuid })
 {
     const { postItDimensions, innerDimensions } = getDimensionsFromSize(size);
 
-    //Les datas du post-it
+    //Les data du post-it
     const [postIt, setPostIt] = useState({
         //Permet de centrer le post-it horizontalement par défaut (moitié de l'écran moins la largeur du post-it)
         positionX: positionX ? positionX : (pageDimensions.width/2)-(postItDimensions.width/2),
@@ -16,49 +18,20 @@ function PostIt({ scale, pageDimensions, color, content, deadline, fontSizePixel
         fontSizePixels: fontSizePixels,
         content: content,
         color: color,
-        deadline: deadline,
+        deadline: (deadline ? new Date(deadline) : null),
         size: size,
         uuid: uuid
     });
 
-    /**
-     * @param {string} sizeString - Size of the post-it ('small', 'large', or default is 'medium').
-     * @returns {{ postItDimensions: {width: number, height: number}, innerDimensions: {headerHeight: number, contentHeight: number} }} - Object containing post-it and inner dimensions.
-     */
-    function getDimensionsFromSize(sizeString){
-
-        let dimensions = {};
-
-        switch (sizeString) {
-            case 'small':
-                dimensions = {
-                    postItDimensions: {width: 180, height: 170},
-                    innerDimensions: {headerHeight: 30, contentHeight: 134}
-                };
-                break;
-            case 'large':
-                dimensions = {
-                    postItDimensions: {width: 240, height: 210},
-                    innerDimensions: {headerHeight: 30, contentHeight: 174}
-                };
-                break;
-            //Medium size by default
-            default:
-                dimensions = {
-                    postItDimensions: {width: 210, height: 190},
-                    innerDimensions: {headerHeight: 30, contentHeight: 154}
-                };
-        }
-        return dimensions;
-    }
-
-    const handleStart = (() => {
-
+    //Largeur et hauteur du post-it de base
+    const [dimensions, setDimensions] = useState(() => {
+        return getDimensionsFromSize(size);
     });
-    
-    const handleDrag = (() => {
-
-    });
+      
+    //Dès que postIt.size change, on va mettre à jour la taille du postIt en fonction de si c'est "small", "medium" ou "large"
+    useEffect(() => {
+        setDimensions(getDimensionsFromSize(postIt.size));
+    }, [postIt.size]);
 
     const handleStop = ((e) => {
         setPostIt({
@@ -86,18 +59,16 @@ function PostIt({ scale, pageDimensions, color, content, deadline, fontSizePixel
             onDrag={handleDrag}
             onStop={handleStop}
         >
-            <div className="panning-disabled post-it-container" style={{width: postItDimensions.width+'px'}}>
-                <div className={"panning-disabled header-"+color} style={{height: innerDimensions.headerHeight+'px'}}>
-
+            <div className="panning-disabled post-it-container" style={{width: dimensions.postItDimensions.width+'px'}}>
+                <div className={"panning-disabled header-"+color} style={{height: dimensions.innerDimensions.headerHeight+'px'}}>
+                    <CountDown deadline={postIt.deadline} />
                 </div>
 
-                <div className={"post-it-content panning-disabled content-"+color} style={{minHeight: innerDimensions.contentHeight+'px'}}>
+                <div className={"post-it-content panning-disabled content-"+color} style={{minHeight: dimensions.innerDimensions.contentHeight+'px'}}>
                     {postIt.content}
                 </div>
             </div>
         </Draggable>
-
-
     );
 }
 

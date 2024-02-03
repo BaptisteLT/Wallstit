@@ -40,7 +40,8 @@ function Wall() {
           uuid: response.data.uuid,
           positionX: positionX,
           positionY: positionY,
-          content: null
+          content: null,
+          color: 'yellow'
         }
       ]);
     })

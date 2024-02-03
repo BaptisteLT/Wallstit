@@ -21,7 +21,6 @@ class PostIt
         //default values
         $this->color = 'yellow';
         $this->size = 'medium';
-        $this->fontSizePixels = 16;
         $this->uuid = Uuid::v4();
     }
 
@@ -40,15 +39,6 @@ class PostIt
     #[Assert\Choice(['yellow', 'green', 'orange', 'blue', 'pink'])]
     #[ORM\Column(length: 6)]
     private string $color;
-
-    #[Groups(['get-post-its'])]
-    #[Assert\Range(
-        min: 10,
-        max: 22,
-        notInRangeMessage: 'The font size must be between {{ min }}pixels and {{ max }}pixels',
-    )]
-    #[ORM\Column]
-    private int $fontSizePixels;
 
     #[Groups(['get-post-its'])]
     #[Assert\Length(
@@ -115,18 +105,6 @@ class PostIt
     public function setColor(string $color): static
     {
         $this->color = $color;
-
-        return $this;
-    }
-
-    public function getFontSizePixels(): int
-    {
-        return $this->fontSizePixels;
-    }
-
-    public function setFontSizePixels(int $fontSizePixels): static
-    {
-        $this->fontSizePixels = $fontSizePixels;
 
         return $this;
     }

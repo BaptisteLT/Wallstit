@@ -22,7 +22,7 @@ function Zoom({initialScale, handleTransform, pageDimensions, handleAddPostIt, c
             //Défini jusqu'à quel zoomIn on peut aller
             maxScale={5}
             //Défini jusqu'à quel zoomOut on peut aller
-            minScale={0.6}
+            minScale={0.58}
             panning={{excluded: ['panning-disabled']}}
             onTransformed={handleTransform}
         >
@@ -38,7 +38,7 @@ function Zoom({initialScale, handleTransform, pageDimensions, handleAddPostIt, c
                     wrapperStyle={{
                         width: "100vw",
                         /*On enlève la hauteur du header et footer*/
-                        height: "calc(100vh - 140px)",
+                        height: "calc(100vh - 141px)",
                     }}>
                         <div style={{width: pageDimensions.width+'px', height: pageDimensions.height+'px'}}>
                             {children}
