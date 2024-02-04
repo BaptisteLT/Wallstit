@@ -18,28 +18,18 @@ class AuthController extends AbstractController
 {
     #[Route('/refresh-jwt-token', name: 'refresh-jwt-token')]
     /* Va tenter de refresh le jwt token en utilisant le refresh token en cookies */
-    public function refreshTokens(Request $request, RefreshTokenRepository $refreshTokenRepository, TokenManagerService $tokenManager): JsonResponse
+    public function refreshTokens(Request $request, TokenManagerService $tokenManager): JsonResponse
     {
-        try
-        {
-            $refreshToken = $request->cookies->get('refreshToken');
-            $tokens = $tokenManager->refreshTokens($refreshToken);
-            
-            $response = new JsonResponse(['jwtToken' =>$tokens['jwtToken'] ,'data' => [
-                'refreshTokenExpiresAt' => $tokens['refreshToken']['expiresAt'], 
-                'jwtToken' => $tokenManager->decodeJwtToken($tokens['jwtToken'])
-            ]], Response::HTTP_OK);//TODO: display error to client
-            $response->headers->setCookie(new Cookie('jwtToken', $tokens['jwtToken'], 0, '/', null, true, true));
-            $response->headers->setCookie(new Cookie('refreshToken', $tokens['refreshToken']['refreshToken'], 0, '/', null, true, true));
-        }
-        catch(AccessDeniedException $e)
-        {
-            $response = new JsonResponse(['error' => 'Refresh token doesn\'t exist or is expired. Please log-in again.'], Response::HTTP_UNAUTHORIZED);
-        } 
-        catch(\Exception $e)
-        {
-            $response = new JsonResponse(['error' => 'Server error, please log-in again.'], Response::HTTP_INTERNAL_SERVER_ERROR);
-        } 
+        
+        $refreshToken = $request->cookies->get('refreshToken');
+        $tokens = $tokenManager->refreshTokens($refreshToken);
+        
+        $response = new JsonResponse(['jwtToken' =>$tokens['jwtToken'] ,'data' => [
+            'refreshTokenExpiresAt' => $tokens['refreshToken']['expiresAt'], 
+            'jwtToken' => $tokenManager->decodeJwtToken($tokens['jwtToken'])
+        ]], Response::HTTP_OK);//TODO: display error to client
+        $response->headers->setCookie(new Cookie('jwtToken', $tokens['jwtToken'], 0, '/', null, true, true));
+        $response->headers->setCookie(new Cookie('refreshToken', $tokens['refreshToken']['refreshToken'], 0, '/', null, true, true));
 
         return $response;
     }

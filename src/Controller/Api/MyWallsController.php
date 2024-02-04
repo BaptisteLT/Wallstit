@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\AccessDeniedException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Messenger\Transport\Serialization\Serializer;
 use Symfony\Component\Serializer\Context\Normalizer\ObjectNormalizerContextBuilder;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -35,56 +36,31 @@ class MyWallsController extends AbstractController
     #[Route('/my-wall', name: 'create-my-wall', methods: ['POST'])]
     public function createWall(Request $request): JsonResponse
     {
-        try
-        {
-            $user = $this->tokenManager->findUserInRequest($request);
+        $user = $this->tokenManager->findUserInRequest($request);
 
-            $wall = new Wall();
-            $wall->setName('My Wall');
-            $wall->setUser($user);
+        $wall = new Wall();
+        $wall->setName('My Wall');
+        $wall->setUser($user);
 
-            $this->em->persist($wall);
-            $this->em->flush();
+        $this->em->persist($wall);
+        $this->em->flush();
 
-            $wallId = $wall->getId();
+        $wallId = $wall->getId();
 
-            $response = new JsonResponse(['id' => $wallId], Response::HTTP_OK);
-        }
-        catch(AccessDeniedException $e)
-        {
-            $response = new JsonResponse(['error' => 'Session has expired.'], Response::HTTP_UNAUTHORIZED);
-        }
-        catch(\Exception $e)
-        {
-            $response = new JsonResponse(['error' => 'Server error while trying to create a new wall.'], Response::HTTP_INTERNAL_SERVER_ERROR);
-        } 
-
-        return $response;
+        return new JsonResponse(['id' => $wallId], Response::HTTP_OK);
     }
+    
 
     #[Route('/my-walls', name: 'get-my-walls', methods: ['GET'])]
     public function getWalls(Request $request): JsonResponse
     {
-        try
-        {
-            $user = $this->tokenManager->findUserInRequest($request);
+        $user = $this->tokenManager->findUserInRequest($request);
 
-            $walls = $user->getWalls();
+        $walls = $user->getWalls();
 
-            $json = $this->serializer->serialize($walls, 'json', ['groups' => 'get-walls']);
+        $json = $this->serializer->serialize($walls, 'json', ['groups' => 'get-walls']);
 
-            $response = new JsonResponse(['walls' => $json], Response::HTTP_OK);
-        }
-        catch(AccessDeniedException $e)
-        {
-            $response = new JsonResponse(['error' => 'Session has expired.'], Response::HTTP_UNAUTHORIZED);
-        }
-        catch(\Exception $e)
-        {
-            $response = new JsonResponse(['error' => 'Server error while trying to create a new wall.'], Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
-
-        return $response;
+        return new JsonResponse(['walls' => $json], Response::HTTP_OK);
     }
 
     
@@ -92,30 +68,18 @@ class MyWallsController extends AbstractController
     #[Route('/my-wall/delete/{id}', name: 'delete-my-wall', methods: ['DELETE'])]
     public function deleteWall(int $id, Request $request): JsonResponse
     {
-        try
+        
+        $user = $this->tokenManager->findUserInRequest($request);
+
+        $wall = $this->wallRepository->findOneBy(['user'=>$user->getId(), 'id' => $id]);
+
+        if(!$wall)
         {
-            $user = $this->tokenManager->findUserInRequest($request);
-
-            $wall = $this->wallRepository->findOneBy(['user'=>$user->getId(), 'id' => $id]);
-
-            if(!$wall)
-            {
-                return new JsonResponse(['error' => 'Wall not found.'], Response::HTTP_FORBIDDEN);
-            }
-            $this->em->remove($wall);
-            $this->em->flush();
-
-            $response = new JsonResponse(['response' => 'ok'], Response::HTTP_OK);
+            throw new NotFoundHttpException('Wall not found.');
         }
-        catch(AccessDeniedException $e)
-        {
-            $response = new JsonResponse(['error' => 'Session has expired.'], Response::HTTP_UNAUTHORIZED);
-        }
-        catch(\Exception $e)
-        {
-            $response = new JsonResponse(['error' => 'Server error while trying to create a new wall.'], Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
+        $this->em->remove($wall);
+        $this->em->flush();
 
-        return $response;
+        return new JsonResponse(['response' => 'ok'], Response::HTTP_OK);
     }
 }

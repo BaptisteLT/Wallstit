@@ -5,7 +5,7 @@ import CountDown from "./CountDown";
 import { getDimensionsFromSize } from '../utils/postItUtils';
 
 //Dragable: https://www.npmjs.com/package/react-draggable#controlled-vs-uncontrolled
-function PostIt({ scale, pageDimensions, color, content, deadline, fontSizePixels, positionX, positionY, size, uuid })
+function PostIt({ scale, pageDimensions, color, content, deadline, positionX, positionY, size, uuid })
 {
     const { postItDimensions, innerDimensions } = getDimensionsFromSize(size);
 
@@ -15,7 +15,6 @@ function PostIt({ scale, pageDimensions, color, content, deadline, fontSizePixel
         positionX: positionX ? positionX : (pageDimensions.width/2)-(postItDimensions.width/2),
         //Permet de centrer le post-it verticalement par défaut (moitié de l'écran moins la hauteur du post-it)
         positionY: positionY ? positionY : (pageDimensions.height/2)-((innerDimensions.headerHeight + innerDimensions.contentHeight)/2),
-        fontSizePixels: fontSizePixels,
         content: content,
         color: color,
         deadline: (deadline ? new Date(deadline) : null),
@@ -55,8 +54,6 @@ function PostIt({ scale, pageDimensions, color, content, deadline, fontSizePixel
             }
             grid={[1, 1]}
             scale={scale}
-            onStart={handleStart}
-            onDrag={handleDrag}
             onStop={handleStop}
         >
             <div className="panning-disabled post-it-container" style={{width: dimensions.postItDimensions.width+'px'}}>

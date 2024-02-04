@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
 
+/**
+ * Composant responsable de la décrémentation du champ deadline
+ */
 function CountDown({ deadline })
 {
     const [countDown, setCountDown] = useState('');

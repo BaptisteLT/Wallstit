@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Uid\Uuid;
 use App\Service\GoogleOAuthService;
 use App\Service\TokenManagerService;
@@ -14,9 +15,10 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpClient\Exception\ServerException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
-use Psr\Log\LoggerInterface;
 
 #[Route('/auth', name: 'auth_')]
 class GoogleAuthController extends AbstractController
@@ -57,7 +59,7 @@ class GoogleAuthController extends AbstractController
             'state' => $session->get('state'),
         ]);
 
-        return new JsonResponse($uri);
+        return new JsonResponse($uri, 200);
     }
 
 
@@ -88,7 +90,7 @@ class GoogleAuthController extends AbstractController
         catch(\Exception $e)
         {
             $this->logger->error('An error occurred during the google authentication: ' . $e->getMessage());
-            $response = new JsonResponse(['error' => 'An error occurred during the Google authentication.'], 500);//TODO: send error to client
+            throw new HttpException(500, 'An error occurred during the Google authentication.');
         }
 
         return $response;

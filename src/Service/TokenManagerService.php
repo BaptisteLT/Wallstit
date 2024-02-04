@@ -159,7 +159,7 @@ class TokenManagerService
         return [
             'refreshToken' => $encryptedToken, 
             'expiresAt' => $refreshToken->getExpiresAt()->getTimestamp()
-        ];//TODO faire le refresh du jwt avec ce refreshToken (check expiration date) + bouton logout pour kill les cookies + TTL du jwt à 15min
+        ];
     }
 
     public function decodeJwtToken($token)
