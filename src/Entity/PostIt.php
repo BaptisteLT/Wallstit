@@ -51,7 +51,7 @@ class PostIt
     #[Groups(['get-post-its'])]
     #[Assert\Range(
         min: -150,
-        max: 2750,
+        max: 3800,
         notInRangeMessage: 'You are off limits',
     )]
     #[ORM\Column(nullable: true)]

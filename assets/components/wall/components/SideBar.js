@@ -4,7 +4,7 @@ import React, { useState } from "react";
 //SideBar documentation: https://www.npmjs.com/package/react-pro-sidebar?activeTab=readme
 function SideBar({addPostIt})
 {
-    const [collapsed, setCollapsed] = useState(false);
+    const [collapsed, setCollapsed] = useState(true);
 
     function handleAddPostIt(){
         addPostIt();

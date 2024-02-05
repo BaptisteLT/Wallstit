@@ -94,8 +94,6 @@ function Wall() {
                 uuid={postIt.uuid}
               />
             ))}
-            <h1>Grid Component</h1>
-            <p>ID: {id}</p> {/* Display the 'id' parameter value */}
         </Grid>
       </Zoom>
   );

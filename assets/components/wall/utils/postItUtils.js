@@ -1,3 +1,6 @@
+import axios from "axios";
+import { toast } from 'react-toastify';
+
 /**
  * Récupère les dimensions du post-it en fonction de la taille passée en paramètres
  * 
@@ -31,4 +34,22 @@ function getDimensionsFromSize(sizeString){
     return dimensions;
 }
 
-export { getDimensionsFromSize };
+/**
+ * Va mettre à jour la position en base de données et affiche les erreurs s'il y en a.
+ * 
+ * @param {string} uuid 
+ * @param {integer} positionX 
+ * @param {integer} positionY 
+ */
+function updatePositionInDB(uuid, positionX, positionY){
+    axios.patch('/api/post-it/'+uuid,{
+        positionX: positionX,
+        positionY: positionY
+    })
+    .catch(function(error){
+        toast.error(error.response.data.error || 'An error occurred');
+    });
+}
+    
+
+export { getDimensionsFromSize, updatePositionInDB };

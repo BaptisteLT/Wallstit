@@ -103,6 +103,7 @@ class PostItController extends AbstractController
         }
 
         $requestData = json_decode($request->getContent(), true);
+        
         $color = $requestData['color'] ?? null;
         $content = $requestData['content'] ?? null;
         $size = $requestData['size'] ?? null;
@@ -150,14 +151,27 @@ class PostItController extends AbstractController
                 throw new HttpException(400, 'Deadline must be a string format "Y-m-d H:i:s"');
             }
         }
-    
-        isset($color) ?? $postIt->setColor($color); 
-        isset($content) ?? $postIt->setContent($content); 
-        isset($positionX) ?? $postIt->setPositionX($positionX); 
-        isset($positionY) ?? $postIt->setPositionY($positionY); 
-        isset($size) ?? $postIt->setSize($size); 
+
+        if($color !== null){
+            $postIt->setColor($color); 
+        }
+        if($content !== null){
+            $postIt->setContent($content); 
+        }
+        if($positionX !== null){
+            $postIt->setPositionX($positionX); 
+        }
+        if($positionY !== null){
+            $postIt->setPositionY($positionY); 
+        }
+        if($size !== null){
+            $postIt->setSize($size); 
+        }
 
         $this->validatorService->validateEntityOrThrowException($postIt);
+
+        $this->em->persist($postIt);
+        $this->em->flush();
 
         return new JsonResponse('OK', Response::HTTP_OK);
     }
