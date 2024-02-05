@@ -9,6 +9,7 @@ use App\Repository\UserRepository;
 use App\Repository\WallRepository;
 use App\Repository\PostItRepository;
 use App\Service\TokenManagerService;
+use App\Service\ValidatorService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,16 +25,17 @@ use Symfony\Component\Messenger\Transport\Serialization\Serializer;
 use Symfony\Component\HttpFoundation\File\Exception\AccessDeniedException;
 use Symfony\Component\Serializer\Context\Normalizer\ObjectNormalizerContextBuilder;
 
+
 #[Route('/api')]
 class PostItController extends AbstractController
 {
     public function __construct(
         private TokenManagerService $tokenManager,
         private EntityManagerInterface $em,
-        private ValidatorInterface $validator,
         private WallRepository $wallRepository,
         private PostItRepository $postItRepository,
         private SerializerInterface $serializer,
+        private ValidatorService $validatorService
     ){}
 
     //TODO: implémenter une gestion des erreurs avec un listener: https://openclassrooms.com/fr/courses/7709361-construisez-une-api-rest-avec-symfony/7795134-gerez-les-erreurs-et-ajoutez-la-validation
@@ -54,15 +56,8 @@ class PostItController extends AbstractController
         $postIt = new PostIt();
         $postIt->setWall($wall);
 
-        $errors = $this->validator->validate($postIt);
-
-        if (count($errors) > 0) {
-            $errorArray = [];
-            foreach ($errors as $error) {
-                $errorArray[$error->getPropertyPath()] = $error->getMessage();
-            }
-            return new JsonResponse(['errors' => $errorArray], Response::HTTP_BAD_REQUEST);
-        }
+        
+        $this->validatorService->validateEntityOrThrowException($postIt);
 
         $this->em->persist($postIt);
         $this->em->flush();
@@ -93,8 +88,8 @@ class PostItController extends AbstractController
 
     
     
-    #[Route('/post-it/{uuid}', name: 'get-post-it', methods: ['GET'])] //TODO: changer en PATCH
-    public function patchPostIt(int $uuid, Request $request): JsonResponse
+    #[Route('/post-it/{uuid}', name: 'get-post-it', methods: ['PATCH'])]
+    public function patchPostIt(string $uuid, Request $request): JsonResponse
     {
         $postIt = $this->postItRepository->findOneBy(['uuid' => $uuid]);
 
@@ -107,8 +102,63 @@ class PostItController extends AbstractController
             throw new NotFoundHttpException('Post-it not found');
         }
 
-        //TODO: PATCH
+        $requestData = json_decode($request->getContent(), true);
+        $color = $requestData['color'] ?? null;
+        $content = $requestData['content'] ?? null;
+        $size = $requestData['size'] ?? null;
+        $positionX = $requestData['positionX'] ?? null;
+        $positionY = $requestData['positionY'] ?? null;
+        $deadline = $requestData['deadline'] ?? null;
         
+        /**
+         * Première vérification des types
+         */
+        //Si la valeur est spécifiée et si le type n'est pas celui attendu, on envoie une erreur Bad Request 400
+        if(!is_string($color) && $color !== null)
+        {
+            throw new HttpException(400, 'Color must be a string');
+        }
+        if(!is_string($content) && $content !== null)
+        {
+            throw new HttpException(400, 'Content must be a string');
+        }
+        if(!is_string($size) && $size !== null)
+        {
+            throw new HttpException(400, 'Size must be a string');
+        }
+        if(!is_string($deadline) && $deadline !== null)
+        {
+            throw new HttpException(400, 'Deadline must be a string format "Y-m-d H:i:s"');
+        }
+        if(!is_integer($positionX) && $positionX !== null)
+        {
+            throw new HttpException(400, 'PositionX must be an integer');
+        }
+        if(!is_integer($positionY) && $positionY !== null)
+        {
+            throw new HttpException(400, 'PositionY must be an integer');
+        }
+
+        /**
+         * Remplacement des valeurs qui ont été spécifiées
+         */
+        if (isset($deadline)) {
+            try {
+                $deadlineDateTime = new \DateTimeImmutable($deadline);
+                $postIt->setDeadline($deadlineDateTime);
+            } catch (\Exception $e) {
+                throw new HttpException(400, 'Deadline must be a string format "Y-m-d H:i:s"');
+            }
+        }
+    
+        isset($color) ?? $postIt->setColor($color); 
+        isset($content) ?? $postIt->setContent($content); 
+        isset($positionX) ?? $postIt->setPositionX($positionX); 
+        isset($positionY) ?? $postIt->setPositionY($positionY); 
+        isset($size) ?? $postIt->setSize($size); 
+
+        $this->validatorService->validateEntityOrThrowException($postIt);
+
         return new JsonResponse('OK', Response::HTTP_OK);
     }
 

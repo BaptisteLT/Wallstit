@@ -13,15 +13,17 @@ class ExceptionListener
         $exception = $event->getThrowable();
 
         // Customize your response object to display the exception details
-        $response = new JsonResponse(['error' => $exception->getMessage()]);
-
+        $response = new JsonResponse();
+ 
         // HttpExceptionInterface is a special type of exception that
         // holds status code and header details
         if ($exception instanceof HttpExceptionInterface) {
             $response->setStatusCode($exception->getStatusCode());
             $response->headers->replace($exception->getHeaders());
+            $response->setData(['error' => $exception->getMessage()]);
         } else {
             $response->setStatusCode(JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+            $response->setData(['error' => 'Internal server error.']);
         }
 
         // sends the modified response object to the event

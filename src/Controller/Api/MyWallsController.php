@@ -49,7 +49,7 @@ class MyWallsController extends AbstractController
 
         return new JsonResponse(['id' => $wallId], Response::HTTP_OK);
     }
-    
+
 
     #[Route('/my-walls', name: 'get-my-walls', methods: ['GET'])]
     public function getWalls(Request $request): JsonResponse
@@ -68,7 +68,6 @@ class MyWallsController extends AbstractController
     #[Route('/my-wall/delete/{id}', name: 'delete-my-wall', methods: ['DELETE'])]
     public function deleteWall(int $id, Request $request): JsonResponse
     {
-        
         $user = $this->tokenManager->findUserInRequest($request);
 
         $wall = $this->wallRepository->findOneBy(['user'=>$user->getId(), 'id' => $id]);
@@ -80,6 +79,6 @@ class MyWallsController extends AbstractController
         $this->em->remove($wall);
         $this->em->flush();
 
-        return new JsonResponse(['response' => 'ok'], Response::HTTP_OK);
+        return new JsonResponse('ok', Response::HTTP_OK);
     }
 }

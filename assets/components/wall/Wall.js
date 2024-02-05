@@ -88,7 +88,6 @@ function Wall() {
                 color={postIt.color} 
                 content={postIt.content} 
                 deadline={postIt.deadline}
-                fontSizePixels={postIt.fontSizePixels}
                 positionX={postIt.positionX}
                 positionY={postIt.positionY}
                 size={postIt.size}
