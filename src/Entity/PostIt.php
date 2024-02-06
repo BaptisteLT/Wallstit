@@ -80,6 +80,10 @@ class PostIt
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $deadline = null;
 
+    #[Groups(['get-post-its'])]
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $title = null;
+
     public function getId(): int
     {
         return $this->id;
@@ -180,4 +184,17 @@ class PostIt
 
         return $this;
     }
+
+    public function getTitle(): ?string
+    {
+        return $this->title;
+    }
+
+    public function setTitle(?string $title): static
+    {
+        $this->title = $title;
+
+        return $this;
+    }
+
 }

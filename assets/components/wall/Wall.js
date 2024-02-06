@@ -78,15 +78,16 @@ function Wall() {
 
 
   return (
-      <Zoom handleAddPostIt={addPostIt} handleTransform={updateScale} initialScale={scale} pageDimensions={pageDimensions}>
+      <Zoom postIts={postIts} handleAddPostIt={addPostIt} handleTransform={updateScale} initialScale={scale} pageDimensions={pageDimensions}>
         <Grid id={id}>
             {postIts.map((postIt) => (
               <PostIt 
                 scale={scale}
-                pageDimensions={pageDimensions} 
-                key={postIt.uuid} 
-                color={postIt.color} 
-                content={postIt.content} 
+                pageDimensions={pageDimensions}
+                title={postIt.title}
+                key={postIt.uuid}
+                color={postIt.color}
+                content={postIt.content}
                 deadline={postIt.deadline}
                 positionX={postIt.positionX}
                 positionY={postIt.positionY}

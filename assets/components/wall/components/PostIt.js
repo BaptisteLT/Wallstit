@@ -5,7 +5,7 @@ import CountDown from "./CountDown";
 import { getDimensionsFromSize, updatePositionInDB } from '../utils/postItUtils';
 
 //Dragable: https://www.npmjs.com/package/react-draggable#controlled-vs-uncontrolled
-function PostIt({ scale, pageDimensions, color, content, deadline, positionX, positionY, size, uuid })
+function PostIt({ scale, pageDimensions, color, content, deadline, positionX, positionY, size, uuid, title })
 {
     const { postItDimensions, innerDimensions } = getDimensionsFromSize(size);
 
@@ -19,7 +19,8 @@ function PostIt({ scale, pageDimensions, color, content, deadline, positionX, po
         color: color,
         deadline: (deadline ? new Date(deadline) : null),
         size: size,
-        uuid: uuid
+        uuid: uuid,
+        title: title
     });
     //Largeur et hauteur du post-it de base
     const [dimensions, setDimensions] = useState(() => { return getDimensionsFromSize(size); });
@@ -80,7 +81,8 @@ function PostIt({ scale, pageDimensions, color, content, deadline, positionX, po
                 </div>
 
                 <div className={`post-it-content panning-disabled content-${color}`} style={{minHeight: dimensions.innerDimensions.contentHeight+'px'}}>
-                    {postIt.content}
+                    <p>{postIt.title}</p>
+                    <p>{postIt.content}</p>
                 </div>
             </div>
         </Draggable>
