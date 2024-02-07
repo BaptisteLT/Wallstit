@@ -78,7 +78,7 @@ function Wall() {
 
 
   return (
-      <Zoom postIts={postIts} handleAddPostIt={addPostIt} handleTransform={updateScale} initialScale={scale} pageDimensions={pageDimensions}>
+      <Zoom setPostIts={setPostIts} postIts={postIts} handleAddPostIt={addPostIt} handleTransform={updateScale} initialScale={scale} pageDimensions={pageDimensions}>
         <Grid id={id}>
             {postIts.map((postIt) => (
               <PostIt 

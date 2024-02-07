@@ -1,0 +1,23 @@
+.select_size_wrapper
+{
+    display: flex;
+    align-items: center;
+    height: 36px;
+    gap: 5px;
+}
+
+.select_size{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    flex: 1;
+    background: #E6E6E6;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.select_size.active {
+    border: 2px solid #1f1f1f;
+    /* Your styles for the active class go here */
+}

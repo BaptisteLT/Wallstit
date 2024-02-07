@@ -1,11 +1,40 @@
 import { Sidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar';
 import React, { useState } from "react";
 import '../../../styles/Wall/sidebar.css';
+import SizeInput from './SizeInput';
+import ContentInput from './ContentInput';
+import ColorInput from './ColorInput';
+import TitleInput from './TitleInput';
 
 //SideBar documentation: https://www.npmjs.com/package/react-pro-sidebar?activeTab=readme
-function SideBar({addPostIt, postIts})
+function SideBar({setPostIts, addPostIt, postIts})
 {
     const [collapsed, setCollapsed] = useState(false);
+
+    const [postItDataCallback, setPostItDataCallback] = useState(null);//TODO: 2.5 secondes sans modif on envoie le call API
+
+    const handlePostItChange = (title = null, content = null, size = null, color = null) => {
+
+        setPostIts
+        //TODO: setPostIts.filter(..., Il faut mettre à jour le postIt qui se situe dans setPostIts, il me faudra le uuid aussi
+        //title)
+
+        // Clear the timeout if it exists
+        if (postItDataCallback) {
+            clearTimeout(postItDataCallback);
+        }
+
+        //Permet d'attendre X secondes avant d'envoyer le PATCH qui contiendra la positionX et positionY.
+        //Si l'utilisateur déplace le post-it avant les X secondes, on clear le timeout et on le relance.
+        const newTimeoutCallback = setTimeout(() => {
+            //Sauvegarder la position en BDD
+            //updatePostItInDB(title, content, size, color); TODO: à implémtener
+            alert('it does work!');
+        }, 2500);
+
+        // Store the callback in the state
+        setPostItDataCallback(newTimeoutCallback);
+    };
 
     function handleAddPostIt(){
         addPostIt();
@@ -29,43 +58,12 @@ function SideBar({addPostIt, postIts})
                 <SubMenu label="Post-its">
                     {postIts.map((postIt) => (
                         //On met le titre s'il existe, autrement si n'existe pas on regarde si le content existe, et si aucun des deux n'existe on affiche "Empty content"
-                        <SubMenu label={postIt.title ? postIt.title : postIt.content ? postIt.content : 'Empty content'}>
+                        <SubMenu key={postIt.uuid} label={postIt.title ? postIt.title : postIt.content ? postIt.content : 'Empty content'}>
                             <div className="main_wrapper">
-                                <div>
-                                    <label className="label" for="title">Title</label>
-                                    <input className="input" type="text" name="title" id="input_title" defaultValue={postIt.title} />
-                                </div>
-
-                                <div>
-                                    <label className="label" for="content">Content</label>
-                                    <textarea className="input textarea" id="content" name="content" rows="5">
-                                        {postIt.content}
-                                    </textarea>
-                                </div>
-
-
-                                <div>
-                                    <p className="label">Size</p>
-                                    <div className="select_size_wrapper">
-                                        <div className="select_size">Small</div>
-                                        <div className="active select_size">Medium</div>
-                                        <div className="select_size">Large</div>
-                                    </div>
-                                </div>
-
-
-                                <div>
-                                    <p className="label">Color</p>
-                                    <div className="select_color_wrapper">
-                                        <div className="active select_color select_color_yellow"></div>
-                                        <div className="select_color select_color_green"></div>
-                                        <div className="select_color select_color_blue"></div>
-                                        <div className="select_color select_color_orange"></div>
-                                        <div className="select_color select_color_pink"></div>
-                                    </div>
-                                </div>
-                               
-
+                                <TitleInput title={postIt.title} handlePostItChange={handlePostItChange} />
+                                <ContentInput content={postIt.content} handlePostItChange={handlePostItChange} />
+                                <SizeInput size={postIt.size} handlePostItChange={handlePostItChange} />
+                                <ColorInput color={postIt.color} handlePostItChange={handlePostItChange} />
                                 {/* TODO: ça serait mieux de créer des composants et mettre le CSS dans les composants respectifs. */}
 
     

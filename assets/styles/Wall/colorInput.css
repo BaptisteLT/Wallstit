@@ -1,0 +1,37 @@
+.select_color_wrapper{
+    display: flex;
+    align-items: center;
+    height: 36px;
+    gap: 5px;
+}
+
+.select_color{
+    height: 100%;
+    flex: 1;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.select_color.active {
+    border: 2px solid #1f1f1f;
+}
+
+.select_color_yellow{
+    background: #FCCF67;
+}
+
+.select_color_orange{
+    background: #FCAD67;
+}
+
+.select_color_green{
+    background: #7AFC67;
+}
+
+.select_color_pink{
+    background: #F467FC;
+}
+
+.select_color_blue{
+    background: #67CDFC;
+}
