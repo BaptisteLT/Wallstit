@@ -50,6 +50,27 @@ function updatePositionInDB(uuid, positionX, positionY){
         toast.error(error.response.data.error || 'An error occurred');
     });
 }
+
+
+/**
+ * Va mettre à jour le title, content, size, color en BDD
+ * 
+ * @param {*} postIt 
+ */
+function updatePostItInDB(postIt)
+{
+    axios.patch('/api/post-it/'+postIt.uuid, {
+        title: postIt.title,
+        content: postIt.content,
+        color: postIt.color,
+        size: postIt.size 
+    })
+    .catch(function(error){
+        console.log(error)
+        toast.error(error.response.data.error || 'An error occurred');
+    });
+}
+
     
 
-export { getDimensionsFromSize, updatePositionInDB };
+export { getDimensionsFromSize, updatePositionInDB, updatePostItInDB };

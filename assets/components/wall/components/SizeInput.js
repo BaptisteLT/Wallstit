@@ -11,14 +11,13 @@ function SizeInput({ size, handlePostItChange })
         handlePostItChange(null, null, size);
     }
     
-
     return(
         <div>
             <p className="label">Size</p>
             <div className="select_size_wrapper">
-                <div className="select_size" onClick={() => handleOnClick('small')}>Small</div>
-                <div className="active select_size" onClick={() => handleOnClick('medium')}>Medium</div>
-                <div className="select_size" onClick={() => handleOnClick('big')}>Large</div>
+                <div className={"select_size " + (size === 'small' ? 'active' : '')} onClick={() => handleOnClick('small')}>Small</div>
+                <div className={"select_size " + (size === 'medium' ? 'active' : '')} onClick={() => handleOnClick('medium')}>Medium</div>
+                <div className={"select_size " + (size === 'large' ? 'active' : '')} onClick={() => handleOnClick('large')}>Large</div>
             </div>
         </div>
     )

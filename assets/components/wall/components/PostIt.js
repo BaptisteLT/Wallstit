@@ -14,24 +14,21 @@ function PostIt({ scale, pageDimensions, color, content, deadline, positionX, po
         //Permet de centrer le post-it horizontalement par défaut (moitié de l'écran moins la largeur du post-it)
         positionX: positionX ? positionX : (pageDimensions.width/2)-(postItDimensions.width/2),
         //Permet de centrer le post-it verticalement par défaut (moitié de l'écran moins la hauteur du post-it)
-        positionY: positionY ? positionY : (pageDimensions.height/2)-((innerDimensions.headerHeight + innerDimensions.contentHeight)/2),
-        content: content,
-        color: color,
-        deadline: (deadline ? new Date(deadline) : null),
-        size: size,
-        uuid: uuid,
-        title: title
+        positionY: positionY ? positionY : (pageDimensions.height/2)-((innerDimensions.headerHeight + innerDimensions.contentHeight)/2)
     });
+    
     //Largeur et hauteur du post-it de base
-    const [dimensions, setDimensions] = useState(() => { return getDimensionsFromSize(size); });
+    const [dimensions, setDimensions] = useState(getDimensionsFromSize(size));
     //Permet de stocker le callback du setTimeout afin de pouvoir l'annuler
     const [positionTimeoutCallback, setPositionTimeoutCallback] = useState(null);
 
       
     //Dès que postIt.size change, on va mettre à jour la taille du postIt en fonction de si c'est "small", "medium" ou "large"
     useEffect(() => {
-        setDimensions(getDimensionsFromSize(postIt.size));
-    }, [postIt.size]);
+        setDimensions(getDimensionsFromSize(size));
+    }, [size]);
+
+    const deadlineDate  = (deadline ? new Date(deadline) : null);
 
 
     const handleStop = ((e, ui) => {
@@ -54,7 +51,7 @@ function PostIt({ scale, pageDimensions, color, content, deadline, positionX, po
         //Si l'utilisateur déplace le post-it avant les X secondes, on clear le timeout et on le relance.
         const newTimeoutCallback = setTimeout(() => {
             //Sauvegarder la position en BDD
-            updatePositionInDB(postIt.uuid, positionX, positionY);
+            updatePositionInDB(uuid, positionX, positionY);
         }, 2500);
 
         // Store the callback in the state
@@ -77,12 +74,12 @@ function PostIt({ scale, pageDimensions, color, content, deadline, positionX, po
         >
             <div className="panning-disabled post-it-container" style={{width: dimensions.postItDimensions.width+'px'}}>
                 <div className={`panning-disabled header-${color}`} style={{height: dimensions.innerDimensions.headerHeight+'px'}}>
-                    <CountDown deadline={postIt.deadline} />
+                    <CountDown deadline={deadlineDate} />
                 </div>
 
                 <div className={`post-it-content panning-disabled content-${color}`} style={{minHeight: dimensions.innerDimensions.contentHeight+'px'}}>
-                    <p>{postIt.title}</p>
-                    <p>{postIt.content}</p>
+                    <p>{title}</p>
+                    <p>{content}</p>
                 </div>
             </div>
         </Draggable>

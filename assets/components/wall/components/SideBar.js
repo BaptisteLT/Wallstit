@@ -1,8 +1,7 @@
 import { Sidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar';
-import React, { useState } from "react";
+import React, { useState, memo } from "react";
 import '../../../styles/Wall/sidebar.css';
 import SubMenuContent from './SubMenuContent';
-
 
 //SideBar documentation: https://www.npmjs.com/package/react-pro-sidebar?activeTab=readme
 function SideBar({setPostIts, addPostIt, postIts})
@@ -34,7 +33,7 @@ function SideBar({setPostIts, addPostIt, postIts})
                     {postIts.map((postIt) => (
                         //On met le titre s'il existe, autrement si n'existe pas on regarde si le content existe, et si aucun des deux n'existe on affiche "Empty content"
                         <SubMenu key={postIt.uuid} label={postIt.title ? postIt.title : postIt.content ? postIt.content : 'Empty content'}>
-                            <SubMenuContent size={postIt.size} content={postIt.content} title={postIt.title} color={postIt.color} uuid={postIt.uuid}  setPostIts={setPostIts} />
+                            <SubMenuContent size={postIt.size} content={postIt.content} title={postIt.title} color={postIt.color} uuid={postIt.uuid} setPostIts={setPostIts} postIts={postIts} />
                         </SubMenu>
                     ))}
   

@@ -1,20 +1,38 @@
 import React, { useState } from "react";
-
 import SizeInput from './SizeInput';
 import ContentInput from './ContentInput';
 import ColorInput from './ColorInput';
 import TitleInput from './TitleInput';
+import { updatePostItInDB } from '../utils/postItUtils';
 
-function SubMenuContent({ uuid, title, content, size, color })
+function SubMenuContent({ uuid, title, content, size, color, setPostIts, postIts })
 {
-    const [postItDataCallback, setPostItDataCallback] = useState(null);//TODO: 2.5 secondes sans modif on envoie le call API
+    const [postItDataCallback, setPostItDataCallback] = useState(null);
 
     const handlePostItChange = (title = null, content = null, size = null, color = null) => {
+        let currentPostIt = null;
+        let data = {};
 
+        if (title !== null) data.title = title;
+        if (content !== null) data.content = content;
+        if (size !== null) data.size = size;
+        if (color !== null) data.color = color;
 
-        //setPostIts
-        //TODO: setPostIts.filter(..., Il faut mettre à jour le postIt qui se situe dans setPostIts, il me faudra le uuid aussi
-        //title)
+        //Application des modifications sur le PostIt concerné
+        setPostIts(postIts.map(postIt => {
+            if(postIt.uuid === uuid){
+                // Create a *new* object with changes
+                const newPostIt = { ...postIt, ...data };
+                currentPostIt = newPostIt;
+                return newPostIt;
+            } else {
+              // No changes
+              return postIt;
+            }
+        }));
+
+        //Dans le cas où le PostIt ne serait pas trouvé dans l'array on return même si c'est very unlikely
+        if(currentPostIt === null) return;
 
         // Clear the timeout if it exists
         if (postItDataCallback) {
@@ -25,14 +43,12 @@ function SubMenuContent({ uuid, title, content, size, color })
         //Si l'utilisateur déplace le post-it avant les X secondes, on clear le timeout et on le relance.
         const newTimeoutCallback = setTimeout(() => {
             //Sauvegarder la position en BDD
-            //updatePostItInDB(title, content, size, color); TODO: à implémtener
-            alert('it does work!' + uuid);
+            updatePostItInDB(currentPostIt);
         }, 2500);
 
         // Store the callback in the state
         setPostItDataCallback(newTimeoutCallback);
     };
-
 
     return(
         <div className="main_wrapper">

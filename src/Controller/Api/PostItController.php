@@ -106,6 +106,7 @@ class PostItController extends AbstractController
         
         $color = $requestData['color'] ?? null;
         $content = $requestData['content'] ?? null;
+        $title = $requestData['title'] ?? null;
         $size = $requestData['size'] ?? null;
         $positionX = $requestData['positionX'] ?? null;
         $positionY = $requestData['positionY'] ?? null;
@@ -120,6 +121,10 @@ class PostItController extends AbstractController
             throw new HttpException(400, 'Color must be a string');
         }
         if(!is_string($content) && $content !== null)
+        {
+            throw new HttpException(400, 'Content must be a string');
+        }
+        if(!is_string($title) && $title !== null)
         {
             throw new HttpException(400, 'Content must be a string');
         }
@@ -157,6 +162,9 @@ class PostItController extends AbstractController
         }
         if($content !== null){
             $postIt->setContent($content); 
+        }
+        if($title !== null){
+            $postIt->setTitle($title); 
         }
         if($positionX !== null){
             $postIt->setPositionX($positionX); 

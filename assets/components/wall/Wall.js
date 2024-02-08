@@ -70,8 +70,6 @@ function Wall() {
     });
   }
   
-  console.log(postIts)
-
   useEffect(() => {
     retrieveWallPostIts();
   }, [])
@@ -82,10 +80,10 @@ function Wall() {
         <Grid id={id}>
             {postIts.map((postIt) => (
               <PostIt 
+                key={postIt.uuid}
                 scale={scale}
                 pageDimensions={pageDimensions}
                 title={postIt.title}
-                key={postIt.uuid}
                 color={postIt.color}
                 content={postIt.content}
                 deadline={postIt.deadline}

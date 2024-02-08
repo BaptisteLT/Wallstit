@@ -13,11 +13,11 @@ function ColorInput({ color, handlePostItChange })
         <div>
             <p className="label">Color</p>
             <div className="select_color_wrapper">
-                <div className="active select_color select_color_yellow" onClick={() => handleOnClick('yellow')}></div>
-                <div className="select_color select_color_green" onClick={() => handleOnClick('green')}></div>
-                <div className="select_color select_color_blue" onClick={() => handleOnClick('blue')}></div>
-                <div className="select_color select_color_orange" onClick={() => handleOnClick('orange')}></div>
-                <div className="select_color select_color_pink" onClick={() => handleOnClick('pink')}></div>
+                <div className={"select_color select_color_yellow " + (color === 'yellow' ? 'active' : '')} onClick={() => handleOnClick('yellow')}></div>
+                <div className={"select_color select_color_green " + (color === 'green' ? 'active' : '')} onClick={() => handleOnClick('green')}></div>
+                <div className={"select_color select_color_blue " + (color === 'blue' ? 'active' : '')} onClick={() => handleOnClick('blue')}></div>
+                <div className={"select_color select_color_orange " + (color === 'orange' ? 'active' : '')} onClick={() => handleOnClick('orange')}></div>
+                <div className={"select_color select_color_pink " + (color === 'pink' ? 'active' : '')} onClick={() => handleOnClick('pink')}></div>
             </div>
         </div>
     )
