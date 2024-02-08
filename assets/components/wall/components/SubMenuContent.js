@@ -1,15 +1,19 @@
 import React, { useState } from "react";
-import SizeInput from './SizeInput';
-import ContentInput from './ContentInput';
-import ColorInput from './ColorInput';
-import TitleInput from './TitleInput';
+import SizeInput from './Inputs/SizeInput';
+import ContentInput from './Inputs/ContentInput';
+import ColorInput from './Inputs/ColorInput';
+import TitleInput from './Inputs/TitleInput';
+import DeadlineInput from './Inputs/DeadlineInput';
 import { updatePostItInDB } from '../utils/postItUtils';
 
-function SubMenuContent({ uuid, title, content, size, color, setPostIts, postIts })
+function SubMenuContent({ uuid, title, content, size, color, deadline, setPostIts, postIts })
 {
     const [postItDataCallback, setPostItDataCallback] = useState(null);
 
-    const handlePostItChange = (title = null, content = null, size = null, color = null) => {
+    const handlePostItChange = (title = null, content = null, size = null, color = null, deadline = null) => {
+
+        console.log(deadline);
+
         let currentPostIt = null;
         let data = {};
 
@@ -17,6 +21,7 @@ function SubMenuContent({ uuid, title, content, size, color, setPostIts, postIts
         if (content !== null) data.content = content;
         if (size !== null) data.size = size;
         if (color !== null) data.color = color;
+        if (deadline !== null) data.deadline = deadline;
 
         //Application des modifications sur le PostIt concerné
         setPostIts(postIts.map(postIt => {
@@ -54,8 +59,10 @@ function SubMenuContent({ uuid, title, content, size, color, setPostIts, postIts
         <div className="main_wrapper">
             <TitleInput title={title} handlePostItChange={handlePostItChange} />
             <ContentInput content={content} handlePostItChange={handlePostItChange} />
+            <DeadlineInput deadline={deadline} handlePostItChange={handlePostItChange} />
             <SizeInput size={size} handlePostItChange={handlePostItChange} />
             <ColorInput color={color} handlePostItChange={handlePostItChange} />
+
         </div>
     )
 }

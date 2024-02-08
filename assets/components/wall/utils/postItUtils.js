@@ -63,7 +63,8 @@ function updatePostItInDB(postIt)
         title: postIt.title,
         content: postIt.content,
         color: postIt.color,
-        size: postIt.size 
+        size: postIt.size,
+        deadline: postIt.deadline
     })
     .catch(function(error){
         console.log(error)

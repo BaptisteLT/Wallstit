@@ -1,6 +1,6 @@
 import React from "react";
-import '../../../styles/Wall/contentInput.css';
-import '../../../styles/Wall/generalInput.css';
+import '../../../../styles/Wall/contentInput.css';
+import '../../../../styles/Wall/generalInput.css';
 
 function ContentInput({ content, handlePostItChange })
 {

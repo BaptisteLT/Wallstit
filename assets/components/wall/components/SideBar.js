@@ -33,7 +33,7 @@ function SideBar({setPostIts, addPostIt, postIts})
                     {postIts.map((postIt) => (
                         //On met le titre s'il existe, autrement si n'existe pas on regarde si le content existe, et si aucun des deux n'existe on affiche "Empty content"
                         <SubMenu key={postIt.uuid} label={postIt.title ? postIt.title : postIt.content ? postIt.content : 'Empty content'}>
-                            <SubMenuContent size={postIt.size} content={postIt.content} title={postIt.title} color={postIt.color} uuid={postIt.uuid} setPostIts={setPostIts} postIts={postIts} />
+                            <SubMenuContent deadline={postIt.deadline} size={postIt.size} content={postIt.content} title={postIt.title} color={postIt.color} uuid={postIt.uuid} setPostIts={setPostIts} postIts={postIts} />
                         </SubMenu>
                     ))}
   

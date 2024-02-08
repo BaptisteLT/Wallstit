@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import '../../../styles/Wall/titleInput.css';
-import '../../../styles/Wall/generalInput.css';
+import React from "react";
+import '../../../../styles/Wall/titleInput.css';
+import '../../../../styles/Wall/generalInput.css';
 
 function TitleInput({ title, handlePostItChange })
 {
