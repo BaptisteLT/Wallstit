@@ -53,7 +53,6 @@ function SubMenuContent({ uuid, title, content, size, color, deadline })
             <DeadlineInput deadline={deadline} handlePostItChange={handlePostItChange} />
             <SizeInput size={size} handlePostItChange={handlePostItChange} />
             <ColorInput color={color} handlePostItChange={handlePostItChange} />
-
         </div>
     )
 }

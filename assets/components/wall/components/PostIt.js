@@ -1,16 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, memo } from "react";
 import '../../../styles/Wall/post-it.css'
 import Draggable from 'react-draggable';
 import CountDown from "./CountDown";
 import { getDimensionsFromSize, updatePositionInDB } from '../utils/postItUtils';
 
 //Dragable: https://www.npmjs.com/package/react-draggable#controlled-vs-uncontrolled
-const PostIt = React.memo(({ title, color, content, deadline, positionX, positionY, size, uuid, scale, pageDimensions }) => {
-
-    useEffect(() => {
-        console.log( title, color, content, deadline, positionX, positionY, size, uuid, scale, pageDimensions);
-    });
-
+const PostIt = memo(({ title, color, content, deadline, positionX, positionY, size, uuid, scale, pageDimensions }) => 
+{
     const { postItDimensions, innerDimensions } = getDimensionsFromSize(size);
 
     //Les data du post-it

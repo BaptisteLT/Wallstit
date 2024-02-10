@@ -1,5 +1,5 @@
 import { Sidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar';
-import React, { useState, memo } from "react";
+import React, { useState } from "react";
 import '../../../styles/Wall/sidebar.css';
 import SubMenuContent from './SubMenuContent';
 import { usePostItContext } from '../PostItContext';
@@ -8,6 +8,7 @@ import { usePostItContext } from '../PostItContext';
 function SideBar()
 {
     //TODO: voir si on peut pas utiliser un contexte pour passer setPostIts
+    //TODO:Je suis casi sûr que le problème vient de postIt
     const { postIts, addPostIt } = usePostItContext();
 
     const [collapsed, setCollapsed] = useState(false);

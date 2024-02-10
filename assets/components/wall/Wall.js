@@ -19,6 +19,7 @@ function Wall() {
 
   /*TODO: lister les post-its à gauche et pouvoir cliquer dessus grâce à ZoomToElement de la librairie react-zoom-pan-pinch?*/
   const [postIts, setPostIts] = useState([]);
+  
   const [scale, setScale] = useState(1);
   //TODO: Peut-être le récupérer de l'entité walls?
   const [pageDimensions] = useState({width: 3840, height: 2160});
