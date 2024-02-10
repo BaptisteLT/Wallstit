@@ -5,16 +5,18 @@ import ColorInput from './Inputs/ColorInput';
 import TitleInput from './Inputs/TitleInput';
 import DeadlineInput from './Inputs/DeadlineInput';
 import { updatePostItInDB } from '../utils/postItUtils';
+import { usePostItContext } from '../PostItContext';
 
-function SubMenuContent({ uuid, title, content, size, color, deadline, setPostIts, postIts })
+
+function SubMenuContent({ uuid, title, content, size, color, deadline })
 {
+    const { updatePostIt } = usePostItContext();
+
     const [postItDataCallback, setPostItDataCallback] = useState(null);
 
     const handlePostItChange = (title = null, content = null, size = null, color = null, deadline = null) => {
 
-        console.log(deadline);
 
-        let currentPostIt = null;
         let data = {};
 
         if (title !== null) data.title = title;
@@ -23,19 +25,8 @@ function SubMenuContent({ uuid, title, content, size, color, deadline, setPostIt
         if (color !== null) data.color = color;
         if (deadline !== null) data.deadline = deadline;
 
-        //Application des modifications sur le PostIt concerné
-        setPostIts(postIts.map(postIt => {
-            if(postIt.uuid === uuid){
-                // Create a *new* object with changes
-                const newPostIt = { ...postIt, ...data };
-                currentPostIt = newPostIt;
-                return newPostIt;
-            } else {
-              // No changes
-              return postIt;
-            }
-        }));
-
+        const currentPostIt = updatePostIt(data, uuid);
+        
         //Dans le cas où le PostIt ne serait pas trouvé dans l'array on return même si c'est very unlikely
         if(currentPostIt === null) return;
 

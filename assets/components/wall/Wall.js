@@ -6,6 +6,8 @@ import Zoom from './components/Zoom';
 import PostIt from './components/PostIt';
 import { toast } from 'react-toastify';
 import axios from 'axios';
+import { PostItContext } from './PostItContext';
+
 
 function Wall() {
   // Access the 'id' parameter from the route
@@ -19,7 +21,7 @@ function Wall() {
   const [postIts, setPostIts] = useState([]);
   const [scale, setScale] = useState(1);
   //TODO: Peut-être le récupérer de l'entité walls?
-  const pageDimensions = {width: 3840, height: 2160}
+  const [pageDimensions] = useState({width: 3840, height: 2160});
 
   //On met à jour le scale pour le passer au post-it qui en a besoin
   function updateScale(elements)
@@ -51,7 +53,6 @@ function Wall() {
     })
   }
 
-
   function retrieveWallPostIts() {
     axios.get('/api/wall/' + id + '/post-its')
     .then(function (response) {
@@ -72,29 +73,52 @@ function Wall() {
   
   useEffect(() => {
     retrieveWallPostIts();
-  }, [])
+  }, []);
 
+
+  /**
+   * Met à jour les données d'un seul postIts dans le useState postIts qui contient un array d'objects postIts
+   */
+  const updatePostIt = (newPostItData, uuid) => {
+    let currentPostIt = null;
+
+    setPostIts(prevPostIts => 
+      prevPostIts.map((postIt) => {
+        if (postIt.uuid === uuid) {
+          const newPostIt = { ...postIt, ...newPostItData };
+          currentPostIt = newPostIt;
+          return newPostIt;
+        }
+        return postIt;
+      })
+    )
+
+    return currentPostIt;
+  };
 
   return (
-      <Zoom setPostIts={setPostIts} postIts={postIts} handleAddPostIt={addPostIt} handleTransform={updateScale} initialScale={scale} pageDimensions={pageDimensions}>
+    //TODO: voir comment on peut get rid of postIts={postIts}
+    <PostItContext.Provider value={{ updatePostIt, addPostIt, postIts }}>
+      <Zoom handleTransform={updateScale} initialScale={scale} pageDimensions={pageDimensions}>
         <Grid id={id}>
-            {postIts.map((postIt) => (
-              <PostIt 
-                key={postIt.uuid}
-                scale={scale}
-                pageDimensions={pageDimensions}
-                title={postIt.title}
-                color={postIt.color}
-                content={postIt.content}
-                deadline={postIt.deadline}
-                positionX={postIt.positionX}
-                positionY={postIt.positionY}
-                size={postIt.size}
-                uuid={postIt.uuid}
-              />
-            ))}
+          {postIts.map((postIt) => (
+            <PostIt 
+              key={postIt.uuid}
+              scale={scale}
+              pageDimensions={pageDimensions}
+              title={postIt.title}
+              color={postIt.color}
+              content={postIt.content}
+              deadline={postIt.deadline}
+              positionX={postIt.positionX}
+              positionY={postIt.positionY}
+              size={postIt.size}
+              uuid={postIt.uuid}
+            />
+          ))}
         </Grid>
       </Zoom>
+    </PostItContext.Provider>
   );
 }
 

@@ -5,8 +5,12 @@ import CountDown from "./CountDown";
 import { getDimensionsFromSize, updatePositionInDB } from '../utils/postItUtils';
 
 //Dragable: https://www.npmjs.com/package/react-draggable#controlled-vs-uncontrolled
-function PostIt({ scale, pageDimensions, color, content, deadline, positionX, positionY, size, uuid, title })
-{
+const PostIt = React.memo(({ title, color, content, deadline, positionX, positionY, size, uuid, scale, pageDimensions }) => {
+
+    useEffect(() => {
+        console.log( title, color, content, deadline, positionX, positionY, size, uuid, scale, pageDimensions);
+    });
+
     const { postItDimensions, innerDimensions } = getDimensionsFromSize(size);
 
     //Les data du post-it
@@ -84,6 +88,8 @@ function PostIt({ scale, pageDimensions, color, content, deadline, positionX, po
             </div>
         </Draggable>
     );
-}
+  });
+
+
 
 export default PostIt;

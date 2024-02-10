@@ -2,11 +2,13 @@ import { Sidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar';
 import React, { useState, memo } from "react";
 import '../../../styles/Wall/sidebar.css';
 import SubMenuContent from './SubMenuContent';
+import { usePostItContext } from '../PostItContext';
 
 //SideBar documentation: https://www.npmjs.com/package/react-pro-sidebar?activeTab=readme
-function SideBar({setPostIts, addPostIt, postIts})
+function SideBar()
 {
     //TODO: voir si on peut pas utiliser un contexte pour passer setPostIts
+    const { postIts, addPostIt } = usePostItContext();
 
     const [collapsed, setCollapsed] = useState(false);
 
@@ -32,8 +34,9 @@ function SideBar({setPostIts, addPostIt, postIts})
                 <SubMenu label="Post-its">
                     {postIts.map((postIt) => (
                         //On met le titre s'il existe, autrement si n'existe pas on regarde si le content existe, et si aucun des deux n'existe on affiche "Empty content"
+                        //TODO: gérer le open
                         <SubMenu key={postIt.uuid} label={postIt.title ? postIt.title : postIt.content ? postIt.content : 'Empty content'}>
-                            <SubMenuContent deadline={postIt.deadline} size={postIt.size} content={postIt.content} title={postIt.title} color={postIt.color} uuid={postIt.uuid} setPostIts={setPostIts} postIts={postIts} />
+                            <SubMenuContent deadline={postIt.deadline} size={postIt.size} content={postIt.content} title={postIt.title} color={postIt.color} uuid={postIt.uuid} />
                         </SubMenu>
                     ))}
   
