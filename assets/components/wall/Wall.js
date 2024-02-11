@@ -47,7 +47,8 @@ function Wall() {
           positionX: positionX,
           positionY: positionY,
           content: null,
-          color: 'yellow'
+          color: 'yellow',
+          size: 'medium'
         }
       ]);
     })

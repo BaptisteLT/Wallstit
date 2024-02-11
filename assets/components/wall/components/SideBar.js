@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import '../../../styles/Wall/SideBar/sidebar.css';
 import SubMenuContent from './SubMenuContent';
 import { usePostItContext } from '../PostItContext';
@@ -10,7 +10,7 @@ import AddIcon from '@mui/icons-material/Add';
 //SideBar documentation: https://www.npmjs.com/package/react-pro-sidebar?activeTab=readme
 function SideBar()
 {
-    //TODO:Je suis casi sûr que le problème vient de postIt pour le re-render des composants
+    //TODO: Optimisation potentielle: Je suis casi sûr que le problème vient de postIt pour le re-render des composants
     const { postIts, addPostIt, activePostItMenuUuid } = usePostItContext();
 
     function handleAddPostIt(){
@@ -34,9 +34,7 @@ function SideBar()
             <DropDown open={activePostItMenuUuid} parentDropDown={true} label="Post-its">
                 {postIts.map((postIt) => (
                     //On met le titre s'il existe, autrement si n'existe pas on regarde si le content existe, et si aucun des deux n'existe on affiche "Empty content"
-                    //TODO: gérer le open
-                    
-                    <DropDown open={activePostItMenuUuid === postIt.uuid} key={postIt.uuid} label={postIt.title ? postIt.title : postIt.content ? postIt.content : 'Empty content'}>
+                    <DropDown id={postIt.uuid} open={activePostItMenuUuid === postIt.uuid} key={postIt.uuid} label={postIt.title ? postIt.title : postIt.content ? postIt.content : 'Empty content'}>
                         <SubMenuContent deadline={postIt.deadline} size={postIt.size} content={postIt.content} title={postIt.title} color={postIt.color} uuid={postIt.uuid} />
                     </DropDown>
                 ))}
