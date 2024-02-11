@@ -2,11 +2,15 @@ import React, { useEffect, useState, memo } from "react";
 import '../../../styles/Wall/post-it.css'
 import Draggable from 'react-draggable';
 import CountDown from "./CountDown";
+import SettingsIcon from '@mui/icons-material/Settings';
 import { getDimensionsFromSize, updatePositionInDB } from '../utils/postItUtils';
+import { usePostItContext } from '../PostItContext';
 
 //Dragable: https://www.npmjs.com/package/react-draggable#controlled-vs-uncontrolled
-const PostIt = memo(({ title, color, content, deadline, positionX, positionY, size, uuid, scale, pageDimensions }) => 
+const PostIt = React.memo(({ title, color, content, deadline, positionX, positionY, size, uuid, scale, pageDimensions }) =>
 {
+    const { openPostItMenu } = usePostItContext();
+
     const { postItDimensions, innerDimensions } = getDimensionsFromSize(size);
 
     //Les data du post-it
@@ -22,14 +26,16 @@ const PostIt = memo(({ title, color, content, deadline, positionX, positionY, si
     //Permet de stocker le callback du setTimeout afin de pouvoir l'annuler
     const [positionTimeoutCallback, setPositionTimeoutCallback] = useState(null);
 
-      
+    const [deadlineDate, setDeadlineDate] = useState(null);
     //Dès que postIt.size change, on va mettre à jour la taille du postIt en fonction de si c'est "small", "medium" ou "large"
     useEffect(() => {
         setDimensions(getDimensionsFromSize(size));
     }, [size]);
 
-    const deadlineDate  = (deadline ? new Date(deadline) : null);
-
+    useEffect(() => {
+        setDeadlineDate(deadline ? new Date(deadline) : null);
+    }, [deadline]);
+    
 
     const handleStop = ((e, ui) => {
         const positionX = parseInt(ui.x);
@@ -73,13 +79,16 @@ const PostIt = memo(({ title, color, content, deadline, positionX, positionY, si
             onStop={handleStop}
         >
             <div className="panning-disabled post-it-container" style={{width: dimensions.postItDimensions.width+'px'}}>
-                <div className={`panning-disabled header-${color}`} style={{height: dimensions.innerDimensions.headerHeight+'px'}}>
-                    <CountDown deadline={deadlineDate} />
+
+                
+                <div className={`panning-disabled header header-${color}`} style={{height: dimensions.innerDimensions.headerHeight+'px'}}>
+                    <SettingsIcon onClick={() => openPostItMenu(uuid)} fontSize="medium" className="panning-disabled edit-icon" />
                 </div>
 
                 <div className={`post-it-content panning-disabled content-${color}`} style={{minHeight: dimensions.innerDimensions.contentHeight+'px'}}>
-                    <p>{title}</p>
-                    <p>{content}</p>
+                    <CountDown deadline={deadlineDate} />
+                    <p className="panning-disabled">{title}</p>
+                    <p className="panning-disabled">{content}</p>
                 </div>
             </div>
         </Draggable>

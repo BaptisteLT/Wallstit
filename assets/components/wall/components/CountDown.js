@@ -12,6 +12,9 @@ function CountDown({ deadline })
     useEffect(() => {
         if(deadline instanceof Date)
         {
+            //On l'appelle avant autrement on devra attendre 1 seconde.
+            decrementCountDown(deadline);
+
             interval = setInterval(() => {
                 decrementCountDown(deadline);
             }, 1000);
@@ -24,7 +27,7 @@ function CountDown({ deadline })
                 clearInterval(interval);
             }
         }
-    }, [])
+    }, [deadline])
 
 
     function decrementCountDown(deadline){
@@ -56,7 +59,7 @@ function CountDown({ deadline })
 
 
     return(
-        <>{countDown}</>
+        <span className="panning-disabled">{countDown}</span>
     )
 }
 

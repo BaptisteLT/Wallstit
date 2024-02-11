@@ -23,7 +23,7 @@ function Zoom({initialScale, handleTransform, pageDimensions, children}) {
             maxScale={5}
             //Défini jusqu'à quel zoomOut on peut aller
             minScale={0.58}
-            panning={{excluded: ['panning-disabled']}}
+            panning={{excluded: ['panning-disabled', 'path']}}
             onTransformed={handleTransform}
         >
             {({ zoomIn, zoomOut, centerView }) => (

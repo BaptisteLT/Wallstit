@@ -20,6 +20,9 @@ function Wall() {
   /*TODO: lister les post-its à gauche et pouvoir cliquer dessus grâce à ZoomToElement de la librairie react-zoom-pan-pinch?*/
   const [postIts, setPostIts] = useState([]);
   
+  //Défini le menu qui sera ouvert
+  const [activePostItMenuUuid, setActivePostItMenuUuid] = useState('');
+
   const [scale, setScale] = useState(1);
   //TODO: Peut-être le récupérer de l'entité walls?
   const [pageDimensions] = useState({width: 3840, height: 2160});
@@ -78,6 +81,9 @@ function Wall() {
 
 
   /**
+   * @param {object} newPostItData 
+   * @param {string} uuid 
+   * 
    * Met à jour les données d'un seul postIts dans le useState postIts qui contient un array d'objects postIts
    */
   const updatePostIt = (newPostItData, uuid) => {
@@ -86,8 +92,10 @@ function Wall() {
     setPostIts(prevPostIts => 
       prevPostIts.map((postIt) => {
         if (postIt.uuid === uuid) {
+          console.log(postIt);
           const newPostIt = { ...postIt, ...newPostItData };
           currentPostIt = newPostIt;
+          console.log(currentPostIt);
           return newPostIt;
         }
         return postIt;
@@ -97,9 +105,19 @@ function Wall() {
     return currentPostIt;
   };
 
+  /**
+   * Ouvre le menu du PostIt (son uuid) passé en paramètres
+   * 
+   * @param {string} uuid 
+   */
+  const openPostItMenu = (uuid) => {
+    //Permet de refermer si le menu est déjà ouvert, ou d'ouvrir le menu associé à l'uuid du PostIt
+    setActivePostItMenuUuid(uuid === activePostItMenuUuid ? null : uuid);
+  }
+
   return (
     //TODO: voir comment on peut get rid of postIts={postIts}
-    <PostItContext.Provider value={{ updatePostIt, addPostIt, postIts }}>
+    <PostItContext.Provider value={{ updatePostIt, addPostIt, openPostItMenu, postIts, activePostItMenuUuid }}>
       <Zoom handleTransform={updateScale} initialScale={scale} pageDimensions={pageDimensions}>
         <Grid id={id}>
           {postIts.map((postIt) => (

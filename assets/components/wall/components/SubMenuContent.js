@@ -16,7 +16,6 @@ function SubMenuContent({ uuid, title, content, size, color, deadline })
 
     const handlePostItChange = (title = null, content = null, size = null, color = null, deadline = null) => {
 
-
         let data = {};
 
         if (title !== null) data.title = title;
