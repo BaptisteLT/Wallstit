@@ -5,8 +5,9 @@ import '../../../../styles/Wall/SideBar/dropDown.css';
 function DropDown({ open = false, label, parentDropDown = false, id, children })
 {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [isMenuManuallyOpen, setIsMenuManuallyOpen] = useState(false);
 
-    //Ouverture du menu
+    //Ouverture du menu depuis l'icone settings
     useEffect(() => {
       if(open){
         setIsMenuOpen(true);
@@ -16,29 +17,34 @@ function DropDown({ open = false, label, parentDropDown = false, id, children })
       }
     }, [open]);
 
-    //Dès que le menu est ouvert on scroll vers l'élément
+    // Effect for scrolling when the menu is open (form the setting icon)
     useEffect(() => {
-      const element = document.getElementById('identifier-'+id);
-      if(element !== null && isMenuOpen)
-      {
-        element.scrollIntoView({block: 'start'});
+      if (isMenuOpen && id) {
+        const element = document.getElementById('identifier-' + id);
+        if (element !== null) {
+          element.scrollIntoView({ block: 'start', behavior: 'smooth' });
+        }
       }
-    }, [isMenuOpen]);
+    }, [isMenuOpen, id]);
 
-
-
+    //Ouverture/fermeture manuelle
     const toggleMenu = () => {
-      setIsMenuOpen(!isMenuOpen);
+      if(isMenuOpen === true && isMenuManuallyOpen === false){
+        setIsMenuOpen(false);
+      }
+      else{
+        setIsMenuManuallyOpen(!isMenuManuallyOpen);
+      }
     };
   
     return(
-        <div id={id ? 'identifier-'+id : ''}>
-            <div className={'dropDownTitle ' + (isMenuOpen ? 'active' : '') + (parentDropDown ? '' : ' parentDropDown')} onClick={toggleMenu}>
+        <div id={id ? 'identifier-'+id : null}>
+            <div className={'dropDownTitle ' + ((isMenuOpen || isMenuManuallyOpen) ? 'active' : '') + (parentDropDown ? '' : ' parentDropDown')} onClick={toggleMenu}>
               <span>{ label }</span>
-              <span className={isMenuOpen ? 'rotate' : 'rotate-default'}><ArrowForwardIosIcon /></span>
+              <span className={(isMenuOpen || isMenuManuallyOpen) ? 'rotate' : 'rotate-default'}><ArrowForwardIosIcon /></span>
             </div>
     
-            {isMenuOpen && (
+            {(isMenuOpen || isMenuManuallyOpen) && (
             <div className={(parentDropDown ? '' : ' parentDropDown')}>
                 { children }
             </div>

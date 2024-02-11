@@ -15,6 +15,7 @@
     background: #E6E6E6;
     border-radius: 3px;
     cursor: pointer;
+    font-size: 14px;
 }
 
 .select_size.active {

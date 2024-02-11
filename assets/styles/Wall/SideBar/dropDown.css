@@ -2,7 +2,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px;
+    padding: 8px 10px;
     background: white;
     border-bottom: 1px solid #F9F9F9;
 }
@@ -12,12 +12,12 @@
 }
 .dropDownTitle.active
 {
-    background: #efefef;
+    background: #dbdbdb;
 }
 
 .dropDownTitle:hover
 {
-    background: #E6E6E6;
+    background: #dbdbdb;
 }
 
 
