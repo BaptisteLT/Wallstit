@@ -1,11 +1,19 @@
 .menu
 {
     overflow-y: auto;
-    width: 300px;
     position: absolute;
     height: 100%;
     background: #F9F9F9;
     z-index: 1;
+}
+.menu.large{
+  width: 320px;
+}
+.menu.medium{
+  width: 280px;
+}
+.menu.small{
+  width: 240px;
 }
 
 /* Firefox (uncomment to work in Firefox, although other properties will not work!)  */

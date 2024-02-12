@@ -23,6 +23,8 @@ function Wall() {
   //Défini le menu qui sera ouvert
   const [activePostItMenuUuid, setActivePostItMenuUuid] = useState('');
 
+  const [sideBarSize, setSideBarSize] = useState(null);
+
   const [scale, setScale] = useState(1);
   //TODO: Peut-être le récupérer de l'entité walls?
   const [pageDimensions] = useState({width: 3840, height: 2160});
@@ -61,7 +63,11 @@ function Wall() {
   function retrieveWallPostIts() {
     axios.get('/api/wall/' + id + '/post-its')
     .then(function (response) {
-      const newPostIts = JSON.parse(response.data).postIts;
+      const data = JSON.parse(response.data);
+
+      setSideBarSize(data.user.sideBarSize);
+
+      const newPostIts = data.postIts;
 
       // Merging current post-its with new Post-its
       setPostIts((prevPostIts) => [
@@ -116,9 +122,24 @@ function Wall() {
     setActivePostItMenuUuid(uuid === activePostItMenuUuid ? null : uuid);
   }
 
+  /**
+   * Mettre à jour la taille de la sizeBar
+   * 
+   * @param {string} sideBarSize 
+   */
+  const updateSideBarSize = (sideBarSize) => {
+    setSideBarSize(sideBarSize);
+    axios.put('/api/general/side-bar-size', {
+      sideBarSize: sideBarSize
+    })
+    .catch(function(error){
+      toast.error(error.response.data.error || 'An error occurred');
+    })
+  }
+
   return (
     //TODO: voir comment on peut get rid of postIts={postIts}
-    <PostItContext.Provider value={{ updatePostIt, addPostIt, openPostItMenu, postIts, activePostItMenuUuid }}>
+    <PostItContext.Provider value={{ updatePostIt, addPostIt, openPostItMenu, postIts, activePostItMenuUuid, sideBarSize, updateSideBarSize }}>
       <Zoom handleTransform={updateScale} initialScale={scale} pageDimensions={pageDimensions}>
         <Grid id={id}>
           {postIts.map((postIt) => (

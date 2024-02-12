@@ -7,7 +7,10 @@ use App\Repository\UserRepository;
 use App\Entity\Traits\CreateUpdateTrait;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
+
 
 #[ORM\HasLifecycleCallbacks]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
@@ -41,9 +44,15 @@ class User implements UserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Wall::class, orphanRemoval: true)]
     private Collection $walls;
 
+    #[Groups(['get-post-its'])]
+    #[Assert\Choice(['small', 'medium', 'large'])]
+    #[ORM\Column(length: 255)]
+    private ?string $sideBarSize = null;
+
     public function __construct()
     {
         $this->walls = new ArrayCollection();
+        $this->sideBarSize = 'medium';
     }
 
     public function getId(): ?int
@@ -195,6 +204,18 @@ class User implements UserInterface
                 $wall->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getSideBarSize(): ?string
+    {
+        return $this->sideBarSize;
+    }
+
+    public function setSideBarSize(string $sideBarSize): static
+    {
+        $this->sideBarSize = $sideBarSize;
 
         return $this;
     }

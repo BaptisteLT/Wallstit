@@ -1,6 +1,8 @@
 import React, { useEffect } from "react";
 import '../../../styles/Wall/SideBar/sidebar.css';
-import SubMenuContent from './SubMenuContent';
+import PostItSubMenuContent from './SideBar/SubMenuContent/PostItSubMenuContent';
+import WallSubMenuContent from './SideBar/SubMenuContent/WallSubMenuContent';
+import GeneralSubMenuContent from './SideBar/SubMenuContent/GeneralSubMenuContent';
 import { usePostItContext } from '../PostItContext';
 import Menu from './SideBar/Menu';
 import DropDown from './SideBar/DropDown';
@@ -11,41 +13,30 @@ import AddIcon from '@mui/icons-material/Add';
 function SideBar()
 {
     //TODO: Optimisation potentielle: Je suis casi sûr que le problème vient de postIt pour le re-render des composants
-    const { postIts, addPostIt, activePostItMenuUuid } = usePostItContext();
+    const { postIts, addPostIt, activePostItMenuUuid, sideBarSize } = usePostItContext();
 
     function handleAddPostIt(){
         addPostIt();
     }
 
     return(
-        /*
-            <SubMenu label="Wall settings (plus un chargement des items)">
-                <MenuItem> setting 1 </MenuItem>
-                <MenuItem> setting 2 </MenuItem>
-            </SubMenu>
-
-            <SubMenu label="General settings">
-                <MenuItem> Size bar width (small, mediumn, large) </MenuItem>
-                <MenuItem> Font size (14, 16 (default), 18, 20?) </MenuItem>
-            </SubMenu>
-        */
-
-        <Menu>
+        /*TODO: rajouter des ICONS de post-it, etc*/
+        <Menu sideBarSize={sideBarSize}> 
             <DropDown open={activePostItMenuUuid} parentDropDown={true} label="Post-its">
                 {postIts.map((postIt) => (
                     //On met le titre s'il existe, autrement si n'existe pas on regarde si le content existe, et si aucun des deux n'existe on affiche "Empty content"
                     <DropDown id={postIt.uuid} open={activePostItMenuUuid === postIt.uuid} key={postIt.uuid} label={postIt.title ? postIt.title : postIt.content ? postIt.content : 'Empty content'}>
-                        <SubMenuContent deadline={postIt.deadline} size={postIt.size} content={postIt.content} title={postIt.title} color={postIt.color} uuid={postIt.uuid} />
+                        <PostItSubMenuContent deadline={postIt.deadline} size={postIt.size} content={postIt.content} title={postIt.title} color={postIt.color} uuid={postIt.uuid} />
                     </DropDown>
                 ))}
             </DropDown>
 
             <DropDown parentDropDown={true} label="Wall settings (plus un chargement des items)">
-                hi
+                <WallSubMenuContent sideBarSize={sideBarSize} />
             </DropDown>
 
             <DropDown parentDropDown={true} label="General settings">
-                hi
+                <GeneralSubMenuContent sideBarSize={sideBarSize} />
             </DropDown>
 
             <Item onClick={handleAddPostIt}>

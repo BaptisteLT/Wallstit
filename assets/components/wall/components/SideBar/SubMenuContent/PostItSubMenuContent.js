@@ -1,14 +1,14 @@
 import React, { useState } from "react";
-import SizeInput from './Inputs/SizeInput';
-import ContentInput from './Inputs/ContentInput';
-import ColorInput from './Inputs/ColorInput';
-import TitleInput from './Inputs/TitleInput';
-import DeadlineInput from './Inputs/DeadlineInput';
-import { updatePostItInDB } from '../utils/postItUtils';
-import { usePostItContext } from '../PostItContext';
+import SizeInput from '../../Inputs/SizeInput';
+import ContentInput from '../../Inputs/ContentInput';
+import ColorInput from '../../Inputs/ColorInput';
+import TitleInput from '../../Inputs/TitleInput';
+import DeadlineInput from '../../Inputs/DeadlineInput';
+import { updatePostItInDB } from '../../../utils/postItUtils';
+import { usePostItContext } from '../../../PostItContext';
 
 
-function SubMenuContent({ uuid, title, content, size, color, deadline })
+function PostItSubMenuContent({ uuid, title, content, size, color, deadline })
 {
     const { updatePostIt } = usePostItContext();
 
@@ -50,10 +50,10 @@ function SubMenuContent({ uuid, title, content, size, color, deadline })
             <TitleInput title={title} handlePostItChange={handlePostItChange} />
             <ContentInput content={content} handlePostItChange={handlePostItChange} />
             <DeadlineInput deadline={deadline} handlePostItChange={handlePostItChange} />
-            <SizeInput size={size} handlePostItChange={handlePostItChange} />
+            <SizeInput label='Size' size={size} handlePostItChange={handlePostItChange} />
             <ColorInput color={color} handlePostItChange={handlePostItChange} />
         </div>
     )
 }
 
-export default SubMenuContent;
+export default PostItSubMenuContent;

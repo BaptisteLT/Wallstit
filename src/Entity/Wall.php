@@ -31,6 +31,7 @@ class Wall
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $borderColor = null;
 
+    #[Groups(['get-post-its'])]
     #[ORM\ManyToOne(inversedBy: 'walls')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;

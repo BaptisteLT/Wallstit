@@ -9,6 +9,7 @@
 .parentDropDown
 {
     padding-left: 30px;
+    overflow: hidden;
 }
 .dropDownTitle.active
 {
