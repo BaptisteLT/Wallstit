@@ -2,10 +2,19 @@ import React, { useEffect, useState } from 'react';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import '../../../../styles/Wall/SideBar/dropDown.css';
 
-function DropDown({ open = false, label, parentDropDown = false, id, children })
+function DropDown({ open = false, label, parentDropDown = false, id, color = 'default', children })
 {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isMenuManuallyOpen, setIsMenuManuallyOpen] = useState(false);
+
+    function dropDownTitleColor()
+    {
+      if(color === 'green' || color === 'yellow' || color === 'pink' || color === 'blue' || color === 'orange')
+      {
+        return color;
+      }
+      return 'default';
+    }
 
     //Ouverture du menu depuis l'icone settings
     useEffect(() => {
@@ -39,7 +48,7 @@ function DropDown({ open = false, label, parentDropDown = false, id, children })
   
     return(
         <div id={id ? 'identifier-'+id : null}>
-            <div className={'dropDownTitle ' + ((isMenuOpen || isMenuManuallyOpen) ? 'active' : '') + (parentDropDown ? '' : ' parentDropDown')} onClick={toggleMenu}>
+            <div className={dropDownTitleColor() + ' dropDownTitle ' + ((isMenuOpen || isMenuManuallyOpen) ? dropDownTitleColor()+'-active' : '') + (parentDropDown ? '' : ' parentDropDown')} onClick={toggleMenu}>
               <span>{ label }</span>
               <span className={(isMenuOpen || isMenuManuallyOpen) ? 'rotate' : 'rotate-default'}><ArrowForwardIosIcon /></span>
             </div>

@@ -1,26 +1,75 @@
+/*DropDownTitle*/
 .dropDownTitle{
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 8px 10px;
-    background: white;
     border-bottom: 1px solid #F9F9F9;
 }
+.dropDownTitle.default{
+    background: white;
+}
+.dropDownTitle.yellow{
+    background: #FFD980;
+}
+.dropDownTitle.green{
+    background: #A8FF80;
+}
+.dropDownTitle.blue{
+    background: #80D5FF;
+}
+.dropDownTitle.orange{
+    background: #FFBC80;
+}
+.dropDownTitle.pink{
+    background: #F980FF;
+}
+
+/*DropDownTitle Hover*/
+.dropDownTitle.default:hover{
+    background: #dbdbdb;
+}
+.dropDownTitle.yellow:hover{
+    background: #FCCF67;
+}
+.dropDownTitle.green:hover{
+    background: #7AFC67;
+}
+.dropDownTitle.blue:hover{
+    background: #67CDFC;
+}
+.dropDownTitle.orange:hover{
+    background: #FCAD67;
+}
+.dropDownTitle.pink:hover{
+    background: #F467FC;
+}
+
+/*DropDownTitle Active class*/
+.dropDownTitle.default-active{
+    background: #dbdbdb;
+}
+.dropDownTitle.yellow-active{
+    background: #FCCF67;
+}
+.dropDownTitle.green-active{
+    background: #7AFC67;
+}
+.dropDownTitle.blue-active{
+    background: #67CDFC;
+}
+.dropDownTitle.orange-active{
+    background: #FCAD67;
+}
+.dropDownTitle.pink-active{
+    background: #F467FC;
+}
+
 .parentDropDown
 {
     padding-left: 30px;
     overflow: hidden;
 }
-.dropDownTitle.active
-{
-    background: #dbdbdb;
-}
-
-.dropDownTitle:hover
-{
-    background: #dbdbdb;
-}
-
 
 .rotate-default
 {
