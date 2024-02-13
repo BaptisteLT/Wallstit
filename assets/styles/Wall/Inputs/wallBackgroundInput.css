@@ -6,12 +6,15 @@
     gap: 10px 12px;
     align-items: center;
 }
-
 .select-background
 {
     border-radius: 3px;
     background-size: cover;
     height: 46px;
+}
+.select-background:hover
+{
+    cursor: pointer;
 }
 .select-background.active {
     border: 2px solid #1f1f1f;

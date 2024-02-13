@@ -2,7 +2,7 @@ import React from 'react';
 import '../../../../styles/Wall/SideBar/menu.css';
 
 
-function Menu({ children, sideBarSize })
+function Menu({ children, collapsed, sideBarSize })
 {
     function menuSize()
     {
@@ -15,9 +15,13 @@ function Menu({ children, sideBarSize })
     }
 
     return(
-        <div className={"menu " + menuSize()}>
-            { children }
+        <div>
+            <p>Collapse</p>
+            <div className={"menu " + menuSize() + (collapsed ? ' collapsed' : '')}>
+                { children }
+            </div>
         </div>
+        
     );
 }
 

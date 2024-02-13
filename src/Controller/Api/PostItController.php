@@ -38,8 +38,6 @@ class PostItController extends AbstractController
         private ValidatorService $validatorService
     ){}
 
-    //TODO: implémenter une gestion des erreurs avec un listener: https://openclassrooms.com/fr/courses/7709361-construisez-une-api-rest-avec-symfony/7795134-gerez-les-erreurs-et-ajoutez-la-validation
-
     //En création
     #[Route('/post-it', name: 'create-post-it', methods: ['POST'])]
     public function createWall(Request $request): JsonResponse

@@ -20,7 +20,7 @@ function WallBackgroundInput({label, wallBackground, handleWallBackgroundChange}
                 <div className={"select-background flowers-colorful " + (wallBackground === 'flowers-colorful' ? 'active' : '')} onClick={() => handleOnClick('flowers-colorful')}></div>
                 <div className={"select-background flowers-dark " + (wallBackground === 'flowers-dark' ? 'active' : '')} onClick={() => handleOnClick('flowers-dark')}></div>
                 <div className={"select-background grouted-natural-stone " + (wallBackground === 'grouted-natural-stone' ? 'active' : '')} onClick={() => handleOnClick('grouted-natural-stone')}></div>
-                <div className={"select-background multi-coloured-tiles " + (wallBackground === 'multi-coloured-tiles' ? 'active' : '')} onClick={() => handleOnClick('multi-coloured-tiles')}>s</div>
+                <div className={"select-background multi-coloured-tiles " + (wallBackground === 'multi-coloured-tiles' ? 'active' : '')} onClick={() => handleOnClick('multi-coloured-tiles')}></div>
                 <div className={"select-background wood " + (wallBackground === 'wood' ? 'active' : '')} onClick={() => handleOnClick('wood')}></div>
             </div>
         </>

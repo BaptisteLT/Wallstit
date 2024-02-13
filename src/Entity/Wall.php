@@ -47,7 +47,7 @@ class Wall
     private Collection $postIts;
 
     #[Groups(['get-post-its'])]
-    #[Assert\Choice(['bricks', 'cork-board', 'flowers-colorful', 'flowers-dark', 'grounted-natural-stone', 'multi-coloured-tiles', 'wood', 'grid'])]
+    #[Assert\Choice(['bricks', 'cork-board', 'flowers-colorful', 'flowers-dark', 'grouted-natural-stone', 'multi-coloured-tiles', 'wood', 'grid'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $background = null;
 

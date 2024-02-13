@@ -24,12 +24,15 @@ class AuthController extends AbstractController
         $refreshToken = $request->cookies->get('refreshToken');
         $tokens = $tokenManager->refreshTokens($refreshToken);
         
+        $jwtToken = $tokenManager->decodeJwtToken($tokens['jwtToken']);
+
         $response = new JsonResponse(['jwtToken' =>$tokens['jwtToken'] ,'data' => [
             'refreshTokenExpiresAt' => $tokens['refreshToken']['expiresAt'], 
-            'jwtToken' => $tokenManager->decodeJwtToken($tokens['jwtToken'])
+            'jwtToken' => $jwtToken
         ]], Response::HTTP_OK);//TODO: display error to client
-        $response->headers->setCookie(new Cookie('jwtToken', $tokens['jwtToken'], 0, '/', null, true, true));
-        $response->headers->setCookie(new Cookie('refreshToken', $tokens['refreshToken']['refreshToken'], 0, '/', null, true, true));
+
+        $response->headers->setCookie(new Cookie('jwtToken', $tokens['jwtToken'], $jwtToken['jwtPayload']->exp, '/', null, true, true));
+        $response->headers->setCookie(new Cookie('refreshToken', $tokens['refreshToken']['refreshToken'], $tokens['refreshToken']['expiresAt'], '/', null, true, true));
 
         return $response;
     }

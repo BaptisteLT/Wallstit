@@ -103,6 +103,7 @@ class TokenManagerService
     public function refreshTokens($refreshToken)
     {
         $refreshToken = $this->refreshTokenRepository->findOneBy(['value' => $refreshToken]);
+        
         if(!$refreshToken){
             throw new AccessDeniedException('Refresh token not found or has expired.');
         }

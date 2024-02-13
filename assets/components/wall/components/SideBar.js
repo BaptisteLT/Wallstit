@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import '../../../styles/Wall/SideBar/sidebar.css';
 import PostItSubMenuContent from './SideBar/SubMenuContent/PostItSubMenuContent';
 import WallSubMenuContent from './SideBar/SubMenuContent/WallSubMenuContent';
@@ -9,11 +9,12 @@ import DropDown from './SideBar/DropDown';
 import Item from './SideBar/Item';
 import AddIcon from '@mui/icons-material/Add';
 
-//SideBar documentation: https://www.npmjs.com/package/react-pro-sidebar?activeTab=readme
 function SideBar()
 {
     //TODO: Optimisation potentielle: Je suis casi sûr que le problème vient de postIt pour le re-render des composants
     const { postIts, addPostIt, activePostItMenuUuid, sideBarSize, wallBackground } = usePostItContext();
+
+    const [collapsed, setCollapsed] = useState(false);
 
     function handleAddPostIt(){
         addPostIt();
@@ -21,7 +22,7 @@ function SideBar()
 
     return(
         /*TODO: rajouter des ICONS de post-it, etc*/
-        <Menu sideBarSize={sideBarSize}> 
+        <Menu collapsed={collapsed} sideBarSize={sideBarSize}> 
             <DropDown open={activePostItMenuUuid} parentDropDown={true} label="Post-its">
                 {postIts.map((postIt) => (
                     //On met le titre s'il existe, autrement si n'existe pas on regarde si le content existe, et si aucun des deux n'existe on affiche "Empty content"
@@ -31,7 +32,7 @@ function SideBar()
                 ))}
             </DropDown>
 
-            <DropDown parentDropDown={true} label="Wall settings (plus un chargement des items)">
+            <DropDown parentDropDown={true} label="Wall settings">
                 <WallSubMenuContent wallBackground={wallBackground} />
             </DropDown>
 
