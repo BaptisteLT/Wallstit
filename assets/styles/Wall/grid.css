@@ -2,3 +2,35 @@
     height: 100%;
     width: 100%;
 }
+
+.custom-background
+{
+    height: 100%;
+    width: 100%;
+}
+
+.custom-background.bricks{
+    background-image: url('../../img/backgrounds/bricks.jpg');
+}
+.custom-background.cork-board{
+    background-image: url('../../img/backgrounds/cork-board.jpg');
+}
+.custom-background.flowers-colorful{
+    background-image: url('../../img/backgrounds/flowers-colorful.jpg');
+}
+.custom-background.flowers-dark{
+    background-image: url('../../img/backgrounds/flowers-dark.jpg');
+}
+.custom-background.multi-coloured-tiles{
+    background-image: url('../../img/backgrounds/multi-coloured-tiles.jpg');
+}
+.custom-background.wood{
+    background-image: url('../../img/backgrounds/wood.jpg');
+}
+.custom-background.grouted-natural-stone{
+    background-image: url('../../img/backgrounds/grouted-natural-stone.jpg');
+}
+
+.custom-background.active {
+    border: 2px solid #1f1f1f;
+}

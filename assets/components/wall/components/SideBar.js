@@ -13,7 +13,7 @@ import AddIcon from '@mui/icons-material/Add';
 function SideBar()
 {
     //TODO: Optimisation potentielle: Je suis casi sûr que le problème vient de postIt pour le re-render des composants
-    const { postIts, addPostIt, activePostItMenuUuid, sideBarSize } = usePostItContext();
+    const { postIts, addPostIt, activePostItMenuUuid, sideBarSize, wallBackground } = usePostItContext();
 
     function handleAddPostIt(){
         addPostIt();
@@ -32,10 +32,10 @@ function SideBar()
             </DropDown>
 
             <DropDown parentDropDown={true} label="Wall settings (plus un chargement des items)">
-                <WallSubMenuContent sideBarSize={sideBarSize} />
+                <WallSubMenuContent wallBackground={wallBackground} />
             </DropDown>
 
-            <DropDown parentDropDown={true} label="General settings">
+            <DropDown parentDropDown={true} label="General preferences">
                 <GeneralSubMenuContent sideBarSize={sideBarSize} />
             </DropDown>
 

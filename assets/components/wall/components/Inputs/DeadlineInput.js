@@ -1,6 +1,6 @@
 import React from "react";
-import '../../../../styles/Wall/titleInput.css';
-import '../../../../styles/Wall/generalInput.css';
+import '../../../../styles/Wall/Inputs/titleInput.css';
+import '../../../../styles/Wall/Inputs/generalInput.css';
 
 function DeadlineInput({ deadline, handlePostItChange })
 {

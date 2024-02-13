@@ -1,6 +1,6 @@
 import React from "react";
-import '../../../../styles/Wall/sizeInput.css';
-import '../../../../styles/Wall/generalInput.css';
+import '../../../../styles/Wall/Inputs/sizeInput.css';
+import '../../../../styles/Wall/Inputs/generalInput.css';
 
 
 function SizeInput({ size, handlePostItChange = null, handleSideBarChange = null, label })

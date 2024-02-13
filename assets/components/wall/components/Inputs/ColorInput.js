@@ -1,6 +1,6 @@
 import React from "react";
-import '../../../../styles/Wall/colorInput.css';
-import '../../../../styles/Wall/generalInput.css';
+import '../../../../styles/Wall/Inputs/colorInput.css';
+import '../../../../styles/Wall/Inputs/generalInput.css';
 
 function ColorInput({ color, handlePostItChange })
 {

@@ -3,22 +3,23 @@
 namespace App\Controller\Api;
 
 use App\Entity\Wall;
-use Doctrine\ORM\EntityManager;
 use App\Repository\UserRepository;
 use App\Repository\WallRepository;
 use App\Service\TokenManagerService;
+use App\Service\ValidatorService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\File\Exception\AccessDeniedException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Messenger\Transport\Serialization\Serializer;
+use Symfony\Component\HttpFoundation\File\Exception\AccessDeniedException;
 use Symfony\Component\Serializer\Context\Normalizer\ObjectNormalizerContextBuilder;
-use Symfony\Component\Serializer\SerializerInterface;
 
 #[Route('/api')]
 class MyWallsController extends AbstractController
@@ -29,7 +30,8 @@ class MyWallsController extends AbstractController
         private UserRepository $userRepository,
         private EntityManagerInterface $em,
         private SerializerInterface $serializer,
-        private WallRepository $wallRepository
+        private WallRepository $wallRepository,
+        private ValidatorService $validatorService
     ){}
 
     //En création
@@ -80,5 +82,37 @@ class MyWallsController extends AbstractController
         $this->em->flush();
 
         return new JsonResponse('ok', Response::HTTP_OK);
+    }
+
+    
+    //En création
+    #[Route('/wall/{id}/wall-background', name: 'update-wall-background', methods: ['PUT'])]
+    public function updateWallBackground(int $id, Request $request): JsonResponse
+    {
+        $user = $this->tokenManager->findUserInRequest($request);
+
+        $wall = $this->wallRepository->findOneBy(['user'=>$user->getId(), 'id' => $id]);
+
+        if(!$wall)
+        {
+            throw new NotFoundHttpException('Wall not found.');
+        }
+
+        $requestData = json_decode($request->getContent(), true);
+        $wallBackground = $requestData['wallBackground'];
+
+        if(!is_string($wallBackground))
+        {
+            throw new HttpException(400, 'Sidebar size must be a string');
+        }
+
+        $wall->setBackground($wallBackground);
+
+        $this->validatorService->validateEntityOrThrowException($wall);
+
+        $this->em->persist($wall);
+        $this->em->flush();
+
+        return new JsonResponse('OK', Response::HTTP_OK);
     }
 }

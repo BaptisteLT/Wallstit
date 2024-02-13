@@ -8,6 +8,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use App\Entity\Traits\CreateUpdateTrait;
 use App\Repository\WallRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 #[ORM\HasLifecycleCallbacks]
 #[ORM\Entity(repositoryClass: WallRepository::class)]
@@ -43,6 +45,11 @@ class Wall
     #[Groups(['get-post-its'])]
     #[ORM\OneToMany(mappedBy: 'wall', targetEntity: PostIt::class, orphanRemoval: true)]
     private Collection $postIts;
+
+    #[Groups(['get-post-its'])]
+    #[Assert\Choice(['bricks', 'cork-board', 'flowers-colorful', 'flowers-dark', 'grounted-natural-stone', 'multi-coloured-tiles', 'wood', 'grid'])]
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $background = null;
 
     public function __construct()
     {
@@ -140,6 +147,18 @@ class Wall
                 $postIt->setWall(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getBackground(): ?string
+    {
+        return $this->background;
+    }
+
+    public function setBackground(?string $background): static
+    {
+        $this->background = $background;
 
         return $this;
     }
