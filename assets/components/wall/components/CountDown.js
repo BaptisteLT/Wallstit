@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 /**
  * Composant responsable de la décrémentation du champ deadline
  */
-function CountDown({ deadline })
+function CountDown({ deadline, className })
 {
     const [countDown, setCountDown] = useState('');
 
@@ -59,7 +59,7 @@ function CountDown({ deadline })
 
 
     return(
-        <span className="panning-disabled">{countDown}</span>
+        <span className={className}>{countDown}</span>
     )
 }
 

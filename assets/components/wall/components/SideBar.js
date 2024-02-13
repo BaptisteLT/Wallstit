@@ -41,7 +41,7 @@ function SideBar()
             </DropDown>
 
             <Item onClick={handleAddPostIt}>
-                <span>Create a new Post-it</span>
+                <span>Create New Post-It</span>
                 <AddIcon fontSize="medium" />
             </Item>
         </Menu>

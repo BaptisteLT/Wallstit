@@ -80,15 +80,19 @@ const PostIt = React.memo(({ title, color, content, deadline, positionX, positio
         >
             <div className="panning-disabled post-it-container" style={{width: dimensions.postItDimensions.width+'px'}}>
 
-                
                 <div className={`panning-disabled header header-${color}`} style={{height: dimensions.innerDimensions.headerHeight+'px'}}>
                     <SettingsIcon onClick={() => openPostItMenu(uuid)} fontSize="medium" className="panning-disabled edit-icon" />
                 </div>
 
                 <div className={`post-it-content panning-disabled content-${color}`} style={{minHeight: dimensions.innerDimensions.contentHeight+'px'}}>
-                    <CountDown deadline={deadlineDate} />
-                    <p className="panning-disabled">{title}</p>
-                    <p className="panning-disabled">{content}</p>
+                    {
+                        deadlineDate !== null &&
+                        <div className="deadline-wrapper">
+                            <CountDown deadline={deadlineDate} className={"panning-disabled deadline"} />
+                        </div>
+                    }
+                    <p className="panning-disabled title">{title}</p>
+                    <p className="panning-disabled content">{content}</p>
                 </div>
             </div>
         </Draggable>

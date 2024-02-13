@@ -1,6 +1,29 @@
 .tools{
     position: absolute;
-    bottom: 0;
-    right: 0;
+    bottom: 15px;
+    right: 13px;
     z-index: 1;
+    display: flex;
+    gap: 4px;
+}
+
+.tools > .tool{
+    background: #ffffff;
+    border: 1px solid #b4b4b4;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.tools > .zoom{
+
+}
+
+
+.tools > .zoom-out{
+
+}
+
+
+.tools > .center{
+
 }

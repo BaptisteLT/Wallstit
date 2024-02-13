@@ -5,6 +5,7 @@
     padding: 10px;
     background: white;
     border-bottom: 1px solid #F9F9F9;
+    cursor: pointer;
 }
 
 .item:hover

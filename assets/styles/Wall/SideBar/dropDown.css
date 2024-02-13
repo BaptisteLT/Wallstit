@@ -5,6 +5,7 @@
     align-items: center;
     padding: 8px 10px;
     border-bottom: 1px solid #F9F9F9;
+    cursor: pointer;
 }
 .dropDownTitle.default{
     background: white;
