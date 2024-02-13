@@ -154,7 +154,7 @@ function Wall() {
 
   return (
     //TODO: voir comment on peut get rid of postIts={postIts}
-    <PostItContext.Provider value={{ updatePostIt, addPostIt, openPostItMenu, postIts, activePostItMenuUuid, sideBarSize, updateSideBarSize, wallBackground, updateWallBackground, setSideBarSize, setWallBackground }}>
+    <PostItContext.Provider value={{ updatePostIt, addPostIt, openPostItMenu, postIts, activePostItMenuUuid, sideBarSize, updateSideBarSize, wallBackground, updateWallBackground, setSideBarSize, setWallBackground, setActivePostItMenuUuid }}>
       <Zoom handleTransform={updateScale} initialScale={scale} pageDimensions={pageDimensions}>
         <Grid wallBackground={wallBackground} id={id}>
           {postIts.map((postIt) => (

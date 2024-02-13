@@ -12,7 +12,7 @@ import AddIcon from '@mui/icons-material/Add';
 function SideBar()
 {
     //TODO: Optimisation potentielle: Je suis casi sûr que le problème vient de postIt pour le re-render des composants
-    const { postIts, addPostIt, activePostItMenuUuid, sideBarSize, wallBackground } = usePostItContext();
+    const { postIts, addPostIt, activePostItMenuUuid, sideBarSize, wallBackground, setActivePostItMenuUuid } = usePostItContext();
 
     const [collapsed, setCollapsed] = useState(false);
 
@@ -23,7 +23,7 @@ function SideBar()
     return(
         /*TODO: rajouter des ICONS de post-it, etc*/
         <Menu collapsed={collapsed} sideBarSize={sideBarSize} setCollapsed={setCollapsed}> 
-            <DropDown open={activePostItMenuUuid} parentDropDown={true} label="Post-its">
+            <DropDown setActivePostItMenuUuid={setActivePostItMenuUuid} open={activePostItMenuUuid} parentDropDown={true} label="Post-its">
                 {postIts.map((postIt) => (
                     //On met le titre s'il existe, autrement si n'existe pas on regarde si le content existe, et si aucun des deux n'existe on affiche "Empty content"
                     <DropDown color={postIt.color} id={postIt.uuid} open={activePostItMenuUuid === postIt.uuid} key={postIt.uuid} label={postIt.title ? postIt.title : postIt.content ? postIt.content : 'Empty content'}>
