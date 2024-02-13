@@ -22,7 +22,7 @@ function SideBar()
 
     return(
         /*TODO: rajouter des ICONS de post-it, etc*/
-        <Menu collapsed={collapsed} sideBarSize={sideBarSize}> 
+        <Menu collapsed={collapsed} sideBarSize={sideBarSize} setCollapsed={setCollapsed}> 
             <DropDown open={activePostItMenuUuid} parentDropDown={true} label="Post-its">
                 {postIts.map((postIt) => (
                     //On met le titre s'il existe, autrement si n'existe pas on regarde si le content existe, et si aucun des deux n'existe on affiche "Empty content"

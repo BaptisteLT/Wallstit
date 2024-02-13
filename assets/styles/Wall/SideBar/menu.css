@@ -1,23 +1,31 @@
+.menu-wrapper
+{
+  height: 100%;
+  position: absolute;
+  background: #F9F9F9;
+  z-index: 2;
+  box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+}
+
+.menu-wrapper.large{
+  width: 320px;
+}
+.menu-wrapper.medium{
+  width: 280px;
+}
+.menu-wrapper.small{
+  width: 240px;
+}
+.menu-wrapper.collapsed{
+  width: 0px;
+}
+
 .menu
 {
   overflow-y: auto;
-  position: absolute;
-  height: 100%;
-  background: #F9F9F9;
-  z-index: 1;
+  width: 100%;
 }
-.menu.collapsed{
-  display: none;
-}
-.menu.large{
-  width: 320px;
-}
-.menu.medium{
-  width: 280px;
-}
-.menu.small{
-  width: 240px;
-}
+
 
 /* Firefox (uncomment to work in Firefox, although other properties will not work!)  */
 /** {
@@ -27,32 +35,59 @@
 
 /* Chrome, Edge and Safari */
 *::-webkit-scrollbar {
-    height: 10px;
-    width: 10px;
-  }
-  *::-webkit-scrollbar-track {
-    border-radius: 5px;
-    background-color: #EFEFEF;
-  }
+  height: 10px;
+  width: 10px;
+}
+*::-webkit-scrollbar-track {
+  border-radius: 5px;
+  background-color: #EFEFEF;
+}
   
-  *::-webkit-scrollbar-track:hover {
-    background-color: #ffffff;
-  }
+*::-webkit-scrollbar-track:hover {
+  background-color: #ffffff;
+}
   
-  *::-webkit-scrollbar-track:active {
-    background-color: #EFEFEF;
-  }
+*::-webkit-scrollbar-track:active {
+  background-color: #EFEFEF;
+}
+
+*::-webkit-scrollbar-thumb {
+  border-radius: 5px;
+  background-color: #E6E6E6;
+}
   
-  *::-webkit-scrollbar-thumb {
-    border-radius: 5px;
-    background-color: #E6E6E6;
-  }
+*::-webkit-scrollbar-thumb:hover {
+  background-color: #dedede;
+}
+
+*::-webkit-scrollbar-thumb:active {
+  background-color: #dedede;
+}
   
-  *::-webkit-scrollbar-thumb:hover {
-    background-color: #dedede;
-  }
-  
-  *::-webkit-scrollbar-thumb:active {
-    background-color: #dedede;
-  }
-  
+/*Bouton collapse*/
+.collapse-btn
+{
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  background: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 0px 3px 3px 0px;
+  margin-top: 25px;
+  z-index: 4;
+  box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+}
+.collapse-btn.large{
+  left: 320px;
+}
+.collapse-btn.medium{
+  left: 280px;
+}
+.collapse-btn.small{
+  left: 240px;
+}
+.collapse-btn.collapsed{
+  left: 0px;
+}

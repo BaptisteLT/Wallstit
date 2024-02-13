@@ -27,7 +27,7 @@
 
 /*DropDownTitle Hover*/
 .dropDownTitle.default:hover{
-    background: #dbdbdb;
+    background: #E6E6E6;
 }
 .dropDownTitle.yellow:hover{
     background: #FCCF67;
@@ -47,7 +47,7 @@
 
 /*DropDownTitle Active class*/
 .dropDownTitle.default-active{
-    background: #dbdbdb;
+    background: #E6E6E6;
 }
 .dropDownTitle.yellow-active{
     background: #FCCF67;
