@@ -64,18 +64,13 @@ class GoogleAuthController extends AbstractController
     {
         try
         {
-            $requestData = json_decode($request->getContent(), true);
-            $code = $requestData['code'];
-            $state = $requestData['state'];
-    
-
-            
+            ['code' => $code, 'state' => $state] = json_decode($request->getContent(), true);
             ['jwtToken' => $jwtToken, 'refreshToken' => $refreshToken] = $this->googleOAuthService->getAuthenticationTokens($code, $state);
 
             $response = new JsonResponse([
                 'refreshTokenExpiresAt' => $refreshToken->getExpiresAt()->getTimestamp(), 
                 'jwtToken' => $jwtToken->decode()
-            ], 200);//TODO: display error to client
+            ], 200);
 
             $response->headers->setCookie(new Cookie('jwtToken', $jwtToken->getValue(), $jwtToken->getExpiresAt()->getTimestamp(), '/', null, true, true));
             $response->headers->setCookie(new Cookie('refreshToken', $refreshToken->getValue(), $refreshToken->getExpiresAt()->getTimestamp(), '/', null, true, true));
