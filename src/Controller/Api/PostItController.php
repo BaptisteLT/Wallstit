@@ -2,40 +2,32 @@
 
 namespace App\Controller\Api;
 
-use App\Entity\Wall;
 use App\Entity\PostIt;
-use Doctrine\ORM\EntityManager;
-use App\Repository\UserRepository;
 use App\Repository\WallRepository;
 use App\Repository\PostItRepository;
-use App\Service\TokenManagerService;
+use App\Service\CookieService;
 use App\Service\ValidatorService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\HttpKernel\Exception\HttpException;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Messenger\Transport\Serialization\Serializer;
-use Symfony\Component\HttpFoundation\File\Exception\AccessDeniedException;
-use Symfony\Component\Serializer\Context\Normalizer\ObjectNormalizerContextBuilder;
 
 
 #[Route('/api')]
 class PostItController extends AbstractController
 {
     public function __construct(
-        private TokenManagerService $tokenManager,
         private EntityManagerInterface $em,
         private WallRepository $wallRepository,
         private PostItRepository $postItRepository,
         private SerializerInterface $serializer,
-        private ValidatorService $validatorService
+        private ValidatorService $validatorService,
+        private CookieService $cookieService
     ){}
 
     //En création
@@ -47,7 +39,7 @@ class PostItController extends AbstractController
         $wallId = $requestData['wallId'];
 
         //Récupération du user dans le cookie
-        $user = $this->tokenManager->findUserInRequest($request);
+        $user = $this->cookieService->findUserInRequest($request);
         //Récupération du wall du l'utilisateur
         $wall = $this->wallRepository->findOneBy(['user' => $user, 'id' => $wallId]);
         
@@ -71,7 +63,7 @@ class PostItController extends AbstractController
   
         $wall = $this->wallRepository->find($id);
 
-        $user = $this->tokenManager->findUserInRequest($request);
+        $user = $this->cookieService->findUserInRequest($request);
 
         if((!$wall) || ($wall->getUser() !== $user))
         {
@@ -91,7 +83,7 @@ class PostItController extends AbstractController
     {
         $postIt = $this->postItRepository->findOneBy(['uuid' => $uuid]);
 
-        $user = $this->tokenManager->findUserInRequest($request);
+        $user = $this->cookieService->findUserInRequest($request);
 
         //Si le post-it n'existe pas ou qu'il n'appartient à pas l'utilisateur qui en a fait la requête.
         if((!$postIt) || ($postIt->getWall()->getUser() !== $user))

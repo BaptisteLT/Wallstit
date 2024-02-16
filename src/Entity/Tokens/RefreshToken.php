@@ -1,14 +1,15 @@
 <?php
 
-namespace App\Entity;
+namespace App\Entity\Tokens;
 
+use App\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Traits\CreateUpdateTrait;
 use App\Repository\RefreshTokenRepository;
 
 #[ORM\HasLifecycleCallbacks]
 #[ORM\Entity(repositoryClass: RefreshTokenRepository::class)]
-class RefreshToken
+class RefreshToken extends Token
 {
     use CreateUpdateTrait;
 
@@ -18,10 +19,10 @@ class RefreshToken
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $value = null;
+    protected string $value;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $expiresAt = null;
+    protected \DateTimeImmutable $expiresAt;
 
     #[ORM\OneToOne(inversedBy: 'refreshToken', cascade: ['persist', 'remove'])]
     private ?User $user = null;
@@ -31,7 +32,7 @@ class RefreshToken
         return $this->id;
     }
 
-    public function getValue(): ?string
+    public function getValue(): string
     {
         return $this->value;
     }
@@ -43,7 +44,7 @@ class RefreshToken
         return $this;
     }
 
-    public function getExpiresAt(): ?\DateTimeImmutable
+    public function getExpiresAt(): \DateTimeImmutable
     {
         return $this->expiresAt;
     }

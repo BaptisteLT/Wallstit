@@ -8,7 +8,8 @@ import { toast } from 'react-toastify';
 import axios from 'axios';
 import { PostItContext } from './PostItContext';
 
-
+//TODO: suppression d'un postIt (avec csrf)
+//TODO: le bouton done pour la deadline
 function Wall() {
   // Access the 'id' parameter from the route
   //https://github.com/BetterTyped/react-zoom-pan-pinch pour le zoom in and out

@@ -2,29 +2,21 @@
 
 namespace App\Controller;
 
-use Psr\Log\LoggerInterface;
 use Symfony\Component\Uid\Uuid;
-use App\Service\GoogleOAuthService;
 use App\Service\TokenManagerService;
-use Symfony\Component\HttpClient\HttpClient;
+use App\Service\Auth\GoogleOAuthService;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\HttpKernel\Exception\HttpException;
-use Symfony\Component\HttpClient\Exception\ServerException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 
 #[Route('/auth', name: 'auth_')]
 class GoogleAuthController extends AbstractController
 {
     public function __construct(
-        private LoggerInterface $logger, 
         private RequestStack $requestStack, 
         private GoogleOAuthService $googleOAuthService, 
         private TokenManagerService $tokenManager
@@ -76,21 +68,20 @@ class GoogleAuthController extends AbstractController
             $code = $requestData['code'];
             $state = $requestData['state'];
     
-            $tokens = $this->googleOAuthService->authenticate($code, $state);
 
-            $jwtToken = $this->tokenManager->decodeJwtToken($tokens['jwtToken']);
+            
+            ['jwtToken' => $jwtToken, 'refreshToken' => $refreshToken] = $this->googleOAuthService->getAuthenticationTokens($code, $state);
 
             $response = new JsonResponse([
-                'refreshTokenExpiresAt' => $tokens['refreshToken']['expiresAt'], 
-                'jwtToken' => $jwtToken
+                'refreshTokenExpiresAt' => $refreshToken->getExpiresAt()->getTimestamp(), 
+                'jwtToken' => $jwtToken->decode()
             ], 200);//TODO: display error to client
 
-            $response->headers->setCookie(new Cookie('jwtToken', $tokens['jwtToken'], $jwtToken['jwtPayload']->exp, '/', null, true, true));
-            $response->headers->setCookie(new Cookie('refreshToken', $tokens['refreshToken']['refreshToken'], $tokens['refreshToken']['expiresAt'], '/', null, true, true));
+            $response->headers->setCookie(new Cookie('jwtToken', $jwtToken->getValue(), $jwtToken->getExpiresAt()->getTimestamp(), '/', null, true, true));
+            $response->headers->setCookie(new Cookie('refreshToken', $refreshToken->getValue(), $refreshToken->getExpiresAt()->getTimestamp(), '/', null, true, true));
         }
         catch(\Exception $e)
         {
-            $this->logger->error('An error occurred during the google authentication: ' . $e->getMessage());
             throw new HttpException(500, 'An error occurred during the Google authentication.');
         }
 

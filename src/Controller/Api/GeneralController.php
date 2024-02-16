@@ -1,10 +1,8 @@
 <?php
 namespace App\Controller\Api;
 
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\Mapping\Entity;
+use App\Service\CookieService;
 use App\Service\ValidatorService;
-use App\Service\TokenManagerService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,16 +15,16 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class GeneralController extends AbstractController
 {
     public function __construct(
-        private TokenManagerService $tokenManager,
         private ValidatorService $validatorService,
-        private EntityManagerInterface $em
+        private EntityManagerInterface $em,
+        private CookieService $cookieService
     ){}
 
     //En création
     #[Route('/general/side-bar-size', name: 'update-side-bar-size', methods: ['PUT'])]
     public function updateSideBarSize(Request $request): JsonResponse
     {
-        $user = $this->tokenManager->findUserInRequest($request);
+        $user = $this->cookieService->findUserInRequest($request);
 
         $requestData = json_decode($request->getContent(), true);
         $sideBarSize = $requestData['sideBarSize'];

@@ -29,3 +29,9 @@ services:
     # please note that last definitions always *replace* previous ones
     App\EventListener\ExceptionListener:
         tags: [kernel.event_listener]
+
+    App\Service\Auth\GoogleOAuthService:
+        autowire: true
+
+    App\Service\OAuthApi\GoogleOAuth2ApiService:
+        autowire: true
