@@ -4,7 +4,10 @@ namespace App\Service\Authentication\Tokens;
 use App\Entity\User;
 use App\Entity\Tokens\JwtToken;
 use App\Repository\UserRepository;
+use App\Entity\Tokens\RefreshToken;
+use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\File\Exception\AccessDeniedException;
 
 class TokenCookieService
@@ -13,6 +16,23 @@ class TokenCookieService
         private UserRepository $userRepository,
         private TokenManagerService $tokenManagerService
     ){}
+
+    /**
+     * Create cookies for authentication
+     *
+     * @param JwtToken $jwtToken
+     * @param RefreshToken $refreshToken
+     * @param JsonResponse $response
+     * 
+     * @return JsonResponse $response
+     */
+    public function createAuthCookies(JwtToken $jwtToken, RefreshToken $refreshToken, JsonResponse $response)
+    {
+        $response->headers->setCookie(new Cookie('jwtToken', $jwtToken->getValue(), $jwtToken->getExpiresAt()->getTimestamp(), '/', null, true, true));
+        $response->headers->setCookie(new Cookie('refreshToken', $refreshToken->getValue(), $refreshToken->getExpiresAt()->getTimestamp(), '/', null, true, true));
+
+        return $response;
+    }
 
     /**
      * Retourne un utilisateur en prenant la requête et les cookies contenus dans celle-ci

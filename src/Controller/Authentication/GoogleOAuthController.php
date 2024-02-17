@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Authentication;
 
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\HttpFoundation\Cookie;
@@ -15,7 +15,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Service\Authentication\OAuth\OAuthApi\GoogleOAuthApiService;
 
 #[Route('/auth', name: 'auth_')]
-class GoogleAuthController extends AbstractController
+class GoogleOAuthController extends AbstractController
 {
     public function __construct(
         private RequestStack $requestStack, 
@@ -66,15 +66,8 @@ class GoogleAuthController extends AbstractController
         try
         {
             ['code' => $code, 'state' => $state] = json_decode($request->getContent(), true);
-            ['jwtToken' => $jwtToken, 'refreshToken' => $refreshToken] = $this->OAuthAuthenticationService->getAuthenticationTokens($googleOAuthApiService, $code, $state);
-
-            $response = new JsonResponse([
-                'refreshTokenExpiresAt' => $refreshToken->getExpiresAt()->getTimestamp(), 
-                'jwtToken' => $jwtToken->decode()
-            ], 200);
-
-            $response->headers->setCookie(new Cookie('jwtToken', $jwtToken->getValue(), $jwtToken->getExpiresAt()->getTimestamp(), '/', null, true, true));
-            $response->headers->setCookie(new Cookie('refreshToken', $refreshToken->getValue(), $refreshToken->getExpiresAt()->getTimestamp(), '/', null, true, true));
+            
+            $response = $this->OAuthAuthenticationService->prepareAuthenticationResponse($googleOAuthApiService, $code, $state); 
         }
         catch(\Exception $e)
         {
