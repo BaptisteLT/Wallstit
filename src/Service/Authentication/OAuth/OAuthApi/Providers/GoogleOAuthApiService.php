@@ -1,9 +1,10 @@
 <?php
-namespace App\Service\Authentication\OAuth\OAuthApi;
+namespace App\Service\Authentication\OAuth\OAuthApi\Providers;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
+use App\Service\Authentication\OAuth\OAuthApi\OAuthApiInterface;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 

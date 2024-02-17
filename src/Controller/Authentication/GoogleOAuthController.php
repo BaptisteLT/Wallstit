@@ -12,7 +12,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use App\Service\Authentication\Tokens\TokenManagerService;
 use App\Service\Authentication\OAuth\OAuthAuthenticationService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use App\Service\Authentication\OAuth\OAuthApi\GoogleOAuthApiService;
+use App\Service\Authentication\OAuth\OAuthApi\Providers\GoogleOAuthApiService;
 
 #[Route('/auth', name: 'auth_')]
 class GoogleOAuthController extends AbstractController
@@ -66,7 +66,7 @@ class GoogleOAuthController extends AbstractController
         try
         {
             ['code' => $code, 'state' => $state] = json_decode($request->getContent(), true);
-            
+
             $response = $this->OAuthAuthenticationService->prepareAuthenticationResponse($googleOAuthApiService, $code, $state); 
         }
         catch(\Exception $e)
