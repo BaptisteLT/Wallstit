@@ -1,5 +1,5 @@
 <?php
-namespace App\Service;
+namespace App\Service\Authentication\Tokens;
 
 use App\Entity\User;
 use App\Entity\Tokens\JwtToken;
@@ -7,7 +7,7 @@ use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\File\Exception\AccessDeniedException;
 
-class CookieService
+class TokenCookieService
 {
     public function __construct(
         private UserRepository $userRepository,

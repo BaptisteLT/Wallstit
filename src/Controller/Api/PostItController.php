@@ -5,14 +5,14 @@ namespace App\Controller\Api;
 use App\Entity\PostIt;
 use App\Repository\WallRepository;
 use App\Repository\PostItRepository;
-use App\Service\CookieService;
-use App\Service\ValidatorService;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Service\Validator\ValidatorService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\SerializerInterface;
+use App\Service\Authentication\Tokens\TokenCookieService;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -27,7 +27,7 @@ class PostItController extends AbstractController
         private PostItRepository $postItRepository,
         private SerializerInterface $serializer,
         private ValidatorService $validatorService,
-        private CookieService $cookieService
+        private TokenCookieService $tokenCookieService
     ){}
 
     //En création
@@ -39,7 +39,7 @@ class PostItController extends AbstractController
         $wallId = $requestData['wallId'];
 
         //Récupération du user dans le cookie
-        $user = $this->cookieService->findUserInRequest($request);
+        $user = $this->tokenCookieService->findUserInRequest($request);
         //Récupération du wall du l'utilisateur
         $wall = $this->wallRepository->findOneBy(['user' => $user, 'id' => $wallId]);
         
@@ -63,7 +63,7 @@ class PostItController extends AbstractController
   
         $wall = $this->wallRepository->find($id);
 
-        $user = $this->cookieService->findUserInRequest($request);
+        $user = $this->tokenCookieService->findUserInRequest($request);
 
         if((!$wall) || ($wall->getUser() !== $user))
         {
@@ -83,7 +83,7 @@ class PostItController extends AbstractController
     {
         $postIt = $this->postItRepository->findOneBy(['uuid' => $uuid]);
 
-        $user = $this->cookieService->findUserInRequest($request);
+        $user = $this->tokenCookieService->findUserInRequest($request);
 
         //Si le post-it n'existe pas ou qu'il n'appartient à pas l'utilisateur qui en a fait la requête.
         if((!$postIt) || ($postIt->getWall()->getUser() !== $user))

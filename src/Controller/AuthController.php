@@ -2,12 +2,12 @@
 
 namespace App\Controller;
 
-use App\Service\TokenManagerService;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use App\Service\Authentication\Tokens\TokenManagerService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route('/auth', name: 'auth_')]

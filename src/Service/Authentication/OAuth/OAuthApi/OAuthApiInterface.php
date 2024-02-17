@@ -1,7 +1,7 @@
 <?php
-namespace App\Service\OAuthApi;
+namespace App\Service\Authentication\OAuth\OAuthApi;
 
-interface OAuth2ApiInterface{
+interface OAuthApiInterface{
 
     /**
      * Obtains a bearer token from the OAuth 2.0 API using the authorization code and state.

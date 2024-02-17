@@ -1,5 +1,5 @@
 <?php
-namespace App\Service;
+namespace App\Service\Authentication\Tokens;
 
 use Exception;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;

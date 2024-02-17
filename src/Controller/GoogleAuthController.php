@@ -3,22 +3,23 @@
 namespace App\Controller;
 
 use Symfony\Component\Uid\Uuid;
-use App\Service\TokenManagerService;
-use App\Service\Auth\GoogleOAuthService;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use App\Service\Authentication\Tokens\TokenManagerService;
+use App\Service\Authentication\OAuth\OAuthAuthenticationService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Service\Authentication\OAuth\OAuthApi\GoogleOAuthApiService;
 
 #[Route('/auth', name: 'auth_')]
 class GoogleAuthController extends AbstractController
 {
     public function __construct(
         private RequestStack $requestStack, 
-        private GoogleOAuthService $googleOAuthService, 
+        private OAuthAuthenticationService $OAuthAuthenticationService, 
         private TokenManagerService $tokenManager
     ) {}
 
@@ -60,12 +61,12 @@ class GoogleAuthController extends AbstractController
 
     /*Cette route est appelée après que l'utilisateur se soit login sur Google*/
     #[Route('/get-tokens', name: 'getTokens')]
-    public function getTokens(Request $request): JsonResponse
+    public function getTokens(Request $request, GoogleOAuthApiService $googleOAuthApiService): JsonResponse
     {
         try
         {
             ['code' => $code, 'state' => $state] = json_decode($request->getContent(), true);
-            ['jwtToken' => $jwtToken, 'refreshToken' => $refreshToken] = $this->googleOAuthService->getAuthenticationTokens($code, $state);
+            ['jwtToken' => $jwtToken, 'refreshToken' => $refreshToken] = $this->OAuthAuthenticationService->getAuthenticationTokens($googleOAuthApiService, $code, $state);
 
             $response = new JsonResponse([
                 'refreshTokenExpiresAt' => $refreshToken->getExpiresAt()->getTimestamp(), 

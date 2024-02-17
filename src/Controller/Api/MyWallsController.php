@@ -5,15 +5,15 @@ namespace App\Controller\Api;
 use App\Entity\Wall;
 use App\Repository\UserRepository;
 use App\Repository\WallRepository;
-use App\Service\CookieService;
-use App\Service\ValidatorService;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Service\Validator\ValidatorService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Serializer\SerializerInterface;
+use App\Service\Authentication\Tokens\TokenCookieService;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -28,14 +28,14 @@ class MyWallsController extends AbstractController
         private SerializerInterface $serializer,
         private WallRepository $wallRepository,
         private ValidatorService $validatorService,
-        private CookieService $cookieService
+        private TokenCookieService $tokenCookieService
     ){}
 
     //En création
     #[Route('/my-wall', name: 'create-my-wall', methods: ['POST'])]
     public function createWall(Request $request): JsonResponse
     {
-        $user = $this->cookieService->findUserInRequest($request);
+        $user = $this->tokenCookieService->findUserInRequest($request);
 
         $wall = new Wall();
         $wall->setName('My Wall');
@@ -53,7 +53,7 @@ class MyWallsController extends AbstractController
     #[Route('/my-walls', name: 'get-my-walls', methods: ['GET'])]
     public function getWalls(Request $request): JsonResponse
     {
-        $user = $this->cookieService->findUserInRequest($request);
+        $user = $this->tokenCookieService->findUserInRequest($request);
 
         $walls = $user->getWalls();
 
@@ -67,7 +67,7 @@ class MyWallsController extends AbstractController
     #[Route('/my-wall/delete/{id}', name: 'delete-my-wall', methods: ['DELETE'])]
     public function deleteWall(int $id, Request $request): JsonResponse
     {
-        $user = $this->cookieService->findUserInRequest($request);
+        $user = $this->tokenCookieService->findUserInRequest($request);
 
         $wall = $this->wallRepository->findOneBy(['user'=>$user->getId(), 'id' => $id]);
 
@@ -86,7 +86,7 @@ class MyWallsController extends AbstractController
     #[Route('/wall/{id}/wall-background', name: 'update-wall-background', methods: ['PUT'])]
     public function updateWallBackground(int $id, Request $request): JsonResponse
     {
-        $user = $this->cookieService->findUserInRequest($request);
+        $user = $this->tokenCookieService->findUserInRequest($request);
 
         $wall = $this->wallRepository->findOneBy(['user'=>$user->getId(), 'id' => $id]);
 

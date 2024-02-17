@@ -1,5 +1,5 @@
 <?php
-namespace App\Service;
+namespace App\Service\Validator;
 
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;

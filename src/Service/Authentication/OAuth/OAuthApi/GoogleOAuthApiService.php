@@ -1,14 +1,13 @@
 <?php
-namespace App\Service\OAuthApi;
+namespace App\Service\Authentication\OAuth\OAuthApi;
 
-use App\Service\OAuthApi\OAuth2ApiInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
-final class GoogleOAuth2ApiService implements OAuth2ApiInterface
+final class GoogleOAuthApiService implements OAuthApiInterface
 {
     public function __construct(
         private ParameterBagInterface $params, 

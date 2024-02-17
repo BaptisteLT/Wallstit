@@ -30,8 +30,8 @@ services:
     App\EventListener\ExceptionListener:
         tags: [kernel.event_listener]
 
-    App\Service\Auth\GoogleOAuthService:
+    App\Service\Authentication\OAuth\OAuthAuthenticationService:
         autowire: true
 
-    App\Service\OAuthApi\GoogleOAuth2ApiService:
+    App\Service\Authentication\OAuth\OAuthApi\GoogleOAuthApiService:
         autowire: true

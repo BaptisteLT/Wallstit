@@ -6,7 +6,6 @@ class JwtToken extends Token {
 
     /**
      * @param string $value
-     * @param string $expiresAt (must be a timestamp)
      */
     public function __construct(
         string $value,
