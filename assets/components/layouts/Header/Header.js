@@ -1,18 +1,16 @@
 import React, { useContext } from 'react';
-import GoogleLink from './GoogleLink';
+import GoogleLink from './OAuth/GoogleLink';
+import LinkedinLink from './OAuth/LinkedinLink';
 import GitHubLink from './GitHubLink';
 import Logo from '../../layouts/Logo';
 import Separator from '../../layouts/Header/Separator';
 import NavigationLink from './NavigationLink';
 
 import '../../../styles/header/header.css';
-import { AuthContext } from '../../useAuth';
 import RoleChecker from '../../RoleChecker';
 
 
 function Header() {
-
-    const { user } = useContext(AuthContext);  // Destructure the context value correctly
 
     return(
         <header>
@@ -32,6 +30,7 @@ function Header() {
                 <div>
                     <GitHubLink />
                     <RoleChecker removeIfLoggedIn={true}>
+                        <LinkedinLink />
                         <GoogleLink />
                     </RoleChecker>
                     TODO logout

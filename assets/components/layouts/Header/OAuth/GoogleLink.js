@@ -1,32 +1,17 @@
 import React from 'react';
-import axios from "axios";
-import '../../../styles/Header/googleLink.css';
-import { toast } from 'react-toastify';
+import '../../../../styles/Header/googleLink.css';
+import {getOAuthHref} from './utils/oauthUtils';
 
 
 function GoogleLink()
 {
-    function getGoogleOAuthHref(e)
-    {
+    const handleClick = (e) => {
         e.preventDefault();
-        //Request to the controller
-        axios.get('/auth/get-google-oauth2-url')
-        .then(function (response) {
-            
-            // handle success
-            const uri = response.data;
-            // Redirect the user to the obtained URI
-            window.location.href = uri;
-        })
-        .catch(function (error) {
-            // handle error
-            toast.error("Impossible to login with Google at the moment.")
-        })
-    }
+        getOAuthHref('google');
+    };
 
-    
     return(
-        <button onClick={getGoogleOAuthHref} className="gsi-material-button">
+        <button onClick={handleClick} className="gsi-material-button">
         <div className="gsi-material-button-state"></div>
         <div className="gsi-material-button-content-wrapper">
             <div className="gsi-material-button-icon">
