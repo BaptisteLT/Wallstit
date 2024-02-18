@@ -4,11 +4,12 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
+    refresh.token.expiration.seconds: '%env(REFRESH_TOKEN_EXPIRATION_SECONDS)%'
+    refresh.token.encoding.passphrase: '%env(REFRESH_TOKEN_ENCODING_PASSPHRASE)%'
+
     google.oauth2.secret: '%env(GOOGLE_OAUTH2_SECRET)%'
     google.oauth2.client_id: '%env(GOOGLE_OAUTH2_CLIENT_ID)%'
     google.oauth2.redirect_uri: '%env(GOOGLE_OAUTH2_REDIRECT_URI)%'
-    refresh.token.expiration.seconds: '%env(REFRESH_TOKEN_EXPIRATION_SECONDS)%'
-    refresh.token.encoding.passphrase: '%env(REFRESH_TOKEN_ENCODING_PASSPHRASE)%'
 
     oauth2.providers:
         google:
@@ -22,6 +23,7 @@ parameters:
             code_challenge: true
 
 services:
+
     # default configuration for services in *this* file
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
@@ -41,11 +43,18 @@ services:
     App\EventListener\ExceptionListener:
         tags: [kernel.event_listener]
 
-    App\Service\Authentication\OAuth\OAuthAuthenticationService:
-        autowire: true
+    #App\Service\Authentication\OAuth\OAuthAuthenticationService:
+    #    autowire: true
 
-    App\Service\Authentication\OAuth\OAuthApi\GoogleOAuthApiService:
-        autowire: true
+    #App\Service\Authentication\OAuth\OAuthApi\GoogleOAuthApiService:
+    #    autowire: true
 
-    App\Service\Authentication\Response:
-        autowire: true
+    # Register automatique des services qui implémentent OAuthApiInterface
+    _instanceof:
+        #Permet d'aller chercher toutes les classes qui implémentent OAuthApiInterface
+        App\Service\Authentication\OAuth\OAuthApi\OAuthApiInterface:
+            tags: ['app.oauth_api']
+    App\Service\Authentication\OAuth\OAuthApi\Factory\OAuthApiFactory:
+        arguments:
+            # $providers va automatiquement contenir toutes les implémentations de OAuthApiInterface grâce au tag app.oauth_api
+            $providers: !tagged_iterator app.oauth_api
