@@ -1,12 +1,11 @@
 <?php
 namespace App\Service\Authentication\OAuth;
 
-use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Service\Authentication\Tokens\TokenManagerService;
 use App\Service\Authentication\OAuth\OAuthApi\OAuthApiInterface;
-use App\Service\Authentication\Response\ResponseManagerService;
 use App\Service\Authentication\UserRegistration\UserManagerService;
+use App\Service\Authentication\OAuth\OAuthResponse\ResponseManagerService;
 
 final class OAuthAuthenticationService{
 

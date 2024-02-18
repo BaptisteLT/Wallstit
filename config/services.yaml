@@ -10,6 +10,17 @@ parameters:
     refresh.token.expiration.seconds: '%env(REFRESH_TOKEN_EXPIRATION_SECONDS)%'
     refresh.token.encoding.passphrase: '%env(REFRESH_TOKEN_ENCODING_PASSPHRASE)%'
 
+    oauth2.providers:
+        google:
+            base_login_url: 'https://accounts.google.com/o/oauth2/v2/auth?code_challenge_method=&scope=&access_type=&response_type=&client_id=&redirect_uri=&code_challenge=&state='
+            code_challenge_method: 'S256'
+            scope: 'email profile'
+            access_type: 'offline'
+            response_type: 'code'
+            client_id: '%env(GOOGLE_OAUTH2_CLIENT_ID)%'
+            redirect_uri: '%env(GOOGLE_OAUTH2_REDIRECT_URI)%'
+            code_challenge: true
+
 services:
     # default configuration for services in *this* file
     _defaults:

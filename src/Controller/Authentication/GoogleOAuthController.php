@@ -12,7 +12,10 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use App\Service\Authentication\Tokens\TokenManagerService;
 use App\Service\Authentication\OAuth\OAuthAuthenticationService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use App\Service\Authentication\OAuth\OAuthResponse\ResponseManagerService;
 use App\Service\Authentication\OAuth\OAuthApi\Providers\GoogleOAuthApiService;
+
 
 #[Route('/auth', name: 'auth_')]
 class GoogleOAuthController extends AbstractController
@@ -23,36 +26,22 @@ class GoogleOAuthController extends AbstractController
         private TokenManagerService $tokenManager
     ) {}
 
-    #[Route('/get-google-oauth2-url', name: 'get-google-oauth2-url')]
-    public function generateGoogleOAuth2Url(): JsonResponse
+    #[Route('/get-{provider}-oauth2-url', name: 'get-provider-oauth2-url')]
+    public function generateProviderOAuth2Url(string $provider, ResponseManagerService $responseManager): JsonResponse
     {
-        // Génération d'un Uuid random que google nous renverra et que l'on vérifiera par la suite
-        $uuid = (Uuid::v1())->__toString();
+        $OAuthProviders = $this->getParameter('oauth2.providers');
+        
+        //Check if the selected provider exists
+        if(!isset($OAuthProviders[$provider]))
+        {
+            throw new NotFoundHttpException(sprintf("Provider '%s' not found.", $provider));
+        }
 
-        // Génération d'un code_verifier aléatoire
-        $codeVerifier = bin2hex(random_bytes(32));
-        // Génération du PCKE, qui est une clé que l'on envoie dans un premier temps hashé, puis en clair lors de la deuxième étape afin que Google s'assure de notre identité
-        $codeChallenge = rtrim(strtr(base64_encode(hash('sha256', $codeVerifier, true)), '+/', '-_'), '=');
+        $providerData = $OAuthProviders[$provider];
 
-        /* Mise en session, ces valeurs seront réutilisées au moment du callback */
-        $session = $this->requestStack->getSession();
-        $session->set('state', $uuid);
-        $session->set('original_PCKE', $codeVerifier);
+        $response = $responseManager->generateOAuthLoginUrlResponse($providerData);
 
-        /*Génération de l'URI que l'utilisateur (URL de login à Google)*/     
-        $uri = vsprintf("https://accounts.google.com/o/oauth2/v2/auth?code_challenge_method=%s&scope=%s&access_type=%s&response_type=%s&client_id=%s&redirect_uri=%s&code_challenge=%s&state=%s", 
-        [
-            'code_challenge_method' => 'S256',
-            'scope' => 'email%20profile',
-            'access_type' => 'offline',
-            'response_type' => 'code',
-            'client_id' => $this->getParameter('google.oauth2.client_id'),
-            'redirect_uri' => $this->getParameter('google.oauth2.redirect_uri'),
-            'code_challenge' => $codeChallenge,
-            'state' => $session->get('state'),
-        ]);
-
-        return new JsonResponse($uri, 200);
+        return $response;
     }
 
 
