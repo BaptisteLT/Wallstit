@@ -11,7 +11,7 @@ import MyWalls from './myWalls/MyWalls';
 import Wall from './wall/Wall';
 import PostItPriority from './postItPriority/PostItPriority';
 import My404 from './layouts/My404';
-import GoogleCallback from './GoogleCallback';
+import OAuthCallback from './OAuthCallback';
 import UserCheckComponent from './UserCheckComponent';
 
 //Composant axios interceptor pour renouveler les tokens JWT expirés
@@ -52,7 +52,7 @@ function App()
                         <Routes>
                             <Route index path="/" element={<Home />} /> 
                             <Route path="/my-walls" element={<MyWalls />} />
-                            <Route path="/google-callback" element={<GoogleCallback />} />
+                            <Route path="/google-callback" element={<OAuthCallback provider="google" />} />
                             <Route path="/post-it-priority" element={<PostItPriority />} />
                             <Route path="/wall/:id" element={<Wall />} />
                             <Route path="*" element={<My404 />} />
