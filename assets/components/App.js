@@ -53,6 +53,7 @@ function App()
                             <Route index path="/" element={<Home />} /> 
                             <Route path="/my-walls" element={<MyWalls />} />
                             <Route path="/google-callback" element={<OAuthCallback provider="google" />} />
+                            <Route path="/discord-callback" element={<OAuthCallback provider="discord" />} />
                             <Route path="/post-it-priority" element={<PostItPriority />} />
                             <Route path="/wall/:id" element={<Wall />} />
                             <Route path="*" element={<My404 />} />

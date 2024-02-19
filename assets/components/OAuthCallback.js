@@ -21,6 +21,8 @@ function OAuthCallback({provider}) {
         // Get query parameters
         const queryParams = getQueryParams();
     
+        console.log(getQueryParams());
+
         // Use code and state as needed
         const { code, state } = queryParams;
       

@@ -11,8 +11,9 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
-
+#[UniqueEntity(fields: ['OAuth2Provider', 'OAuth2ProviderId'], message: 'This combination is already used.')]
 #[ORM\HasLifecycleCallbacks]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 class User implements UserInterface
@@ -24,7 +25,7 @@ class User implements UserInterface
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 180, unique: true)]
+    #[ORM\Column(length: 180, nullable: true)]
     private ?string $email = null;
 
     #[ORM\Column]
@@ -49,6 +50,12 @@ class User implements UserInterface
     #[Assert\Choice(['small', 'medium', 'large'])]
     #[ORM\Column(length: 255)]
     private ?string $sideBarSize = null;
+
+    #[ORM\Column(length: 255, nullable: false)]
+    private ?string $OAuth2Provider = null;
+
+    #[ORM\Column(length: 255, nullable: false)]
+    private ?string $OAuth2ProviderId = null;
 
     public function __construct()
     {
@@ -80,7 +87,7 @@ class User implements UserInterface
      */
     public function getUserIdentifier(): string
     {
-        return (string) $this->email;
+        return sprintf('%s_%s', $this->OAuth2Provider, $this->OAuth2ProviderId);
     }
 
     /**
@@ -90,7 +97,7 @@ class User implements UserInterface
      */
     public function getUsername(): string
     {
-        return (string) $this->email;
+        return sprintf('%s@@@%s', $this->OAuth2Provider, $this->OAuth2ProviderId);
     }
 
     /**
@@ -217,6 +224,30 @@ class User implements UserInterface
     public function setSideBarSize(string $sideBarSize): static
     {
         $this->sideBarSize = $sideBarSize;
+
+        return $this;
+    }
+
+    public function getOAuth2Provider(): ?string
+    {
+        return $this->OAuth2Provider;
+    }
+
+    public function setOAuth2Provider(?string $OAuth2Provider): static
+    {
+        $this->OAuth2Provider = $OAuth2Provider;
+
+        return $this;
+    }
+
+    public function getOAuth2ProviderId(): ?string
+    {
+        return $this->OAuth2ProviderId;
+    }
+
+    public function setOAuth2ProviderId(?string $OAuth2ProviderId): static
+    {
+        $this->OAuth2ProviderId = $OAuth2ProviderId;
 
         return $this;
     }

@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import GoogleLink from './OAuth/GoogleLink';
-import LinkedinLink from './OAuth/LinkedinLink';
+import DiscordLink from './OAuth/DiscordLink';
 import GitHubLink from './GitHubLink';
 import Logo from '../../layouts/Logo';
 import Separator from '../../layouts/Header/Separator';
@@ -30,7 +30,7 @@ function Header() {
                 <div>
                     <GitHubLink />
                     <RoleChecker removeIfLoggedIn={true}>
-                        <LinkedinLink />
+                        <DiscordLink />
                         <GoogleLink />
                     </RoleChecker>
                     TODO logout

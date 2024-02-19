@@ -15,38 +15,43 @@ class UserManagerService
     /**
      * Trouve l'utilisateur en base de données ou le crée
      *
-     * @param \stdClass $userData
+     * @param array $userData
      * @return User
      */
-    public function getOrCreateUser($userData): User
+    public function getOrCreateUser($userData, string $provider): User
     {
-        $email = $userData->email;
-        $name = $userData->name;
-        $picture = $userData->picture;
-        $locale = $userData->locale;
-
-        $user = $this->userRepository->findOneBy(['email' => $email]);
+        $user = $this->userRepository->findOneBy(['OAuth2Provider' => $provider, 'OAuth2ProviderId' => $userData['id']]);
 
         if(!$user)
         {
             //We create a new user because it is a new account
             $user = new User();
-            $user->setEmail($email)
-                 ->setName($name)
-                 ->setPicture($picture)
-                 ->setlocale($locale);
+            if(isset($userData['name']))
+            {
+                $user->setName($userData['name']);
+            }
+            if(isset($userData['picture']))
+            {
+                $user->setPicture($userData['picture']);
+            }
+            if(isset($userData['locale']))
+            {
+                $user->setLocale($userData['locale']);
+            }
+            $user->setOAuth2Provider($provider);
+            $user->setOAuth2ProviderId($userData['id']);
         }
         else
         {
             //We update the user data in case they have changed
-            if($name !== $user->getName()){
-                $user->setName($name);
+            if(isset($userData['name']) && $userData['name'] !== $user->getName()){
+                $user->setName($userData['name']);
             }
-            if($picture !== $user->getPicture()){
-                $user->setPicture($picture);
+            if(isset($userData['picture']) && $userData['picture'] !== $user->getPicture()){
+                $user->setPicture($userData['picture']);
             }
-            if($locale !== $user->getLocale()){
-                $user->setLocale($locale);
+            if(isset($userData['locale']) && $userData['locale'] !== $user->getLocale()){
+                $user->setLocale($userData['locale']);
             }
         }
 

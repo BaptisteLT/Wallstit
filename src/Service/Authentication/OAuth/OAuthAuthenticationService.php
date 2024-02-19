@@ -24,14 +24,14 @@ final class OAuthAuthenticationService{
      *
      * @return JsonResponse containing the JwtToken and RefreshToken in a cookie and in the response body itself.
      */
-    public function prepareAuthenticationResponse(OAuthApiInterface $OAuthApiInterface, string $code, string $state): JsonResponse
+    public function prepareAuthenticationResponse(OAuthApiInterface $OAuthApiInterface, string $provider, string $code, string $state): JsonResponse
     {
         // Exchange the code present in the Request for a Bearer token
         $bearerToken = $OAuthApiInterface->getBearerToken($code, $state);
         // Retrieve user data from Google OAuth service using the Bearer token
         $userData = $OAuthApiInterface->retrieveUserData($bearerToken);
         // Create or update user based on retrieved data
-        $user = $this->userManager->getOrCreateUser($userData);
+        $user = $this->userManager->getOrCreateUser($userData, $provider);
         // Generate JWT token based on user
         $jwtToken = $this->tokenManager->generateJWTToken($user);
         // Generate the refresh token

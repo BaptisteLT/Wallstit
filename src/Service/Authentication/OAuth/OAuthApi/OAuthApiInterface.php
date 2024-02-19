@@ -18,11 +18,12 @@ interface OAuthApiInterface{
      *
      * @param string $bearerToken The bearer token obtained from the authentication process.
      *
-     * @return \stdClass An object containing user data with the following properties:
-     *                  - email: The user's email address.
-     *                  - name: The user's name.
-     *                  - picture: URL to the user's profile picture.
-     *                  - locale: The user's locale or language preference.
+     * @return arrays An array containing user data with the following properties:
+     *                  - id: The user's provider id (mandatory)
+     *                  - email: The user's email address. (optional)
+     *                  - name: The user's name. (optional)
+     *                  - picture: URL to the user's profile picture. (optional)
+     *                  - locale: The user's locale or language preference. (optional)
      */
-    public function retrieveUserData($bearerToken): \stdClass;
+    public function retrieveUserData($bearerToken): array;
 }

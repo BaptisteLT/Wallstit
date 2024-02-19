@@ -60,11 +60,11 @@ class GoogleOAuthController extends AbstractController
 
             $OAuthApiService = $factory->create($provider);
 
-            $response = $this->OAuthAuthenticationService->prepareAuthenticationResponse($OAuthApiService, $code, $state); 
+            $response = $this->OAuthAuthenticationService->prepareAuthenticationResponse($OAuthApiService, $provider, $code, $state); 
         }
         catch(\Exception $e)
         {
-            throw new HttpException(500, 'An error occurred during the Google authentication.');
+            throw new \Exception('An error occurred during the OAuth authentication.');
         }
 
         return $response;

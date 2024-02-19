@@ -50,8 +50,13 @@ class TokenCookieService
 
         $jwtToken = $request->cookies->get('jwtToken');
         $decodedJwt = (new JwtToken($jwtToken))->decode();
-        
-        $user = $this->userRepository->findOneBy(['email' => $decodedJwt['jwtPayload']->username]);
+
+        [0 => $providerName, 1 => $providerAccountId] = explode("@@@", $decodedJwt['jwtPayload']->username);
+
+        $user = $this->userRepository->findOneBy([
+            'OAuth2Provider' =>  $providerName,
+            'OAuth2ProviderId' => $providerAccountId
+        ]);
         
         if(!$user)
         {

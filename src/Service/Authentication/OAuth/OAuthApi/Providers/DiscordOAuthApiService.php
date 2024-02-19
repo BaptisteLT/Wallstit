@@ -1,14 +1,14 @@
 <?php
 namespace App\Service\Authentication\OAuth\OAuthApi\Providers;
 
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use App\Service\Authentication\OAuth\OAuthApi\OAuthApiInterface;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
-final class GoogleOAuthApiService implements OAuthApiInterface
+
+final class DiscordOAuthApiService implements OAuthApiInterface
 {
     public function __construct(
         private ParameterBagInterface $params, 
@@ -16,7 +16,9 @@ final class GoogleOAuthApiService implements OAuthApiInterface
         private HttpClientInterface $httpClient
     ){}
 
-        /**
+
+    
+    /**
      * Return bearer token from Google Request
      *
      * @param Request $request
@@ -35,28 +37,31 @@ final class GoogleOAuthApiService implements OAuthApiInterface
             throw new AccessDeniedHttpException('State in session doesn\'t match with what google sent back.');
         }
 
-
         // Define the request parameters
-        $url = "https://oauth2.googleapis.com/token";
+        $url = "https://discord.com/api/oauth2/token";
         $data = [
-            'client_id' => $this->params->get('google.oauth2.client_id'),
-            'client_secret' => $this->params->get('google.oauth2.secret'),
-            'code' => $code,
-            'grant_type' => 'authorization_code',
-            'redirect_uri' => $this->params->get('google.oauth2.redirect_uri'),
-            'code_verifier' => $session->get('original_PCKE')
+            'code' => $code,//OK
+            'grant_type' => 'authorization_code',//OK
+            'redirect_uri' => $this->params->get('discord.oauth2.redirect_uri'),//OK
         ];
+
+        // Create the Authorization header with Basic Authentication
+        $authHeader = base64_encode($this->params->get('discord.oauth2.client_id') . ':' . $this->params->get('discord.oauth2.secret'));
 
         // Send a POST request
         $response = $this->httpClient->request('POST', $url, [
             'headers' => [
-                'Content-Type' => 'application/x-www-form-urlencoded'
+                'Content-Type' => 'application/x-www-form-urlencoded',
+                'Authorization' => 'Basic ' . $authHeader
             ],
             'body' => $data,
         ]);
 
+        
+
         // Get the response content
         $content = json_decode($response->getContent());
+
         // Retrieve user data from Google OAuth service
         return $content->access_token;
     }
@@ -70,11 +75,10 @@ final class GoogleOAuthApiService implements OAuthApiInterface
     public function retrieveUserData($bearerToken): array
     {
         // Define the request parameters
-        $url = "https://www.googleapis.com/oauth2/v2/userinfo";
+        $url = "https://discord.com/api/oauth2/@me";
         // Send a POST request
         $response = $this->httpClient->request('GET', $url, [
             'headers' => [
-                'Content-Type' => 'application/json; charset=UTF-8',
                 'Authorization' => "Bearer $bearerToken"
             ]
         ]);
@@ -82,11 +86,10 @@ final class GoogleOAuthApiService implements OAuthApiInterface
         $userData = json_decode($response->getContent());
 
         return [
-            'id' => $userData->id,
-            //'email' => $userData->email,
-            'name' => $userData->name,
-            'picture' => $userData->picture,
-            'locale' => $userData->locale
+            'id' => $userData->user->id,
+            'name' => $userData->user->global_name,
+            'picture' =>  'https://cdn.discordapp.com/avatars/'.$userData->user->id.'/'.$userData->user->avatar,
         ];
     }
+
 }
