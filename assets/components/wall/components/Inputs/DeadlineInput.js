@@ -6,9 +6,10 @@ function DeadlineInput({ deadline, handlePostItChange })
 {
 
     const validDateFormat = () => {
-        if (!deadline) {
+        if (!deadline || isNaN(new Date(deadline))) {
             return '';
         }
+        console.log(deadline);
         const formattedDate = (new Date(deadline)).toISOString().slice(0,16);
 
         return formattedDate;
@@ -16,9 +17,16 @@ function DeadlineInput({ deadline, handlePostItChange })
     
 
     const handleOnChange = (event) => {
+        
         const newDate = event.target.value.slice(0,16) + ':00+00:00';
-        //Va appeler la méthode mère pour mettre à jour seulement après 2.5 secondes d'inactivité afin d'éviter de spam le serveur d'appels API
-        handlePostItChange(null, null, null, null, newDate);
+        if (newDate && !isNaN(new Date(newDate))) {
+            //Va appeler la méthode mère pour mettre à jour seulement après 2.5 secondes d'inactivité afin d'éviter de spam le serveur d'appels API
+            handlePostItChange(null, null, null, null, newDate);
+        }
+        else
+        {
+            handlePostItChange(null, null, null, null, '0000-00-00T00:00:00+00:00');
+        }
     };
 
     return(

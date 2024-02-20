@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 /**
  * Composant responsable de la décrémentation du champ deadline
  */
-function CountDown({ deadline, className })
+function CountDown({ deadline, deadlineDone, className, updateDeadlineDone })
 {
     const [countDown, setCountDown] = useState('');
 
@@ -27,13 +27,20 @@ function CountDown({ deadline, className })
                 clearInterval(interval);
             }
         }
-    }, [deadline])
+    }, [deadline, deadlineDone])
 
 
     function decrementCountDown(deadline){
         const now = new Date();
         const timestampTimeLeft = deadline.getTime() - now.getTime();
         
+        if(deadlineDone)
+        {
+            setCountDown('Task completed');
+            clearInterval(interval);
+            return;
+        }
+
         //Si le temps est écoulé on affiche simplement la date de la deadline
         if(timestampTimeLeft <= 0)
         {
@@ -57,9 +64,21 @@ function CountDown({ deadline, className })
         setCountDown(days + 'd ' + hours + 'h ' + minutes + 'm ' + seconds + 's left.')
     }
 
+    /**
+     * Met à jour la valeur de la checkbox à true ou false
+     */
+    function handleDeadlineDone(e)
+    {
+        const checked = e.target.checked;
+        updateDeadlineDone(checked);
+    }
+
 
     return(
-        <span className={className}>{countDown}</span>
+        <span className={className}>
+            {countDown}
+            <input onChange={handleDeadlineDone} type="checkbox" id="deadline_done" defaultChecked={deadlineDone} />
+        </span>
     )
 }
 

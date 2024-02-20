@@ -14,7 +14,7 @@ function PostItSubMenuContent({ uuid, title, content, size, color, deadline })
 
     const [postItDataCallback, setPostItDataCallback] = useState(null);
 
-    const handlePostItChange = (title = null, content = null, size = null, color = null, deadline = null) => {
+    const handlePostItChange = async (title = null, content = null, size = null, color = null, deadline = null) => {
 
         let data = {};
 
@@ -22,10 +22,17 @@ function PostItSubMenuContent({ uuid, title, content, size, color, deadline })
         if (content !== null) data.content = content;
         if (size !== null) data.size = size;
         if (color !== null) data.color = color;
-        if (deadline !== null) data.deadline = deadline;
-
-        const currentPostIt = updatePostIt(data, uuid);
         
+        if (deadline !== null && deadline === '0000-00-00T00:00:00+00:00'){
+            data.deadline = null;
+        }
+        else if(deadline !== null)
+        {
+            data.deadline = deadline;
+        }
+
+        const currentPostIt = await updatePostIt(data, uuid);
+
         //Dans le cas où le PostIt ne serait pas trouvé dans l'array on return même si c'est very unlikely
         if(currentPostIt === null) return;
 

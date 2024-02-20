@@ -84,6 +84,10 @@ class PostIt
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $title = null;
 
+    #[Groups(['get-post-its'])]
+    #[ORM\Column(nullable: true)]
+    private ?bool $deadlineDone = null;
+
     public function getId(): int
     {
         return $this->id;
@@ -193,6 +197,18 @@ class PostIt
     public function setTitle(?string $title): static
     {
         $this->title = $title;
+
+        return $this;
+    }
+
+    public function isDeadlineDone(): ?bool
+    {
+        return $this->deadlineDone;
+    }
+
+    public function setDeadlineDone(?bool $deadlineDone): static
+    {
+        $this->deadlineDone = $deadlineDone;
 
         return $this;
     }

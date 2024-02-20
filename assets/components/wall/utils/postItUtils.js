@@ -51,6 +51,15 @@ function updatePositionInDB(uuid, positionX, positionY){
     });
 }
 
+function updateDeadlineDoneInBD(uuid, deadlineDone){
+    axios.patch('/api/post-it/'+uuid,{
+        deadlineDone: deadlineDone
+    })
+    .catch(function(error){
+        toast.error(error.response.data.error || 'An error occurred');
+    });
+}
+
 
 /**
  * Va mettre à jour le title, content, size, color en BDD
@@ -67,11 +76,10 @@ function updatePostItInDB(postIt)
         deadline: postIt.deadline
     })
     .catch(function(error){
-        console.log(error)
         toast.error(error.response.data.error || 'An error occurred');
     });
 }
 
     
 
-export { getDimensionsFromSize, updatePositionInDB, updatePostItInDB };
+export { getDimensionsFromSize, updatePositionInDB, updatePostItInDB, updateDeadlineDoneInBD };

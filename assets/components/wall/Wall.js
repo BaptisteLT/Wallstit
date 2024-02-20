@@ -100,9 +100,9 @@ function Wall() {
     setPostIts(prevPostIts => 
       prevPostIts.map((postIt) => {
         if (postIt.uuid === uuid) {
-          console.log(postIt);
           const newPostIt = { ...postIt, ...newPostItData };
           currentPostIt = newPostIt;
+          console.log('currentPostIt: ')
           console.log(currentPostIt);
           return newPostIt;
         }
@@ -171,6 +171,7 @@ function Wall() {
               positionY={postIt.positionY}
               size={postIt.size}
               uuid={postIt.uuid}
+              deadlineDone={postIt.deadlineDone}
             />
           ))}
         </Grid>

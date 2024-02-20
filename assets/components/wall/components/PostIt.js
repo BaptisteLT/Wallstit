@@ -3,13 +3,13 @@ import '../../../styles/Wall/post-it.css'
 import Draggable from 'react-draggable';
 import CountDown from "./CountDown";
 import SettingsIcon from '@mui/icons-material/Settings';
-import { getDimensionsFromSize, updatePositionInDB } from '../utils/postItUtils';
+import { getDimensionsFromSize, updatePositionInDB, updateDeadlineDoneInBD } from '../utils/postItUtils';
 import { usePostItContext } from '../PostItContext';
 
 //Dragable: https://www.npmjs.com/package/react-draggable#controlled-vs-uncontrolled
-const PostIt = React.memo(({ title, color, content, deadline, positionX, positionY, size, uuid, scale, pageDimensions }) =>
+const PostIt = React.memo(({ title, color, content, deadline, positionX, positionY, size, uuid, scale, deadlineDone, pageDimensions }) =>
 {
-    const { openPostItMenu } = usePostItContext();
+    const { openPostItMenu, updatePostIt } = usePostItContext();
 
     const { postItDimensions, innerDimensions } = getDimensionsFromSize(size);
 
@@ -64,6 +64,17 @@ const PostIt = React.memo(({ title, color, content, deadline, positionX, positio
         setPositionTimeoutCallback(newTimeoutCallback);
     });
 
+    const updateDeadlineDone = (isDeadlineDone) => {
+
+        let data = {};
+        data.deadlineDone = isDeadlineDone;
+
+        //Mise à jour dans le DOM
+        updatePostIt(data, uuid);
+        //Mise à jour en BDD
+        updateDeadlineDoneInBD(uuid, isDeadlineDone);
+    }
+
     return(
         <Draggable
             //La poignée
@@ -88,7 +99,7 @@ const PostIt = React.memo(({ title, color, content, deadline, positionX, positio
                     {
                         deadlineDate !== null &&
                         <div className="deadline-wrapper">
-                            <CountDown deadline={deadlineDate} className={"panning-disabled deadline"} />
+                            <CountDown updateDeadlineDone={updateDeadlineDone} deadlineDone={deadlineDone} deadline={deadlineDate} className={"panning-disabled deadline"} />
                         </div>
                     }
                     <p className="panning-disabled title">{title}</p>

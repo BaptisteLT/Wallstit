@@ -101,7 +101,8 @@ class PostItController extends AbstractController
         $positionX = $requestData['positionX'] ?? null;
         $positionY = $requestData['positionY'] ?? null;
         $deadline = $requestData['deadline'] ?? null;
-        
+        $deadlineDone = $requestData['deadlineDone'] ?? null;
+
         /**
          * Première vérification des types
          */
@@ -124,7 +125,7 @@ class PostItController extends AbstractController
         }
         if(!is_string($deadline) && $deadline !== null)
         {
-            throw new HttpException(400, 'Deadline must be a string format "Y-m-d H:i:s"');
+            throw new HttpException(400, 'Deadline must be a string format "Y-m-d H:i:s" or null');
         }
         if(!is_integer($positionX) && $positionX !== null)
         {
@@ -134,36 +135,50 @@ class PostItController extends AbstractController
         {
             throw new HttpException(400, 'PositionY must be an integer');
         }
+        if(!is_bool($deadlineDone) && $deadlineDone !== null)
+        {
+            throw new HttpException(400, 'deadlineDone must be a boolean');
+        }
 
         /**
          * Remplacement des valeurs qui ont été spécifiées
          */
-        if (isset($deadline)) {
-            try {
-                $deadlineDateTime = new \DateTimeImmutable($deadline);
-                $postIt->setDeadline($deadlineDateTime);
-            } catch (\Exception $e) {
-                throw new HttpException(400, 'Deadline must be a string format "Y-m-d H:i:s"');
+        if (array_key_exists('deadline', $requestData)) {
+            if($deadline === null)
+            {
+                $postIt->setDeadline($deadline);
+            }
+            else
+            {
+                try {
+                    $deadlineDateTime = new \DateTimeImmutable($deadline);
+                    $postIt->setDeadline($deadlineDateTime);
+                } catch (\Exception $e) {
+                    throw new HttpException(400, 'Deadline must be a string format "Y-m-d H:i:s"');
+                }
             }
         }
 
-        if($color !== null){
+        if(array_key_exists('color', $requestData)){
             $postIt->setColor($color); 
         }
-        if($content !== null){
+        if(array_key_exists('$content', $requestData)){
             $postIt->setContent($content); 
         }
-        if($title !== null){
+        if(array_key_exists('title', $requestData)){
             $postIt->setTitle($title); 
         }
-        if($positionX !== null){
+        if(array_key_exists('positionX', $requestData)){
             $postIt->setPositionX($positionX); 
         }
-        if($positionY !== null){
+        if(array_key_exists('positionY', $requestData)){
             $postIt->setPositionY($positionY); 
         }
-        if($size !== null){
+        if(array_key_exists('size', $requestData)){
             $postIt->setSize($size); 
+        }
+        if(array_key_exists('deadlineDone', $requestData)){
+            $postIt->setDeadlineDone($deadlineDone); 
         }
 
         $this->validatorService->validateEntityOrThrowException($postIt);
