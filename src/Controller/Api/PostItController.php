@@ -162,7 +162,7 @@ class PostItController extends AbstractController
         if(array_key_exists('color', $requestData)){
             $postIt->setColor($color); 
         }
-        if(array_key_exists('$content', $requestData)){
+        if(array_key_exists('content', $requestData)){
             $postIt->setContent($content); 
         }
         if(array_key_exists('title', $requestData)){

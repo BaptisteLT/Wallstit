@@ -18,7 +18,6 @@ class AuthController extends AbstractController
     /* Va tenter de refresh le jwt token en utilisant le refresh token en cookies */
     public function refreshTokens(Request $request, TokenManagerService $tokenManager): JsonResponse
     {
-        
         $refreshToken = $request->cookies->get('refreshToken');
         if(!$refreshToken)
         {
