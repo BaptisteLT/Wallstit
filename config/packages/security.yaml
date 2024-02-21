@@ -12,7 +12,7 @@ security:
     firewalls:
         api:
             pattern:   ^/api
-            stateless: true
+            stateless: false
             jwt: ~
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/

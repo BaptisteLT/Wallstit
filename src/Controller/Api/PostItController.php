@@ -72,7 +72,7 @@ class PostItController extends AbstractController
 
         $json = $this->serializer->serialize($wall, 'json', ['groups' => 'get-post-its']);
 
-        return new JsonResponse($json, Response::HTTP_OK);
+        return new JsonResponse(['data' => $json], Response::HTTP_OK);
     }
 
 

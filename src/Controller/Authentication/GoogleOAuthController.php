@@ -27,7 +27,7 @@ class GoogleOAuthController extends AbstractController
         private TokenManagerService $tokenManager
     ) {}
 
-    #[Route('/get-{provider}-oauth2-url', name: 'get-provider-oauth2-url')]
+    #[Route('/get-{provider}-oauth2-url', name: 'get-provider-oauth2-url', methods: ['GET'])]
     public function generateProviderOAuth2Url(string $provider, ResponseManagerService $responseManager): JsonResponse
     {
         $OAuthProviders = $this->getParameter('oauth2.providers');
@@ -50,7 +50,7 @@ class GoogleOAuthController extends AbstractController
 
 
     /*Cette route est appelée après que l'utilisateur se soit login sur Google*/
-    #[Route('/get-tokens/{provider}', name: 'getTokens')]
+    #[Route('/get-tokens/{provider}', name: 'getTokens', methods: ['POST'])]
     public function getTokens(string $provider, Request $request, OAuthApiFactory $factory): JsonResponse
     {
         //TODO: be able to choose a service based on the {provider} in the url

@@ -10,9 +10,9 @@ use App\Entity\Tokens\RefreshToken;
 use App\Entity\Tokens\JwtToken;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\RefreshTokenRepository;
-use Symfony\Component\HttpFoundation\File\Exception\AccessDeniedException;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 class TokenManagerService
 {
@@ -36,7 +36,7 @@ class TokenManagerService
         $refreshToken = $this->refreshTokenRepository->findOneBy(['value' => $refreshToken]);
         
         if(!$refreshToken){
-            throw new AccessDeniedException('Refresh token not found or has expired.');
+            throw new UnauthorizedHttpException('Refresh token not found or has expired.');
         }
         //Je fais ça pour récupérer le User car sinon User est un proxy et la génération du JWT ne fonctionne pas, je pourrais passer l'entité en Eager mais ça ne serait pas opti pour le reste de l'appli qui récupère User sans avoir besoin de ses propriétés
         $user = $refreshToken->getUser();
@@ -46,7 +46,7 @@ class TokenManagerService
 
         if($expiresAtDateTime < $currentDateTime)
         {
-            throw new AccessDeniedException('Token has expired.');
+            throw new UnauthorizedHttpException('Token has expired.');
         }
 
         $decryptedToken = $this->refreshTokenEncryptionService->encryptOrDecrypt($refreshToken->getValue(), 'decrypt');
@@ -54,7 +54,7 @@ class TokenManagerService
         //Si le token a bien été généré et n'est pas égal à false
         if(!$decryptedToken)
         {
-            throw new AccessDeniedException('Failed to decrypt refresh token.');
+            throw new UnauthorizedHttpException('Failed to decrypt refresh token.');
         }
 
         return [

@@ -63,7 +63,7 @@ function Wall() {
   function retrieveWallPostIts() {
     axios.get('/api/wall/' + id + '/post-its')
     .then(function (response) {
-      const data = JSON.parse(response.data);
+      const data = JSON.parse(response.data.data);
 
       setWallBackground(data.background);
       setSideBarSize(data.user.sideBarSize);

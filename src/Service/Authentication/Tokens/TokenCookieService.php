@@ -8,7 +8,7 @@ use App\Entity\Tokens\RefreshToken;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\File\Exception\AccessDeniedException;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 class TokenCookieService
 {
@@ -45,7 +45,7 @@ class TokenCookieService
         //TODO: faire un middleware qui récupère directement le User de préférence
         if(!$request->cookies->has('jwtToken'))
         {
-            throw new AccessDeniedException('jwtToken not found');
+            throw new UnauthorizedHttpException('jwtToken not found');
         }
 
         $jwtToken = $request->cookies->get('jwtToken');
@@ -60,7 +60,7 @@ class TokenCookieService
         
         if(!$user)
         {
-            throw new AccessDeniedException('User not found');
+            throw new UnauthorizedHttpException('User not found');
         }
         
         return $user;

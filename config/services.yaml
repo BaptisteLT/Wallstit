@@ -51,6 +51,14 @@ services:
     # please note that last definitions always *replace* previous ones
     App\EventListener\ExceptionListener:
         tags: [kernel.event_listener]
+    
+    App\EventListener\CSRF\SetCSRFListener:
+        tags: [kernel.event_listener]
+
+    App\EventListener\CSRF\GetCSRFListener:
+        tags: [kernel.event_listener]
+
+
 
     #App\Service\Authentication\OAuth\OAuthAuthenticationService:
     #    autowire: true
