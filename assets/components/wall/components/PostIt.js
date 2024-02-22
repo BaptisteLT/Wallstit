@@ -5,6 +5,11 @@ import CountDown from "./CountDown";
 import SettingsIcon from '@mui/icons-material/Settings';
 import { getDimensionsFromSize, updatePositionInDB, updateDeadlineDoneInBD } from '../utils/postItUtils';
 import { usePostItContext } from '../PostItContext';
+import DeleteConfirm from "../../reusable/DeleteConfirm";
+import InitialDeleteIcon from "../../reusable/InitialDeleteIcon";
+import { toast } from 'react-toastify';
+import { DeleteForever } from "@mui/icons-material";
+import axios from 'axios';
 
 //Dragable: https://www.npmjs.com/package/react-draggable#controlled-vs-uncontrolled
 const PostIt = React.memo(({ title, color, content, deadline, positionX, positionY, size, uuid, scale, deadlineDone, pageDimensions }) =>
@@ -12,6 +17,8 @@ const PostIt = React.memo(({ title, color, content, deadline, positionX, positio
     const { openPostItMenu, updatePostIt } = usePostItContext();
 
     const { postItDimensions, innerDimensions } = getDimensionsFromSize(size);
+
+    const [isDeleteOpen, setIsDeleteOpen] = useState(false);
 
     //Les data du post-it
     const [postIt, setPostIt] = useState({
@@ -27,6 +34,13 @@ const PostIt = React.memo(({ title, color, content, deadline, positionX, positio
     const [positionTimeoutCallback, setPositionTimeoutCallback] = useState(null);
 
     const [deadlineDate, setDeadlineDate] = useState(null);
+
+    //Permet de bloquer à 1 click les requêtes vers le serveur lorsque la personne clique sur le bouton de suppression rouge.
+    const [isDeleteRequestProcessed, setIsDeleteRequestProcessed] = useState(false);
+
+    //Défini si la carte est visible ou non (utilisé pour supprimer la carte)
+    const [isPostItVisible, setIsPostItVisible] = useState(true);
+
     //Dès que postIt.size change, on va mettre à jour la taille du postIt en fonction de si c'est "small", "medium" ou "large"
     useEffect(() => {
         setDimensions(getDimensionsFromSize(size));
@@ -75,6 +89,37 @@ const PostIt = React.memo(({ title, color, content, deadline, positionX, positio
         updateDeadlineDoneInBD(uuid, isDeadlineDone);
     }
 
+    //Ouvre ou ferme la sidebar
+    function handleDeleteOpen()
+    {
+        setIsDeleteOpen(!isDeleteOpen);
+    }
+
+    //Delete forever
+    function handlePostItDeletion() 
+    {
+        //On regarde si une requête est déjà en cours pour éviter que la personne clique plusieurs fois par accident et que la personne reçoive 1 message success et plusieurs messages d'erreur par la suite.
+        if(!isDeleteRequestProcessed)
+        {
+            setIsDeleteRequestProcessed(true);
+            
+            axios.delete('/api/post-it/delete/'+uuid)
+            .then(function(response){
+                alert('tttt');
+                setIsPostItVisible(false);
+                toast.success("Post-it removed successfully!")
+            })
+            .catch(function(error){
+                console.log(error)
+                toast.error('An error occured while trying to delete the post-it.');
+            })
+            .finally(function(){
+                setIsDeleteRequestProcessed(false);
+            });
+        }
+        
+    }
+
     return(
         <Draggable
             //La poignée
@@ -93,6 +138,7 @@ const PostIt = React.memo(({ title, color, content, deadline, positionX, positio
 
                 <div className={`panning-disabled header header-${color}`} style={{height: dimensions.innerDimensions.headerHeight+'px'}}>
                     <SettingsIcon onClick={() => openPostItMenu(uuid)} fontSize="medium" className="panning-disabled edit-icon" />
+                    <InitialDeleteIcon className="initialDeleteIcon icon" handleDelete={handleDeleteOpen} />
                 </div>
 
                 <div className={`post-it-content panning-disabled content-${color}`} style={{minHeight: dimensions.innerDimensions.contentHeight+'px'}}>
@@ -105,6 +151,12 @@ const PostIt = React.memo(({ title, color, content, deadline, positionX, positio
                     <p className="panning-disabled title">{title}</p>
                     <p className="panning-disabled content">{content}</p>
                 </div>
+
+
+
+                <DeleteConfirm handleDeleteMenuOpen={handleDeleteOpen} handleItemDelete={handlePostItDeletion} menuOpen={isDeleteOpen} />
+            
+
             </div>
         </Draggable>
     );

@@ -1,0 +1,15 @@
+.initialDeleteIcon
+{
+    display: flex;
+}
+
+.initialDeleteIcon > *{
+    color: #1F1F1F;
+    scale: 1;
+}
+
+.initialDeleteIcon > *:hover{
+    color: #000000;
+    scale: 1.1;
+}
+

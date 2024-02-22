@@ -3,10 +3,10 @@ import { Link } from 'react-router-dom';
 import CardWrapper from './CardWrapper';
 import CardContent from './CardContent';
 import '../../styles/MyWalls/card.css';
-import CloseIcon from '@mui/icons-material/Close';
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import DeleteConfirm from '../reusable/DeleteConfirm';
 
 function Card({href, title, description, id})
 {
@@ -63,11 +63,8 @@ function Card({href, title, description, id})
                 </CardContent>
             </Link>
 
-            <div className='deleteConfirm' style={{visibility: (isDeleteOpen ? 'visible' :  'hidden')}}>
-                <span onClick={handleWallDeletion} className="deleteIcon icon"><DeleteForeverIcon /></span>
-                <span className="closeIcon icon topRight" onClick={handleDeleteOpen}><CloseIcon /></span>
-            </div>
-
+            <DeleteConfirm handleDeleteMenuOpen={handleDeleteOpen} handleItemDelete={handleWallDeletion} menuOpen={isDeleteOpen} />
+            
 
         </CardWrapper>
     )

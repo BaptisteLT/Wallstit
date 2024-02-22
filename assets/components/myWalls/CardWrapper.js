@@ -1,12 +1,13 @@
 import React from 'react';
 import '../../styles/MyWalls/cardWrapper.css';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import InitialDeleteIcon from '../reusable/InitialDeleteIcon';
 
 function CardWrapper({handleDelete = null, isLoading = false, description, styling, children})
 {
     return(
         <div className="card-wrapper" style={styling}>
-            { handleDelete ? <span onClick={handleDelete} className="initialDeleteIcon icon topRight"><DeleteForeverIcon /></span> : null }
+            <InitialDeleteIcon className="nitialDeleteIcon icon topRight" handleDelete={handleDelete} />
             <div className={'card '+ (isLoading ? 'loading' : '')}>
                 {children}
             </div>

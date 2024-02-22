@@ -189,4 +189,22 @@ class PostItController extends AbstractController
         return new JsonResponse('OK', Response::HTTP_OK);
     }
 
+
+        //suppression
+        #[Route('/post-it/delete/{uuid}', name: 'delete-my-wall', methods: ['DELETE'])]
+        public function deleteWall(string $uuid, Request $request): JsonResponse
+        {
+            $user = $this->tokenCookieService->findUserInRequest($request);
+    
+            $postIt = $this->postItRepository->findOneByUserAndUuid($user->getId(), $uuid);
+    
+            if(!$postIt)
+            {
+                throw new NotFoundHttpException('Post-it not found.');
+            }
+            $this->em->remove($postIt);
+            $this->em->flush();
+    
+            return new JsonResponse('ok', Response::HTTP_OK);
+        }
 }

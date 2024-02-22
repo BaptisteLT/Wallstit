@@ -1,0 +1,30 @@
+
+.icon{
+    cursor: pointer;
+}
+
+.deleteIcon > *{
+    color: #ff0015;
+    scale: 1.4;
+}
+
+.deleteIcon > *:hover{
+    color: #db0012;
+    scale: 1.6;
+}
+
+.closeIcon > *{
+    color: #1F1F1F;
+    scale: 1.2;
+}
+
+.closeIcon > *:hover{
+    color: #000000;
+}
+
+.topRight{
+    z-index: 2;
+    position: absolute;
+    top: 8px;
+    right: 8px;
+}
