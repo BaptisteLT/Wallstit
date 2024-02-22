@@ -52,30 +52,36 @@ const PostIt = React.memo(({ title, color, content, deadline, positionX, positio
     
 
     const handleStop = ((e, ui) => {
+
         const positionX = parseInt(ui.x);
         const positionY = parseInt(ui.y);
 
-        //Update the Post-It position in the DOM
-        setPostIt({
-            ...postIt,
-            positionX: positionX,
-            positionY: positionY
-        });
+        //On met à jour seulement si la position a changé
+        if(ui.x != positionX || ui.y != positionY)
+        {
+            //Update the Post-It position in the DOM
+            setPostIt({
+                ...postIt,
+                positionX: positionX,
+                positionY: positionY
+            });
 
-        // Clear the timeout if it exists
-        if (positionTimeoutCallback) {
-            clearTimeout(positionTimeoutCallback);
+            // Clear the timeout if it exists
+            if (positionTimeoutCallback) {
+                clearTimeout(positionTimeoutCallback);
+            }
+
+            //Permet d'attendre X secondes avant d'envoyer le PATCH qui contiendra la positionX et positionY.
+            //Si l'utilisateur déplace le post-it avant les X secondes, on clear le timeout et on le relance.
+            const newTimeoutCallback = setTimeout(() => {
+                //Sauvegarder la position en BDD
+                updatePositionInDB(uuid, positionX, positionY);
+            }, 2500);
+
+            // Store the callback in the state
+            setPositionTimeoutCallback(newTimeoutCallback);
+                    
         }
-
-        //Permet d'attendre X secondes avant d'envoyer le PATCH qui contiendra la positionX et positionY.
-        //Si l'utilisateur déplace le post-it avant les X secondes, on clear le timeout et on le relance.
-        const newTimeoutCallback = setTimeout(() => {
-            //Sauvegarder la position en BDD
-            updatePositionInDB(uuid, positionX, positionY);
-        }, 2500);
-
-        // Store the callback in the state
-        setPositionTimeoutCallback(newTimeoutCallback);
     });
 
     const updateDeadlineDone = (isDeadlineDone) => {
@@ -105,7 +111,7 @@ const PostIt = React.memo(({ title, color, content, deadline, positionX, positio
             
             axios.delete('/api/post-it/delete/'+uuid)
             .then(function(response){
-                alert('tttt');
+              
                 setIsPostItVisible(false);
                 toast.success("Post-it removed successfully!")
             })
@@ -133,8 +139,10 @@ const PostIt = React.memo(({ title, color, content, deadline, positionX, positio
             grid={[1, 1]}
             scale={scale}
             onStop={handleStop}
+            //Disable drag on icons
+            cancel='svg'
         >
-            <div className="panning-disabled post-it-container" style={{width: dimensions.postItDimensions.width+'px'}}>
+            <div className="panning-disabled post-it-container" style={{width: dimensions.postItDimensions.width+'px', display: (isPostItVisible ? 'block' : 'none')}}>
 
                 <div className={`panning-disabled header header-${color}`} style={{height: dimensions.innerDimensions.headerHeight+'px'}}>
                     <SettingsIcon onClick={() => openPostItMenu(uuid)} fontSize="medium" className="panning-disabled edit-icon" />
@@ -152,11 +160,7 @@ const PostIt = React.memo(({ title, color, content, deadline, positionX, positio
                     <p className="panning-disabled content">{content}</p>
                 </div>
 
-
-
                 <DeleteConfirm handleDeleteMenuOpen={handleDeleteOpen} handleItemDelete={handlePostItDeletion} menuOpen={isDeleteOpen} />
-            
-
             </div>
         </Draggable>
     );

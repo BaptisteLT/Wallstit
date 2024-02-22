@@ -7,7 +7,7 @@ function CardWrapper({handleDelete = null, isLoading = false, description, styli
 {
     return(
         <div className="card-wrapper" style={styling}>
-            <InitialDeleteIcon className="nitialDeleteIcon icon topRight" handleDelete={handleDelete} />
+            { handleDelete ? <InitialDeleteIcon className="nitialDeleteIcon icon topRight" handleDelete={handleDelete} /> : null }
             <div className={'card '+ (isLoading ? 'loading' : '')}>
                 {children}
             </div>
