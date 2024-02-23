@@ -25,7 +25,6 @@ function Card({href, title, description, id})
         {
             setIsDeleteRequestProcessed(true);
             
-            //TODO: CSRF
             axios.delete('/api/my-wall/delete/'+id)
             .then(function(response){
                 if(response.status === 200)

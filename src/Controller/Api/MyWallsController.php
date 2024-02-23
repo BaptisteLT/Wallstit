@@ -112,4 +112,78 @@ class MyWallsController extends AbstractController
 
         return new JsonResponse('OK', Response::HTTP_OK);
     }
+
+
+
+
+
+
+
+    #[Route('/wall/{id}', name: 'patch-wall', methods: ['PATCH'])]
+    public function patchWall(int $id, Request $request): JsonResponse
+    {
+        $user = $this->tokenCookieService->findUserInRequest($request);
+
+        $wall = $this->wallRepository->findOneBy(['id' => $id, 'user' => $user->getId()]);
+
+        
+        //Si le post-it n'existe pas ou qu'il n'appartient à pas l'utilisateur qui en a fait la requête.
+        if((!$wall))
+        {
+            //Alors on retourne un 404.
+            throw new NotFoundHttpException('Wall not found');
+        }
+
+        $requestData = json_decode($request->getContent(), true);
+        
+        $wallBackground = $requestData['wallBackground'] ?? null;
+        $wallName = $requestData['wallName'] ?? null;
+        $wallDescription = $requestData['wallDescription'] ?? null;
+
+        /**
+         * Première vérification des types
+         */
+        //Si la valeur est spécifiée et si le type n'est pas celui attendu, on envoie une erreur Bad Request 400
+        if(!is_string($wallBackground) && $wallBackground !== null)
+        {
+            throw new HttpException(400, 'Wall background must be a string');
+        }
+        if(!is_string($wallName) && $wallName !== null)
+        {
+            throw new HttpException(400, 'Wall name must be a string');
+        }
+        if(!is_string($wallDescription) && $wallDescription !== null)
+        {
+            throw new HttpException(400, 'Wall description must be a string');
+        }
+        
+
+        /**
+         * Remplacement des valeurs qui ont été spécifiées
+         */
+        if(array_key_exists('wallBackground', $requestData)){
+            $wall->setBackground($wallBackground);
+        }
+        if(array_key_exists('wallName', $requestData)){
+            $wall->setName($wallName); 
+        }
+        if(array_key_exists('wallDescription', $requestData)){
+            $wall->setDescription($wallDescription); 
+        }
+
+        $this->validatorService->validateEntityOrThrowException($wall);
+
+        $this->em->persist($wall);
+        $this->em->flush();
+
+        return new JsonResponse('OK', Response::HTTP_OK);
+    }
+
+
+
+
+
+
+
+
 }

@@ -10,7 +10,7 @@ function SizeInput({ size, handlePostItChange = null, handleSideBarChange = null
         if(handlePostItChange !== null)
         {
             //Va appeler la méthode mère pour mettre à jour seulement après 2.5 secondes d'inactivité afin d'éviter de spam le serveur d'appels API
-            handlePostItChange(null, null, size);
+            handlePostItChange('size', size);
         }
         if(handleSideBarChange !== null)
         {

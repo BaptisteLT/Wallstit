@@ -53,7 +53,6 @@ class GoogleOAuthController extends AbstractController
     #[Route('/get-tokens/{provider}', name: 'getTokens', methods: ['POST'])]
     public function getTokens(string $provider, Request $request, OAuthApiFactory $factory): JsonResponse
     {
-        //TODO: be able to choose a service based on the {provider} in the url
         try
         {
             ['code' => $code, 'state' => $state] = json_decode($request->getContent(), true);

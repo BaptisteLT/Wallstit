@@ -1,35 +1,35 @@
 import React, { useState } from "react";
 import WallBackgroundInput from '../../Inputs/WallBackgroundInput';
 import { usePostItContext } from '../../../PostItContext';
+import TitleInput from "../../Inputs/TitleInput";
+import ContentInput from "../../Inputs/ContentInput";
 
 
-function WallSubMenuContent({ wallBackground })
+function WallSubMenuContent({ wallBackground, wallName, wallDescription })
 {
-    const { updateWallBackground, setWallBackground } = usePostItContext();
+    const { setWallBackground, setWallName, setWallDescription } = usePostItContext();
 
-    const [wallBackgroundTimeoutCallback, setWallBackgroundTimeoutCallback] = useState(null);
-
-    function handleWallBackgroundChange(wallBackground)
+    function handleWallChange(key, value)
     {
-        setWallBackground(wallBackground);
-        // Clear the timeout if it exists
-        if (wallBackgroundTimeoutCallback) {
-            clearTimeout(wallBackgroundTimeoutCallback);
+        if(key === 'title')
+        {
+            setWallName(value);
         }
-
-        //Permet d'attendre X secondes avant d'envoyer le PUT au serveur
-        const newTimeoutCallback = setTimeout(() => {
-            updateWallBackground(wallBackground);
-        }, 2500);
-
-        // Store the callback in the state
-        setWallBackgroundTimeoutCallback(newTimeoutCallback);
+        if(key === 'content')
+        {
+            setWallDescription(value);
+        }
+        if(key === 'background')
+        {
+            setWallBackground(value);
+        }
     }
-
 
     return(
         <div className="main_wrapper">
-            <WallBackgroundInput wallBackground={wallBackground} label="Backgrounds" handleWallBackgroundChange={handleWallBackgroundChange} />
+            <TitleInput label='Title' title={wallName} handleChange={handleWallChange} />
+            <ContentInput label='Description' content={wallDescription} handleChange={handleWallChange} />
+            <WallBackgroundInput wallBackground={wallBackground} label="Backgrounds" handleChange={handleWallChange} />
         </div>
     )
 }

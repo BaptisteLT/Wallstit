@@ -14,22 +14,11 @@ function PostItSubMenuContent({ uuid, title, content, size, color, deadline })
 
     const [postItDataCallback, setPostItDataCallback] = useState(null);
 
-    const handlePostItChange = async (title = null, content = null, size = null, color = null, deadline = null) => {
+    const handlePostItChange = async (key, value) => {
 
         let data = {};
 
-        if (title !== null) data.title = title;
-        if (content !== null) data.content = content;
-        if (size !== null) data.size = size;
-        if (color !== null) data.color = color;
-        
-        if (deadline !== null && deadline === '0000-00-00T00:00:00+00:00'){
-            data.deadline = null;
-        }
-        else if(deadline !== null)
-        {
-            data.deadline = deadline;
-        }
+        data[key] = value;
 
         const currentPostIt = await updatePostIt(data, uuid);
 
@@ -54,8 +43,8 @@ function PostItSubMenuContent({ uuid, title, content, size, color, deadline })
 
     return(
         <div className="main_wrapper">
-            <TitleInput title={title} handlePostItChange={handlePostItChange} />
-            <ContentInput content={content} handlePostItChange={handlePostItChange} />
+            <TitleInput label='Title' title={title} handleChange={handlePostItChange} />
+            <ContentInput label='Content' content={content} handleChange={handlePostItChange} />
             <DeadlineInput deadline={deadline} handlePostItChange={handlePostItChange} />
             <SizeInput label='Size' size={size} handlePostItChange={handlePostItChange} />
             <ColorInput color={color} handlePostItChange={handlePostItChange} />

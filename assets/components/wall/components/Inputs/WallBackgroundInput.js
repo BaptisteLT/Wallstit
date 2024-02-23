@@ -3,11 +3,11 @@ import '../../../../styles/Wall/Inputs/wallBackgroundInput.css';
 import '../../../../styles/Wall/Inputs/generalInput.css';
 
 
-function WallBackgroundInput({label, wallBackground, handleWallBackgroundChange})
+function WallBackgroundInput({label, wallBackground, handleChange})
 {
     function handleOnClick(wallBackground)
     {
-        handleWallBackgroundChange(wallBackground);
+        handleChange('background', wallBackground);
     }
 
     return(

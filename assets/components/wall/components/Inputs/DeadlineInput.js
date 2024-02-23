@@ -21,11 +21,11 @@ function DeadlineInput({ deadline, handlePostItChange })
         const newDate = event.target.value.slice(0,16) + ':00+00:00';
         if (newDate && !isNaN(new Date(newDate))) {
             //Va appeler la méthode mère pour mettre à jour seulement après 2.5 secondes d'inactivité afin d'éviter de spam le serveur d'appels API
-            handlePostItChange(null, null, null, null, newDate);
+            handlePostItChange('deadline', newDate);
         }
         else
         {
-            handlePostItChange(null, null, null, null, '0000-00-00T00:00:00+00:00');
+            handlePostItChange('deadline', null);
         }
     };
 

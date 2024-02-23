@@ -78,7 +78,7 @@ class PostItController extends AbstractController
 
     
     
-    #[Route('/post-it/{uuid}', name: 'get-post-it', methods: ['PATCH'])]
+    #[Route('/post-it/{uuid}', name: 'patch-post-it', methods: ['PATCH'])]
     public function patchPostIt(string $uuid, Request $request): JsonResponse
     {
         $postIt = $this->postItRepository->findOneBy(['uuid' => $uuid]);

@@ -6,7 +6,7 @@ function ColorInput({ color, handlePostItChange })
 {
     const handleOnClick = (color) => {
         //Va appeler la méthode mère pour mettre à jour seulement après 2.5 secondes d'inactivité afin d'éviter de spam le serveur d'appels API
-        handlePostItChange(null, null, null, color);
+        handlePostItChange('color', color);
     }
 
     return(

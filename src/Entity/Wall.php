@@ -23,7 +23,7 @@ class Wall
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Groups(['get-walls'])]
+    #[Groups(['get-walls', 'get-post-its'])]
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
@@ -38,7 +38,7 @@ class Wall
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 
-    #[Groups(['get-walls'])]
+    #[Groups(['get-walls', 'get-post-its'])]
     #[ORM\Column(length: 100, nullable: true)]
     private ?string $description = null;
 
