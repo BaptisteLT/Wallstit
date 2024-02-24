@@ -6,10 +6,10 @@
 .home-cards-row
 {
     display: grid;
-    justify-content: space-around;
-    grid-template-columns: minmax(210px, 272px) minmax(300px, 440px) minmax(210px, 272px);
+    justify-content: space-evenly;
+    grid-template-columns: minmax(210px, 272px) minmax(300px, 360px) minmax(210px, 272px);
     grid-template-rows: 1fr;
-    gap: 20px;
+    gap: 10px;
 }
 
 .home-cards-row>h2{

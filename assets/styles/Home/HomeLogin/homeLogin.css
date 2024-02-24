@@ -1,0 +1,29 @@
+#home-login-wrapper
+{
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#home-login-wrapper>span{
+    margin-bottom: 16px;
+    font-size: 18px;
+    font-weight: bold;
+    display: flex;
+    gap: 6px;
+    background: #fff4da;
+    padding: 10px;
+    border-radius: 5px;
+}
+#home-login-wrapper>span>img{
+    width: 20px;
+    transform: rotate(-7deg);
+}
+
+#home-login-links
+{
+    display: flex;
+    gap: 18px;
+}

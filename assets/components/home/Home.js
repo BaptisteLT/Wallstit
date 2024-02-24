@@ -19,8 +19,8 @@ const Home = () => {
     return(
         <Container className="homepage">
             <HomeHeader />
-            <HomeCards />
             <HomeLogin />
+            <HomeCards />
         </Container>
     )
 }
