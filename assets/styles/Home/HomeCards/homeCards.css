@@ -1,0 +1,60 @@
+
+#home-cards-wrapper{
+    margin-top: 100px;
+}
+
+.home-cards-row
+{
+    display: grid;
+    justify-content: space-around;
+    grid-template-columns: minmax(210px, 272px) minmax(300px, 440px) minmax(210px, 272px);
+    grid-template-rows: 1fr;
+    gap: 20px;
+}
+
+.home-cards-row>h2{
+    text-align: center;
+}
+
+/* En dessous de 1020px on met le h2 en haut */
+@media screen and (max-width: 992px) {
+    .home-cards-row{
+        grid-template-rows: auto auto;
+        grid-template-columns: auto auto;
+        justify-content: center;
+    }
+
+    .home-cards-row>h2{
+        order: -1;
+        grid-column: span 2; /* Span the full width of the first column */
+    }
+
+    .home-cards-row > :not(h2) {
+        width: 272px; /* Fixed width for HomePostIt elements */
+        margin: auto; /* Center horizontally */
+    }
+}
+
+@media screen and (max-width: 660px) {
+    .home-cards-row > :not(h2) {
+        width: 220px;
+    }
+}
+
+@media screen and (max-width: 550px) {
+    .home-cards-row > :not(h2) {
+        width: 180px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .home-cards-row > :not(h2) {
+        width: 150px;
+    }
+}
+
+@media screen and (max-width: 420px) {
+    .home-cards-row > :not(h2) {
+        width: 120px;
+    }
+}
