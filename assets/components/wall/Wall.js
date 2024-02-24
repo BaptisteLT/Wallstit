@@ -41,6 +41,31 @@ function Wall() {
     setScale(scale);
   }
 
+
+  function addPostIt(positionX, positionY)
+  {
+    axios.post('/api/post-it', {
+      wallId: id,
+    })
+    .then(function (response) {
+      setPostIts([
+        ...postIts,
+        {
+          uuid: response.data.uuid,
+          positionX: positionX,
+          positionY: positionY,
+          content: null,
+          color: 'yellow',
+          size: 'medium'
+        }
+      ]);
+    })
+    .catch(function (error) {
+      // handle error
+      toast.error('An error occured while creating the new post-it.');
+    })
+  }
+
   /**
    * Va charger les post-its sur la page
    */
@@ -111,12 +136,12 @@ function Wall() {
   useEffect(() => {
     // Clear the timeout if it exists
     if (wallTimeoutCallback) {
-        clearTimeout(wallTimeoutCallback);
+      clearTimeout(wallTimeoutCallback);
     }
 
     //Permet d'attendre X milisecondes avant d'envoyer le PATCH au serveur
     const newTimeoutCallback = setTimeout(() => {
-        updateWallInDB(wallBackground, wallName, wallDescription, id);
+      updateWallInDB(wallBackground, wallName, wallDescription, id);
     }, 2500);
 
     // Store the callback in the state

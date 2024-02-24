@@ -1,6 +1,5 @@
 import React from 'react';
 import '../../styles/MyWalls/cardWrapper.css';
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import InitialDeleteIcon from '../reusable/InitialDeleteIcon';
 
 function CardWrapper({handleDelete = null, isLoading = false, description, styling, children})

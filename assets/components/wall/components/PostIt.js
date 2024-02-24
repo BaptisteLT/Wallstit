@@ -108,6 +108,8 @@ const PostIt = React.memo(({ title, color, content, deadline, positionX, positio
         if(!isDeleteRequestProcessed)
         {
             setIsDeleteRequestProcessed(true);
+
+            //TODO: supprimer le post-it de l'array d'objects Post-It sinon la sidebar reste (et par la même occasion il y aura surement plus besoin de fairesetIsPostItVisible(false) )
             
             axios.delete('/api/post-it/delete/'+uuid)
             .then(function(response){

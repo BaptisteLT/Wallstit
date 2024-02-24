@@ -20,6 +20,11 @@ function SideBar()
         addPostIt();
     }
 
+    //Permet d'ouvrir la sideBar quand le bouton settings d'un post-it est cliqué
+    useEffect(() => {
+        setCollapsed(false);
+    }, [activePostItMenuUuid])
+
     return(
         /*TODO: rajouter des ICONS de post-it, etc*/
         <Menu collapsed={collapsed} sideBarSize={sideBarSize} setCollapsed={setCollapsed}> 
