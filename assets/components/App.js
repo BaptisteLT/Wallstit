@@ -28,6 +28,7 @@ import '../fonts/Roboto/Roboto-Medium.ttf';
 
 //Contexte qui permet à toute l'application de bénéficier de user et setUser
 import { AuthContext, useAuth } from './useAuth';
+import MyAccount from './MyAccount/MyAccount';
 
 
 function App()
@@ -55,6 +56,7 @@ function App()
                             <Header />
                             <Routes>
                                 <Route index path="/" element={<Home />} /> 
+                                <Route path="/my-account" element={<MyAccount />} />
                                 <Route path="/my-walls" element={<MyWalls />} />
                                 <Route path="/google-callback" element={<OAuthCallback provider="google" />} />
                                 <Route path="/discord-callback" element={<OAuthCallback provider="discord" />} />

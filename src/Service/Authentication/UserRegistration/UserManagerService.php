@@ -44,15 +44,15 @@ class UserManagerService
         else
         {
             //We update the user data in case they have changed
-            if(isset($userData['name']) && $userData['name'] !== $user->getName()){
+            /*if(isset($userData['name']) && $userData['name'] !== $user->getName()){
                 $user->setName($userData['name']);
-            }
+            }*/
             if(isset($userData['picture']) && $userData['picture'] !== $user->getPicture()){
                 $user->setPicture($userData['picture']);
             }
-            if(isset($userData['locale']) && $userData['locale'] !== $user->getLocale()){
+            /*if(isset($userData['locale']) && $userData['locale'] !== $user->getLocale()){
                 $user->setLocale($userData['locale']);
-            }
+            }*/
         }
 
         $this->em->persist($user);

@@ -1,0 +1,38 @@
+.my-account-container
+{
+    display: flex;
+    justify-content: center;
+}
+
+#my-account-wrapper{
+    width: 400px;
+    height: 500px;
+    background-color: white;
+    margin: 60px 0px;
+    padding: 20px 34px;
+    border-radius: 10px;
+    box-shadow: 0 0px 1px 0 rgba(60, 64, 67, .30), 0 1px 3px 1px rgba(60, 64, 67, .15);
+}
+
+#my-account-avatar-wrapper
+{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+#my-account-avatar-wrapper > img
+{
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+}
+
+#my-account-username-wrapper
+{
+    display: flex;
+    flex-direction: column;
+}
+#my-account-username-wrapper>*
+{
+    flex: 0;
+}

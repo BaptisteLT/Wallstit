@@ -7,7 +7,7 @@ const AccountMenu = () => {
 
     const [profileOpen, setProfileOpen] = useState(false)
 
-    const handleProfileClick = () => {
+    const handleMenuOpen = () => {
         setProfileOpen(!profileOpen);
     };
 
@@ -16,17 +16,11 @@ const AccountMenu = () => {
     };
 
     return(
-        <div id='account-menu'>{/*Position relatice*/}
-            <div onClick={handleProfileClick} id='logo'></div>
-            <div id="menu-arrow" style={{display: profileOpen ? 'block' : 'none'}}></div>
-            <div id="menu" style={{display: profileOpen ? 'block' : 'none'}}>
-                
-                    <NavLink 
-                        to={'/my-account'}>
-                        <span>My account</span>
-                    </NavLink>  
-    
-                
+        <div id='account-menu'>
+            <div onClick={handleMenuOpen} id='logo'></div>
+            <div onClick={handleMenuOpen} id="menu-arrow" style={{display: profileOpen ? 'block' : 'none'}}></div>
+            <div onClick={handleMenuOpen} id="menu" style={{display: profileOpen ? 'block' : 'none'}}>
+                <NavLink to={'/my-account'}><span>My account</span></NavLink>  
                 <hr />
                 <a href='#' onClick={handleLogout}><span>Log out</span></a>
             </div>
