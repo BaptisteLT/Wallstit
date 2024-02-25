@@ -26,7 +26,7 @@ const MyAccount = () => {
                     <input id="username" name="username" type='text' defaultValue='PabloEscargot' />
                 </div>
                
-                
+                date de création du compte
             </div>
         </Container>
     )
