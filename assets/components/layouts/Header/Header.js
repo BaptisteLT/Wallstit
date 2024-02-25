@@ -5,6 +5,7 @@ import GitHubLink from './GitHubLink';
 import Logo from '../../layouts/Logo';
 import Separator from '../../layouts/Header/Separator';
 import NavigationLink from './NavigationLink';
+import AccountMenu from './AccountMenu';
 
 import '../../../styles/header/header.css';
 import RoleChecker from '../../RoleChecker';
@@ -33,7 +34,7 @@ function Header() {
                         <DiscordLink />
                         <GoogleLink />
                     </RoleChecker>
-                    TODO logout
+                    <AccountMenu />
                 </div>
             </nav>
         </header>

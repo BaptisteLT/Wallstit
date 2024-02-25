@@ -4,6 +4,7 @@ footer{
     justify-content: center;
     align-items: center;
     height: 70px;
-    background-color: white;
     z-index: 3;
+    background: #4d4d4d;
+    color: #FFF;
 }

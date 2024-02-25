@@ -1,8 +1,3 @@
-.homePostWrapper
-{
-
-}
-
 .homePostHeader
 {
     width: 100%;
@@ -21,6 +16,19 @@
     height: 220px;
     padding-top: 5px;
 }
+
+
+@media screen and (max-width: 600px) {
+    .homePostBody{
+        height: 184px;
+    }
+}
+@media screen and (max-width: 525px) {
+    .homePostBody{
+        height: 165px;
+    }
+}
+
 
 .homePostHeader.blue{
     background-color: #80D5FF;

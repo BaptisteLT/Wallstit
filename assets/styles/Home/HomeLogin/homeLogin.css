@@ -7,9 +7,8 @@
     align-items: center;
     background: #fff;
     border-radius: 10px;
-    padding: 20px;
+    padding: 20px 34px;
     box-shadow: 0 0px 1px 0 rgba(60, 64, 67, .30), 0 1px 3px 1px rgba(60, 64, 67, .15);
-    width: 400px;
 }
 
 #home-login-wrapper>span{
@@ -32,7 +31,7 @@
     gap: 16px;
 }
 
-@media screen and (max-width: 468px){
+@media screen and (max-width: 550px){
     #home-login-links{
         flex-direction: column;
         gap: 12px;
