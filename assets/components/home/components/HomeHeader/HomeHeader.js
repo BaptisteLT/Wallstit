@@ -9,7 +9,7 @@ const HomeHeader = () => {
             <div id="home-header-wrapper">
                 <h1>Il n'a jamais été aussi facile de mettre ses idées au clair.</h1>
                 <h2 className="home-header-h2">Concevez rapidement vos murs de post-its. Organisez et planifiez vos tâches en toute simplicité à l'aide d'une interface épurée, configurable et ludique.</h2>
-                <button id="start-using-btn">Commencez à utiliser GRATUITEMENT</button>
+                <button id="start-using-btn">Commencer à utiliser GRATUITEMENT</button>
             </div>
 
             <img id="main-img" src={mainImg} alt="Application layout" />
