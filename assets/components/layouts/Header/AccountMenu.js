@@ -16,6 +16,8 @@ const AccountMenu = () => {
         //TODO: API call to delete the refresh token + delete session + cookies + user in local storage
     };
 
+    
+
     return(
         <div id='account-menu'>
             <div onClick={handleMenuOpen} id='logo'></div>

@@ -141,12 +141,4 @@ class MyWallsController extends AbstractController
 
         return new JsonResponse('OK', Response::HTTP_OK);
     }
-
-
-
-
-
-
-
-
 }

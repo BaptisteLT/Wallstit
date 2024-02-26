@@ -2,6 +2,7 @@ import React, { useEffect, useLayoutEffect, useState } from 'react';
 import Container from '../reusable/Container';
 import '../../styles/MyAccount/myAccount.css';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 import ContentLoader from 'react-content-loader'
 
@@ -20,6 +21,8 @@ const MyAccount = () => {
             document.body.style.removeProperty('background-color');
         }
     });
+
+
     
 
     function fetchUserData()
@@ -47,7 +50,18 @@ const MyAccount = () => {
         fetchUserData();
     }, []); // Empty dependency array ensures the effect runs only once
 
-
+    function updateUserData(){
+        
+        axios.patch('/api/user/me',{
+            username: username
+        })
+        .then(function(response){
+            toast.success('Your username has been updated.');
+        })
+        .catch(function(error){
+            toast.error(error.response.data.error || 'An error occurred');
+        });
+    }
 
     return(
         
@@ -61,11 +75,11 @@ const MyAccount = () => {
                         <span className="header-title">Edit profile</span>
 
                         <label htmlFor="username">How should we call you?</label>
-                        <input className="username-input" id="username" name="username" type="text" defaultValue={username} />
+                        <input className="username-input" id="username" name="username" type="text" onChange={(e) => { setUsername(e.target.value) }} defaultValue={username} />
                     
                         <span className="created-at">Your account was created on {createdAt.toUTCString().slice(0, -13)}</span>
 
-                        <button className="save-btn">Save</button>
+                        <button onClick={updateUserData} className="save-btn">Save</button>
 
                         <hr className="separator" />
 

@@ -33,6 +33,10 @@ class User implements UserInterface
 
     #[Groups(['get-user'])]
     #[ORM\Column(length: 255)]
+    #[Assert\Length(
+        max: 30,
+        maxMessage: 'The username cannot be longer than {{ limit }} characters',
+    )]
     private ?string $name = null;
 
     #[Groups(['get-user'])]

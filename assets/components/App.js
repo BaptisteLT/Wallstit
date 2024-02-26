@@ -52,7 +52,7 @@ function App()
                     <Router>
                         {/* UserCheckComponent Va vérifier que le refresh token en localStorage n'est pas expiré, afin de déconnecter l'utilisateur dans le cas présent */}
                         <UserCheckComponent>
-                            <ToastContainer autoClose={2500} />
+                            <ToastContainer autoClose={2500} style={{marginTop: '60px'}} />
                             <Header />
                             <Routes>
                                 <Route index path="/" element={<Home />} /> 
