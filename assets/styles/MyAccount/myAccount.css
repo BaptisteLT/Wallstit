@@ -5,34 +5,115 @@
 }
 
 #my-account-wrapper{
-    width: 400px;
-    height: 500px;
+    width: 350px;
+    height: 534px;
     background-color: white;
     margin: 60px 0px;
     padding: 20px 34px;
-    /*border-radius: 10px;*/
+    border-radius: 4px;
+    /*border: 1px solid #1F1F1F;*/
     box-shadow: 0 0px 1px 0 rgba(60, 64, 67, .30), 0 1px 3px 1px rgba(60, 64, 67, .15);
-}
-
-#my-account-avatar-wrapper
-{
     display: flex;
     align-items: center;
     flex-direction: column;
 }
-#my-account-avatar-wrapper > img
+
+#my-account-wrapper > .username-input
 {
-    border-radius: 50%;
-    width: 100px;
-    height: 100px;
+    max-width: 174px;
+    width: 100%;
+    border: 1px solid #CED4DA;
+    border-radius: 3px;
+    padding: 6px;
+    margin-top: 10px;
+    color: #495057;
+    font-size: 14px;
 }
 
-#my-account-username-wrapper
+
+#my-account-wrapper > .created-at
 {
-    display: flex;
-    flex-direction: column;
+    margin-top: 24px;
+    color: #495057;
+    max-width: 210px;
+    text-align: center;
 }
-#my-account-username-wrapper>*
+
+#my-account-wrapper > .save-btn {
+    margin-top: 24px;
+    border-radius: 3px;
+    color: #ffffff;
+    background: #319bff;
+    padding: 6px;
+    border: none;
+    text-decoration: none;
+    max-width: 188px;
+    width: 100%;
+    font-size: 16px;
+    cursor: pointer;
+}
+  
+#my-account-wrapper > .save-btn:hover {
+    background: #43a4ff;
+    text-decoration: none;
+}
+
+
+
+#my-account-wrapper > .separator
 {
-    flex: 0;
+    width: 100%;
+    margin-top: 40px;
+    margin-bottom: 40px;
+    color: #FFF;
 }
+
+
+
+
+#my-account-wrapper > .delete-account-btn {
+    border-radius: 3px;
+    color: #ffffff;
+    background: #FF3131;
+    padding: 6px;
+    border: none;
+    text-decoration: none;
+    max-width: 188px;
+    width: 100%;
+    font-size: 16px;
+    cursor: pointer;
+}
+  
+#my-account-wrapper > .delete-account-btn:hover {
+    background: #ff4949;
+    text-decoration: none;
+}
+
+
+#my-account-wrapper > .delete-account-text
+{
+    margin-top: 8px;
+    color: #495057;
+    max-width: 210px;
+    text-align: center;
+}
+
+#my-account-wrapper > img
+{
+    border-radius: 50%;
+    width: 105px;
+    height: 105px;
+    margin-top: 32px;
+}
+
+
+
+.my-account-container .header-title
+{
+    color: #1F1F1F;
+    font-size: 24px;
+    font-weight: bold;
+    margin-top: 16px;
+    margin-bottom: 23px;
+}
+
