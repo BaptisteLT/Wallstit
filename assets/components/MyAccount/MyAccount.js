@@ -1,8 +1,16 @@
-import React, { useLayoutEffect } from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 import Container from '../reusable/Container';
 import '../../styles/MyAccount/myAccount.css';
+import axios from 'axios';
+
+import ContentLoader from 'react-content-loader'
 
 const MyAccount = () => {
+
+    const [createdAt, setCreatedAt] = useState(null);
+    const [pictureUrl, setPictureUrl] = useState(null);
+    const [username, setUsername] = useState(null);
+    
 
     //Changing the body background-color before the page is loaded
     useLayoutEffect(() => {
@@ -12,31 +20,77 @@ const MyAccount = () => {
             document.body.style.removeProperty('background-color');
         }
     });
+    
+
+    function fetchUserData()
+    {
+        axios.get('/api/get-user-info')
+        .then(function(response){
+            if(response.status === 200)
+            {
+                const data = JSON.parse(response.data.user);
+                setUsername(data.name);
+                setPictureUrl(data.picture);
+                setCreatedAt(new Date(data.createdAt));
+            }
+            else
+            {
+                throw new Error;
+            }
+        })
+        .catch(function(error){
+            toast.error(error.response.data.error || 'An error occurred');
+        })
+    }
+    
+    useEffect(() => {
+        fetchUserData();
+    }, []); // Empty dependency array ensures the effect runs only once
+
+
 
     return(
+        
         <Container className="my-account-container">
+
             <div id="my-account-wrapper">
+                {username ? //On charge le contenu seulement quand les données de l'utilisateur ont été fetch
+                    <>
+                        <img src={pictureUrl} alt="avatar image" />
+
+                        <span className="header-title">Edit profile</span>
+
+                        <label htmlFor="username">How should we call you?</label>
+                        <input className="username-input" id="username" name="username" type="text" defaultValue={username} />
+                    
+                        <span className="created-at">Your account was created on {createdAt.toUTCString().slice(0, -13)}</span>
+
+                        <button className="save-btn">Save</button>
+
+                        <hr className="separator" />
+
+                        <button className="delete-account-btn">Delete Account</button>
+                        <span className="delete-account-text">This action is permanent!</span>
+                    </>
+                : 
+                <ContentLoader 
+                    width={360}
+                    height={540}
+                >
+                    <circle cx="180" cy="90" r="55" /> 
+                    <rect x="80" y="160" rx="6" ry="6" width="200" height="30" /> 
+                    <rect x="80" y="210" rx="6" ry="6" width="200" height="60" /> 
+                    <rect x="80" y="290" rx="6" ry="6" width="200" height="40" /> 
+                    
+                    <rect x="80" y="350" rx="6" ry="6" width="200" height="30" /> 
+                    
+                    <rect x="80" y="460" rx="6" ry="6" width="200" height="30" /> 
+                    <rect x="80" y="500" rx="6" ry="6" width="200" height="16" /> 
+                </ContentLoader>
+                }
                 
-                <img src="https://lh3.googleusercontent.com/a/ACg8ocJn4wdx_5y_FWDqXQ_WX8-aw_nlZSNO2qC9kdjKCrNpGfY=s96-c" alt="avatar image" />
 
                 
-
-                
-                <span className="header-title">Edit profile</span>
-
-                
-                <label htmlFor="username">How should we call you?</label>
-                <input className="username-input" id="username" name="username" type="text" defaultValue="PabloEscargot" />
-               
-                <span className="created-at">Your account was created on 10th february 2019</span>
-
-                <button className="save-btn">Save</button>
-
-                <hr className="separator" />
-
-                <button className="delete-account-btn">Delete Account</button>
-                <span className="delete-account-text">This action is permanent!</span>
-
             </div>
         </Container>
     )

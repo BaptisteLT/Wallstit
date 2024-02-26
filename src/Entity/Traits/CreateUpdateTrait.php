@@ -3,9 +3,11 @@ namespace App\Entity\Traits;
 
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 trait CreateUpdateTrait{
     #[ORM\Column]
+    #[Groups(['get-user'])]
     private ?\DateTimeImmutable $createdAt = null;
     
     #[ORM\Column(nullable: true)]

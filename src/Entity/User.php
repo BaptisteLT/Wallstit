@@ -31,9 +31,11 @@ class User implements UserInterface
     #[ORM\Column]
     private array $roles = [];
 
+    #[Groups(['get-user'])]
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
+    #[Groups(['get-user'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $picture = null;
 
