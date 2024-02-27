@@ -1,27 +1,30 @@
 import React, { useLayoutEffect } from 'react';
-import Container from "../reusable/Container";
 import '../../styles/Home/home.css';
-import HomeHeader from './components/HomeHeader/HomeHeader';
 import HomeCards from './components/HomeCards/HomeCards';
-import HomeLogin from './components/HomeLogin/HomeLogin';
+import HomeSection1 from './components/HomeSection1/HomeSection1';
+import HomeSection2 from './components/HomeSection2/HomeSection2';
+import HomeSection3 from './components/HomeSection3/HomeSection3';
 
 const Home = () => {
 
     //Changing the body background-color before the page is loaded
     useLayoutEffect(() => {
-        document.body.style.backgroundColor = "rgb(255, 251, 241)";
+        document.body.style.backgroundColor = "#FBFBFB";
         //Remove background-color when unmounted
         return () => {
             document.body.style.removeProperty('background-color');
         }
     });
 
+    //TODO: refaire nouveau canva: https://www.canva.com/design/DAF95re7GPE/TSi_8kr8-77wjsjhlPa5_w/edit?utm_content=DAF95re7GPE&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton
+
     return(
-        <Container className="homepage">
-            <HomeHeader />
-            <HomeLogin />
+        <div className="homepage">
+            <HomeSection1 />
+            <HomeSection2 />
+            <HomeSection3 />
             <HomeCards />
-        </Container>
+        </div>
     )
 }
 export default Home;

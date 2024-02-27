@@ -1,0 +1,25 @@
+.section3 h2
+{
+    font-size: 38px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.section3 .sections-wrapper
+{
+    display: flex;
+    flex-direction: row;
+    gap: 50px;
+}
+
+.section3 .section-left
+{
+    width: 50%;
+}
+
+.section3 .section-right
+{
+    width: 50%;
+}
+
+

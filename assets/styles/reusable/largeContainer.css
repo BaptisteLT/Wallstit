@@ -1,0 +1,19 @@
+.largeContainer{
+    padding-left: 40px;
+    padding-right: 40px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+@media screen and (max-width: 500px) {
+    .largeContainer{
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+}
+@media screen and (max-width: 400px) {
+    .largeContainer{
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+}

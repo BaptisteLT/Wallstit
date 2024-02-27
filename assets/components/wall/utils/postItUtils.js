@@ -47,7 +47,7 @@ function updatePositionInDB(uuid, positionX, positionY){
         positionY: positionY
     })
     .catch(function(error){
-        toast.error(error.response.data.error || 'An error occurred');
+        toast.error(error.response?.data?.error || 'An error occurred');
     });
 }
 
@@ -56,7 +56,7 @@ function updateDeadlineDoneInBD(uuid, deadlineDone){
         deadlineDone: deadlineDone
     })
     .catch(function(error){
-        toast.error(error.response.data.error || 'An error occurred');
+        toast.error(error.response?.data?.error || 'An error occurred');
     });
 }
 
@@ -76,7 +76,7 @@ function updatePostItInDB(postIt)
         deadline: postIt.deadline
     })
     .catch(function(error){
-        toast.error(error.response.data.error || 'An error occurred');
+        toast.error(error.response?.data?.error || 'An error occurred');
     });
 }
 

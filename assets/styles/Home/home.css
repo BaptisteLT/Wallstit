@@ -4,13 +4,6 @@
     align-items: center;
 }
 
-.homepage h1{
-    font-size: 38px;
-    margin-top: 60px;
-    margin-bottom: 20px;
-}
-
-#home-header-wrapper > h2{
-    font-size: 18px;
-    margin-bottom: 20px;
+.bold{
+    font-weight: bold;
 }

@@ -1,0 +1,14 @@
+.offer-text-wrapper
+{
+    display: flex;
+    gap: 4px;
+    margin-top: 20px;
+}
+
+.offer-text-wrapper h3
+{
+    margin: 0;
+    font-weight: normal;
+    font-size: 20px;
+    color: #686868;
+}

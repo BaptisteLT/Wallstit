@@ -13,7 +13,7 @@ const updateWallInDB = (wallBackground, wallName, wallDescription, id) => {
         wallDescription: wallDescription
     })
     .catch(function(error){
-        toast.error(error.response.data.error || 'An error occurred');
+        toast.error(error.response?.data?.error || 'An error occurred');
     })
 }
 
@@ -27,7 +27,7 @@ const updateSideBarSize = (sideBarSize) => {
         sideBarSize: sideBarSize
     })
     .catch(function(error){
-        toast.error(error.response.data.error || 'An error occurred');
+        toast.error(error.response?.data?.error || 'An error occurred');
     })
 }
 

@@ -17,13 +17,12 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 class MyAccountController extends AbstractController
 {
     public function __construct(
-        private SerializerInterface $serializer,
         private TokenCookieService $tokenCookieService
     ){}
 
     
     #[Route('/get-user-info', name: 'get-user-info', methods: ['GET'])]
-    public function getUserInfo(Request $request): JsonResponse
+    public function getUserInfo(SerializerInterface $serializer, Request $request): JsonResponse
     {
         $user = $this->tokenCookieService->findUserInRequest($request);
 
@@ -32,7 +31,7 @@ class MyAccountController extends AbstractController
             throw new NotFoundHttpException('User not found.');
         }
 
-        $json = $this->serializer->serialize($user, 'json', ['groups' => 'get-user']);
+        $json = $serializer->serialize($user, 'json', ['groups' => 'get-user']);
 
         return new JsonResponse(['user' => $json], Response::HTTP_OK);
     }
@@ -44,7 +43,7 @@ class MyAccountController extends AbstractController
     {
         $user = $this->tokenCookieService->findUserInRequest($request);
 
-        if((!$user))
+        if(!$user)
         {
             //Alors on retourne un 404.
             throw new NotFoundHttpException('User not found');
@@ -72,6 +71,24 @@ class MyAccountController extends AbstractController
         $validatorService->validateEntityOrThrowException($user);
 
         $em->persist($user);
+        $em->flush();
+
+        return new JsonResponse('OK', Response::HTTP_OK);
+    }
+
+    
+    #[Route('/user/me/delete', name: 'delete-user-me', methods: ['DELETE'])]
+    public function deleteUserMe(EntityManagerInterface $em, Request $request): JsonResponse
+    { 
+        $user = $this->tokenCookieService->findUserInRequest($request);
+
+        if(!$user)
+        {
+            //Alors on retourne un 404.
+            throw new NotFoundHttpException('User not found');
+        }
+
+        $em->remove($user);
         $em->flush();
 
         return new JsonResponse('OK', Response::HTTP_OK);

@@ -22,34 +22,9 @@ const MyAccount = () => {
         }
     });
 
-
-    
-
-    function fetchUserData()
-    {
-        axios.get('/api/get-user-info')
-        .then(function(response){
-            if(response.status === 200)
-            {
-                const data = JSON.parse(response.data.user);
-                setUsername(data.name);
-                setPictureUrl(data.picture);
-                setCreatedAt(new Date(data.createdAt));
-            }
-            else
-            {
-                throw new Error;
-            }
-        })
-        .catch(function(error){
-            toast.error(error.response.data.error || 'An error occurred');
-        })
-    }
-    
-    useEffect(() => {
-        fetchUserData();
-    }, []); // Empty dependency array ensures the effect runs only once
-
+    /**
+     * Update the user data when clicking on "Save"
+     */
     function updateUserData(){
         
         axios.patch('/api/user/me',{
@@ -59,9 +34,29 @@ const MyAccount = () => {
             toast.success('Your username has been updated.');
         })
         .catch(function(error){
-            toast.error(error.response.data.error || 'An error occurred');
+            toast.error(error.response?.data?.error || 'An error occurred');
         });
     }
+
+    /* Fetch the user data when the page is loaded */
+    function fetchUserData()
+    {
+        axios.get('/api/get-user-info')
+        .then(function(response){
+            const data = JSON.parse(response.data.user);
+            setUsername(data.name);
+            setPictureUrl(data.picture);
+            setCreatedAt(new Date(data.createdAt));
+        })
+        .catch(function(error){
+            toast.error(error.response?.data?.error || 'An error occurred');
+        })
+    }
+    
+    useEffect(() => {
+        fetchUserData();
+    }, []); // Empty dependency array ensures the effect runs only once
+
 
     return(
         
