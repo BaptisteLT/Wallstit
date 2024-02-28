@@ -1,5 +1,5 @@
 import React, { useEffect, useLayoutEffect, useState } from 'react';
-import Container from '../reusable/Container';
+import LargeContainer from '../reusable/LargeContainer';
 import '../../styles/MyAccount/myAccount.css';
 import axios from 'axios';
 import { toast } from 'react-toastify';
@@ -60,7 +60,7 @@ const MyAccount = () => {
 
     return(
         
-        <Container className="my-account-container">
+        <LargeContainer className="my-account-container">
 
             <div id="my-account-wrapper">
                 {username ? //On charge le contenu seulement quand les données de l'utilisateur ont été fetch
@@ -101,7 +101,7 @@ const MyAccount = () => {
 
                 
             </div>
-        </Container>
+        </LargeContainer>
     )
 }
 export default MyAccount;

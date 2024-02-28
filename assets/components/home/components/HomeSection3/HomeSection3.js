@@ -7,7 +7,7 @@ const HomeSection3 = () => {
 
     return(
         <Container className='section3'>
-            <h2>What we have to offer</h2>
+            <h2>Ce que l'on peux offrir</h2>
             
             <div className='sections-wrapper'>
                 <div className='section-left'>
@@ -30,7 +30,7 @@ const HomeSection3 = () => {
 
                 <div className='section-right'>
                     <OfferText>
-                        <span className="bold">Faites des économies</span>, et aidez à <span className="bold">préserver nos forêts.</span> ♻️
+                        <span className="bold">Faites des économies</span>, et aidez à <span className="bold">préserver nos forêts.</span>
                     </OfferText>
 
                     <OfferText>

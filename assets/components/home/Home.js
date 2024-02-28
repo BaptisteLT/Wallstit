@@ -1,9 +1,9 @@
 import React, { useLayoutEffect } from 'react';
 import '../../styles/Home/home.css';
-import HomeCards from './components/HomeCards/HomeCards';
 import HomeSection1 from './components/HomeSection1/HomeSection1';
 import HomeSection2 from './components/HomeSection2/HomeSection2';
 import HomeSection3 from './components/HomeSection3/HomeSection3';
+import HomeSection4 from './components/HomeSection4/HomeSection4';
 
 const Home = () => {
 
@@ -23,7 +23,7 @@ const Home = () => {
             <HomeSection1 />
             <HomeSection2 />
             <HomeSection3 />
-            <HomeCards />
+            <HomeSection4 />
         </div>
     )
 }
