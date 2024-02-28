@@ -1,10 +1,9 @@
 .home-section4-large-container
 {
-    display: flex;
-    justify-content: center;
     background-color: #196BCA;
     margin-top: 100px;
-    padding: 100px 0px;
+    display: flex;
+    justify-content: center;
 }
 
 .home-section4-container
@@ -12,9 +11,9 @@
     background: white;
     width: 100%;
     border-radius: 10px;
-    padding: 38px;
     display: flex;
     gap: 50px;
+    margin: 100px 0;
 }
 
 .home-section4-container h2{
@@ -28,4 +27,12 @@
     font-size: 20px;
     color: #686868;
     margin-bottom: 20px;
+}
+
+#section4-wrapper
+{
+    padding: 40px;
+    display: flex;
+    justify-content: center;
+    gap: 50px;
 }

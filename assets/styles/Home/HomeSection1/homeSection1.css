@@ -10,7 +10,7 @@
 {
     display: flex;
     flex-direction: column;
-    max-width: 398px;
+    /*max-width: 398px;*/
     gap: 20px;
 }
 
