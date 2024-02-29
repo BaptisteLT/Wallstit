@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\SerializerInterface;
 use App\Service\Authentication\Tokens\TokenCookieService;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use App\Service\Authentication\Tokens\RevokeTokensManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -78,12 +79,8 @@ class MyAccountController extends AbstractController
 
     
     #[Route('/user/me/delete', name: 'delete-user-me', methods: ['DELETE'])]
-    public function deleteUserMe(EntityManagerInterface $em, Request $request): JsonResponse
+    public function deleteUserMe(EntityManagerInterface $em, RevokeTokensManager $revokeTokensManager, Request $request): JsonResponse
     {
-        //TODO: clear cookies,
-        //clear user in local storage
-        //check if the refresh tokens are deleted in the DB
-
         $user = $this->tokenCookieService->findUserInRequest($request);
 
         if(!$user)
@@ -95,11 +92,10 @@ class MyAccountController extends AbstractController
         $em->remove($user);
         $em->flush();
 
-        
+        //Remove cookies
+        $response = new JsonResponse('OK', Response::HTTP_OK);
+        $response = $revokeTokensManager->revokeAuthTokens($response);
 
-
-        
-
-        return new JsonResponse('OK', Response::HTTP_OK);
+        return $response;
     }
 }

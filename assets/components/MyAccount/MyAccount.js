@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useState, useContext } from 'react';
 import LargeContainer from '../reusable/LargeContainer';
 import '../../styles/MyAccount/myAccount.css';
 import axios from 'axios';
@@ -8,13 +8,15 @@ import ContentLoader from 'react-content-loader'
 
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
-
+import { AuthContext } from '../useAuth';
 
 const MyAccount = () => {
 
     const [createdAt, setCreatedAt] = useState(null);
     const [pictureUrl, setPictureUrl] = useState(null);
     const [username, setUsername] = useState(null);
+    const { setUser } = useContext(AuthContext);
+
     const navigate = useNavigate();
 
     //Changing the body background-color before the page is loaded
@@ -78,17 +80,20 @@ const MyAccount = () => {
         })
     };
 
+    /**
+     * deleteAccount for ever because the user confirmed with the modal
+     */
     function deleteAccount()
     {
-        /*axios.delete('/user/me/delete')
-            .then(function(){
-                navigate('/');
-            })
-            .catch(function(){
-                toast.error(error.response?.data?.error || 'An error occurred');
-            })
-        */
-        navigate('/');
+        axios.delete('/api/user/me/delete')
+        .then(function(){
+            toast.success('Votre compte à bien été supprimé, ainsi que toutes les informations liées.');
+            setUser(null);
+            navigate('/');
+        })
+        .catch(function(){
+            toast.error(error.response?.data?.error || 'An error occurred');
+        })
     }
 
 
