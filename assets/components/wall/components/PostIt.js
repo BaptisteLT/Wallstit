@@ -76,7 +76,7 @@ const PostIt = React.memo(({ title, color, content, deadline, positionX, positio
             const newTimeoutCallback = setTimeout(() => {
                 //Sauvegarder la position en BDD
                 updatePositionInDB(uuid, positionX, positionY);
-            }, 2500);
+            }, 2000);
 
             // Store the callback in the state
             setPositionTimeoutCallback(newTimeoutCallback);

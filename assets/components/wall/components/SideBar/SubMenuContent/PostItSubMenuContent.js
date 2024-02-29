@@ -35,7 +35,7 @@ function PostItSubMenuContent({ uuid, title, content, size, color, deadline })
         const newTimeoutCallback = setTimeout(() => {
             //Sauvegarder la position en BDD
             updatePostItInDB(currentPostIt);
-        }, 2500);
+        }, 2000);
 
         // Store the callback in the state
         setPostItDataCallback(newTimeoutCallback);

@@ -19,7 +19,7 @@ function GeneralSubMenuContent({ sideBarSize })
         //Permet d'attendre X secondes avant d'envoyer le PUT au serveur
         const newTimeoutCallback = setTimeout(() => {
             updateSideBarSize(size);
-        }, 2500);
+        }, 2000);
 
         // Store the callback in the state
         setSideBarSizeTimeoutCallback(newTimeoutCallback);

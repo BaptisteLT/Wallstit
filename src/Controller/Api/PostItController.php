@@ -191,8 +191,8 @@ class PostItController extends AbstractController
 
 
         //suppression
-        #[Route('/post-it/delete/{uuid}', name: 'delete-my-wall', methods: ['DELETE'])]
-        public function deleteWall(string $uuid, Request $request): JsonResponse
+        #[Route('/post-it/delete/{uuid}', name: 'delete-post-it', methods: ['DELETE'])]
+        public function deletePostIt(string $uuid, Request $request): JsonResponse
         {
             $user = $this->tokenCookieService->findUserInRequest($request);
     

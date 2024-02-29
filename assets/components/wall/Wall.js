@@ -142,7 +142,7 @@ function Wall() {
     //Permet d'attendre X milisecondes avant d'envoyer le PATCH au serveur
     const newTimeoutCallback = setTimeout(() => {
       updateWallInDB(wallBackground, wallName, wallDescription, id);
-    }, 2500);
+    }, 2000);
 
     // Store the callback in the state
     setWallTimeoutCallback(newTimeoutCallback);
