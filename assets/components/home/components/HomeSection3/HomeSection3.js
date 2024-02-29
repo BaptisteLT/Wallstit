@@ -7,7 +7,7 @@ const HomeSection3 = () => {
 
     return(
         <Container className='section3'>
-            <h2>Ce que l'on peux offrir</h2>
+            <h2>Ce que l'on peut offrir</h2>
             
             <div className='sections-wrapper'>
                 <div className='section-left'>

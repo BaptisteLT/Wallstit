@@ -1,0 +1,24 @@
+.login-container
+{
+    display: flex;
+    justify-content: center;
+}
+
+.login-container #login-wrapper
+{
+    width: 350px;
+    background-color: white;
+    margin: 60px 0px;
+    padding: 20px 34px;
+    border-radius: 4px;
+    box-shadow: 0 0px 1px 0 rgba(60, 64, 67, .30), 0 1px 3px 1px rgba(60, 64, 67, .15);
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 10px
+}
+
+.login-container #login-wrapper > span
+{
+    font-weight: bold;
+}

@@ -79,7 +79,7 @@ class MyAccountController extends AbstractController
     
     #[Route('/user/me/delete', name: 'delete-user-me', methods: ['DELETE'])]
     public function deleteUserMe(EntityManagerInterface $em, Request $request): JsonResponse
-    { 
+    {
         $user = $this->tokenCookieService->findUserInRequest($request);
 
         if(!$user)

@@ -1,10 +1,52 @@
 footer{
     position: relative;
     display: flex;
-    justify-content: center;
     align-items: center;
-    height: 70px;
+    /*height: 70px;*/
     z-index: 3;
     background: #4d4d4d;
     color: #FFF;
+    font-size: 18px;
+    border-top: 10px solid #595959;
+    height: 130px;
+}
+
+#footer-content-wrapper
+{
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+ul {
+    font-size: 20px;
+    list-style: none;
+}
+
+ul li {
+    font-size: 18px;
+}
+
+ul li a {
+    color: #D2D2D2;
+}
+
+#footer-content-wrapper > div
+{
+    align-items: center;
+}
+
+#footer-content-wrapper > div:nth-child(1) {
+    display: flex;
+    justify-content: start;
+}
+
+#footer-content-wrapper > div:nth-child(2) {
+    display: flex;
+    justify-content: center;
+}
+
+#footer-content-wrapper > div:nth-child(3) {
+    display: flex;
+    justify-content: end;
 }

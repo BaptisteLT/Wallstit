@@ -24,7 +24,7 @@ function Header() {
                     
                     <RoleChecker roles={['ROLE_USER']}>
                         <NavigationLink to="/my-walls">Walls</NavigationLink>
-                        <NavigationLink to="/post-it-priority">Prioritize</NavigationLink>
+                        {/*<NavigationLink to="/post-it-priority">Prioritize</NavigationLink>*/}
                     </RoleChecker>
                 </div>
             

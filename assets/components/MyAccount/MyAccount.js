@@ -3,15 +3,19 @@ import LargeContainer from '../reusable/LargeContainer';
 import '../../styles/MyAccount/myAccount.css';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-
+import { useNavigate } from 'react-router-dom';
 import ContentLoader from 'react-content-loader'
+
+import { confirmAlert } from 'react-confirm-alert'; // Import
+import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
+
 
 const MyAccount = () => {
 
     const [createdAt, setCreatedAt] = useState(null);
     const [pictureUrl, setPictureUrl] = useState(null);
     const [username, setUsername] = useState(null);
-    
+    const navigate = useNavigate();
 
     //Changing the body background-color before the page is loaded
     useLayoutEffect(() => {
@@ -58,6 +62,36 @@ const MyAccount = () => {
     }, []); // Empty dependency array ensures the effect runs only once
 
 
+    const handleAccountDelete = () => {
+        confirmAlert({
+            title: 'Confirmation',
+            message: 'La suppression de votre compte est une action définitive. Êtes-vous sûr(e)?',
+            buttons: [
+                {
+                    label: 'Oui',
+                    onClick: () => deleteAccount()
+                },
+                {
+                    label: 'Non',
+                }
+            ]
+        })
+    };
+
+    function deleteAccount()
+    {
+        /*axios.delete('/user/me/delete')
+            .then(function(){
+                navigate('/');
+            })
+            .catch(function(){
+                toast.error(error.response?.data?.error || 'An error occurred');
+            })
+        */
+        navigate('/');
+    }
+
+
     return(
         
         <LargeContainer className="my-account-container">
@@ -78,7 +112,7 @@ const MyAccount = () => {
 
                         <hr className="separator" />
 
-                        <button className="delete-account-btn">Delete Account</button>
+                        <button onClick={handleAccountDelete} className="delete-account-btn">Delete Account</button>
                         <span className="delete-account-text">This action is permanent!</span>
                     </>
                 : 

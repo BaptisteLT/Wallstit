@@ -38,7 +38,7 @@ function Zoom({initialScale, handleTransform, pageDimensions, children}) {
                     wrapperStyle={{
                         width: "100vw",
                         /*On enlève la hauteur du header et footer*/
-                        height: "calc(100vh - 141px)",
+                        height: "calc(100vh - 71px)",
                     }}>
                         <div style={{width: pageDimensions.width+'px', height: pageDimensions.height+'px'}}>
                             {children}

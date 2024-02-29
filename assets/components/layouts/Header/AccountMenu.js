@@ -16,6 +16,15 @@ const AccountMenu = () => {
         //TODO: API call to delete the refresh token + delete session + cookies + user in local storage
     };
 
+    /*function updateDeadlineDoneInBD(uuid, deadlineDone){
+        axios.patch('/api/post-it/'+uuid,{
+            deadlineDone: deadlineDone
+        })
+        .catch(function(error){
+            toast.error(error.response.data.error || 'An error occurred');
+        });
+    }*/
+    
     
 
     return(

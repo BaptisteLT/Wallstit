@@ -2,8 +2,8 @@
 {
     display: flex;
     gap: 60px;
-    margin: 100px 0px;
     align-items: center;
+    margin: 100px 0px !important;
 }
 
 .section1 #section-left
@@ -53,6 +53,7 @@
     cursor: pointer;
     max-width: 300px;
     margin-bottom: 10px;
+    text-align: center;
 }
 
 #start-using-btn:hover{

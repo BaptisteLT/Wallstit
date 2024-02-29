@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import React, { useState,useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -29,14 +29,19 @@ import '../fonts/Roboto/Roboto-Medium.ttf';
 //Contexte qui permet à toute l'application de bénéficier de user et setUser
 import { AuthContext, useAuth } from './useAuth';
 import MyAccount from './MyAccount/MyAccount';
-
+import Login from './Login/Login';
+import LocationChecker from './LocationChecker';
 
 function App()
 {
-    
+
+
     //Au rendu de App, useAuth est utilisé pour fetch l'utilisateur depuis le localStorage. Puis l'utilisateur peut être utilisé dans toute l'application puisqu'on le passe au AuthContext.Provider
     const { user, setUser } = useAuth();
     const [ CSRFToken, setCSRFToken ] = useState(null);
+    const [footerActive, setFooterActive] = useState(true);
+
+
 
     //TODO: on App load, il faut checker que le jwt en localStorage est encore valide, si il ne l'est plus il faut faire setUser(null)
     return(
@@ -52,19 +57,24 @@ function App()
                     <Router>
                         {/* UserCheckComponent Va vérifier que le refresh token en localStorage n'est pas expiré, afin de déconnecter l'utilisateur dans le cas présent */}
                         <UserCheckComponent>
-                            <ToastContainer autoClose={2500} style={{marginTop: '60px'}} />
-                            <Header />
-                            <Routes>
-                                <Route index path="/" element={<Home />} /> 
-                                <Route path="/my-account" element={<MyAccount />} />
-                                <Route path="/my-walls" element={<MyWalls />} />
-                                <Route path="/google-callback" element={<OAuthCallback provider="google" />} />
-                                <Route path="/discord-callback" element={<OAuthCallback provider="discord" />} />
-                                <Route path="/post-it-priority" element={<PostItPriority />} />
-                                <Route path="/wall/:id" element={<Wall />} />
-                                <Route path="*" element={<My404 />} />
-                            </Routes>
-                            <Footer />
+                            <div id="app-content" style={{minHeight: 'calc(100vh - 140px)'}}>
+                                <ToastContainer autoClose={2500} style={{marginTop: '60px'}} />
+                                <LocationChecker displayFooter={setFooterActive} />
+                                <Header />
+                                <Routes>
+                                    <Route index path="/" element={<Home />} /> 
+                                    <Route path="/login" element={<Login />} />
+                                    <Route path="/my-account" element={<MyAccount />} />
+                                    <Route path="/my-walls" element={<MyWalls />} />
+                                    <Route path="/google-callback" element={<OAuthCallback provider="google" />} />
+                                    <Route path="/discord-callback" element={<OAuthCallback provider="discord" />} />
+                                    <Route path="/post-it-priority" element={<PostItPriority />} />
+                                    <Route path="/wall/:id" element={<Wall />} />
+                                    <Route path="*" element={<My404 />} />
+                                </Routes>
+                            </div>
+                            
+                            { footerActive ? <Footer /> : null }
                         </UserCheckComponent>
                     </Router>
                 </JwtInvalidInterceptor>
