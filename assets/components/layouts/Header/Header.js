@@ -34,7 +34,9 @@ function Header() {
                         <DiscordLink />
                         <GoogleLink />
                     </RoleChecker>
-                    <AccountMenu />
+                    <RoleChecker roles={['ROLE_USER']}>
+                        <AccountMenu />
+                    </RoleChecker>
                 </div>
             </nav>
         </header>

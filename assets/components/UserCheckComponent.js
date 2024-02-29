@@ -18,12 +18,14 @@ function UserCheckComponent({ children }) {
   function checkRefreshTokenExpiration() {
     if(user)
     {
+      console.log('user is:');
+      
+
       console.log('checking refresh token');
-      const refreshTokenExpiresAt = JSON.parse(localStorage.getItem("user")).refreshTokenExpiresAt;
       const currentTimeStamp = new Date().getTime() / 1000;
       
-      //Si le refresh token a expiré on fait en sorte que l'utilisateur dois se reconnecter
-      if(refreshTokenExpiresAt < currentTimeStamp)
+      //Si le refresh token a expiré on fait en sorte que l'utilisateur doit se reconnecter
+      if(user.refreshTokenExpiresAt < currentTimeStamp)
       {
         console.log('refresh token expired.');
         toast.error('Session has expired. Please log-in again.')

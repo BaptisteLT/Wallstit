@@ -8,7 +8,6 @@ function RoleChecker({removeIfLoggedIn=false, roles = [], children})
 {
     const { user } = useContext( AuthContext );
 
-
     return(
         userHasPermission() ? <>{ children }</> : null
     )

@@ -1,10 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import '../../../styles/Header/accountMenu.css';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import LogoutIcon from '@mui/icons-material/Logout';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import axios from "axios";
+import { AuthContext } from '../../useAuth';
+
 
 const AccountMenu = () => {
+
+    const { setUser } = useContext(AuthContext);
+
+    const navigate = useNavigate();
 
     const [profileOpen, setProfileOpen] = useState(false)
 
@@ -12,20 +19,17 @@ const AccountMenu = () => {
         setProfileOpen(!profileOpen);
     };
 
+    // Deleting cookies and user in localStorage
     const handleLogout = () => {
-        //TODO: API call to delete the refresh token + delete session + cookies + user in local storage
-    };
-
-    /*function updateDeadlineDoneInBD(uuid, deadlineDone){
-        axios.patch('/api/post-it/'+uuid,{
-            deadlineDone: deadlineDone
+        axios.post('/auth/logout')
+        .then(function(){
+            setUser(null);
+            navigate('/');
         })
         .catch(function(error){
-            toast.error(error.response.data.error || 'An error occurred');
-        });
-    }*/
-    
-    
+            toast.error(error.response?.data?.error || 'An error occurred');
+        })
+    };
 
     return(
         <div id='account-menu'>

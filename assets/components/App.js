@@ -57,7 +57,7 @@ function App()
                     <Router>
                         {/* UserCheckComponent Va vérifier que le refresh token en localStorage n'est pas expiré, afin de déconnecter l'utilisateur dans le cas présent */}
                         <UserCheckComponent>
-                            <div id="app-content" style={{minHeight: 'calc(100vh - 140px)'}}>
+                            <div id="app-content" style={{minHeight: 'calc(100vh - 160px)'}}>
                                 <ToastContainer autoClose={2500} style={{marginTop: '60px'}} />
                                 <LocationChecker displayFooter={setFooterActive} />
                                 <Header />

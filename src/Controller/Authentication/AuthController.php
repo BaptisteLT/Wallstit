@@ -2,6 +2,7 @@
 
 namespace App\Controller\Authentication;
 
+use App\Service\Authentication\Tokens\RevokeTokensManager;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -9,6 +10,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Service\Authentication\Tokens\TokenManagerService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 #[Route('/auth', name: 'auth_')]
@@ -32,6 +34,17 @@ class AuthController extends AbstractController
 
         $response->headers->setCookie(new Cookie('jwtToken', $jwtToken->getValue(), $jwtToken->getExpiresAt()->getTimestamp(), '/', null, true, true));
         $response->headers->setCookie(new Cookie('refreshToken', $refreshToken->getValue(), $refreshToken->getExpiresAt()->getTimestamp(), '/', null, true, true));
+
+        return $response;
+    }
+
+    #[Route('/logout', name: 'logout', methods: ['POST'])]
+    /* Va tenter de refresh le jwt token en utilisant le refresh token en cookies */
+    public function logout(RevokeTokensManager $revokeTokensManager): JsonResponse
+    {
+        //Remove cookies
+        $response = new JsonResponse();
+        $response = $revokeTokensManager->revokeAuthTokens($response);
 
         return $response;
     }
