@@ -22,4 +22,22 @@
     width: 50%;
 }
 
+@media screen and (max-width: 650px) {
+    .section3 .sections-wrapper{
+        gap: 20px;
+    }
+}
+@media screen and (max-width: 575px) {
+    .section3 .sections-wrapper{
+        flex-direction: column;
+    }
+    .section3 .section-left
+    {
+        width: 100%;
+    }
+    .section3 .section-right
+    {
+        width: 100%;
+    }
+}
 

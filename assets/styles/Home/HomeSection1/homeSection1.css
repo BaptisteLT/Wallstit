@@ -6,6 +6,7 @@
     margin: 100px 0px !important;
 }
 
+
 .section1 #section-left
 {
     display: flex;
@@ -13,6 +14,35 @@
     /*max-width: 398px;*/
     gap: 20px;
 }
+
+
+.section1 #section-right > img
+{
+    width: 629px;
+    border: 1px solid #d1d1d1;
+}
+
+
+@media screen and (max-width: 1043px) {
+    .section1{
+        flex-direction: column;
+        gap: 20px;
+        margin: 50px 0px !important;
+    }
+    
+    .section1 #section-left
+    {
+        max-width: 800px;
+        align-items: center;
+    }
+    
+    .section1 #section-right > img
+    {
+        width: 100%;
+    }
+}
+
+
 
 .section1 h2{
     font-size: 20px;
@@ -34,12 +64,6 @@
     
 }
 
-.section1 #section-right > img
-{
-    width: 629px;
-    border: 1px solid #d1d1d1;
-}
-
 /*Btn*/
 #start-using-btn{
 	border: none;
@@ -47,7 +71,7 @@
     color: #fff;
     font-size: 20px;
     font-weight: bold;
-    padding: 18px 0px;
+    padding: 18px 10px;
     border: 1px solid #fff;
     border-radius: 4px;
     cursor: pointer;
