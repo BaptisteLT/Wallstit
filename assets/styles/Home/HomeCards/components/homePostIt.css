@@ -1,6 +1,7 @@
 .homePostItWrapper
 {
-    width: 440px;
+    max-width: 280px;
+    width: 100%;
 }
 
 .homePostItHeader
@@ -22,7 +23,7 @@
     height: 236px;
 }
 
-
+/*
 @media screen and (max-width: 600px) {
     .homePostItBody{
         height: 184px;
@@ -32,7 +33,7 @@
     .homePostItBody{
         height: 165px;
     }
-}
+}*/
 
 
 .homePostItHeader.blue{

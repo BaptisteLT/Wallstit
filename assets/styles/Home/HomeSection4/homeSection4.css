@@ -6,6 +6,13 @@
     justify-content: center;
 }
 
+@media screen and (max-width: 750px) {
+    .home-section4-large-container
+    {
+        margin-top: 50px;
+    }
+}
+
 .home-section4-container
 {
     background: white;
@@ -16,6 +23,14 @@
     margin: 100px 0;
     padding: 0 !important;
 }
+
+@media screen and (max-width: 750px) {
+    .home-section4-container
+    {
+        margin: 50px 0;
+    }
+}
+
 
 .home-section4-container h2{
     font-size: 38px;
@@ -35,5 +50,13 @@
     padding: 40px;
     display: flex;
     justify-content: center;
+    align-items: center;
     gap: 50px;
+}
+
+@media screen and (max-width: 750px) {
+    #section4-wrapper
+    {
+        flex-direction: column-reverse;
+    }
 }
