@@ -18,7 +18,7 @@ class UserManagerService
      * @param array $userData
      * @return User
      */
-    public function getOrCreateUser($userData, string $provider): User
+    public function getOrCreateUser(array $userData, string $provider): User
     {
         $user = $this->userRepository->findOneBy(['OAuth2Provider' => $provider, 'OAuth2ProviderId' => $userData['id']]);
 

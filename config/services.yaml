@@ -57,6 +57,9 @@ services:
 
     App\EventListener\CSRF\GetCSRFListener:
         tags: [kernel.event_listener]
+    App\EventListener\JWT\JwtCreatedListener:
+        tags:
+            - { name: kernel.event_listener, event: lexik_jwt_authentication.on_jwt_created, method: onJWTCreated }
 
 
 

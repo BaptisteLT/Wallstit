@@ -9,7 +9,7 @@ import { AuthContext } from '../../useAuth';
 
 const AccountMenu = () => {
 
-    const { setUser } = useContext(AuthContext);
+    const { user, setUser } = useContext(AuthContext);
 
     const navigate = useNavigate();
 
@@ -33,7 +33,7 @@ const AccountMenu = () => {
 
     return(
         <div id='account-menu'>
-            <div onClick={handleMenuOpen} id='logo'></div>
+            <div onClick={handleMenuOpen} style={{backgroundImage: 'url('+user.jwtToken.jwtPayload.avatarImg+')'}} id='logo'></div>
             <div onClick={handleMenuOpen} id="menu-arrow" style={{display: profileOpen ? 'block' : 'none'}}></div>
             <div onClick={handleMenuOpen} id="menu" style={{display: profileOpen ? 'block' : 'none'}}>
                 <NavLink to={'/my-account'}><span><span>My account</span> <AccountCircleIcon /></span></NavLink>  
