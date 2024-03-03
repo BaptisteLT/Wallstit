@@ -122,6 +122,19 @@ function Wall() {
     return currentPostIt;
   };
 
+
+  /**
+   * @param {string} uuid 
+   * 
+   * Met à jour les données d'un seul postIts dans le useState postIts qui contient un array d'objects postIts
+   */
+  const deletePostIt = (uuid) => {
+    setPostIts((current) =>
+      current.filter((postIt) => postIt.uuid !== uuid)
+    );
+  };
+
+
   /**
    * Ouvre le menu du PostIt (son uuid) passé en paramètres
    * 
@@ -151,7 +164,7 @@ function Wall() {
 
   return (
     //TODO: voir comment on peut get rid of postIts={postIts}
-    <PostItContext.Provider value={{ updatePostIt, addPostIt, openPostItMenu, postIts, activePostItMenuUuid, sideBarSize, updateSideBarSize, wallBackground, wallDescription, wallName, setSideBarSize, setWallBackground, setWallDescription, setWallName, setActivePostItMenuUuid }}>
+    <PostItContext.Provider value={{ updatePostIt, deletePostIt, addPostIt, openPostItMenu, postIts, activePostItMenuUuid, sideBarSize, updateSideBarSize, wallBackground, wallDescription, wallName, setSideBarSize, setWallBackground, setWallDescription, setWallName, setActivePostItMenuUuid }}>
       <Zoom handleTransform={updateScale} initialScale={scale} pageDimensions={pageDimensions}>
         <Grid wallBackground={wallBackground} id={id}>
           {postIts.map((postIt) => (

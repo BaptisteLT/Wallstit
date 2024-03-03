@@ -14,7 +14,7 @@ import axios from 'axios';
 //Dragable: https://www.npmjs.com/package/react-draggable#controlled-vs-uncontrolled
 const PostIt = React.memo(({ title, color, content, deadline, positionX, positionY, size, uuid, scale, deadlineDone, pageDimensions }) =>
 {
-    const { openPostItMenu, updatePostIt } = usePostItContext();
+    const { openPostItMenu, updatePostIt, deletePostIt } = usePostItContext();
 
     const { postItDimensions, innerDimensions } = getDimensionsFromSize(size);
 
@@ -37,9 +37,6 @@ const PostIt = React.memo(({ title, color, content, deadline, positionX, positio
 
     //Permet de bloquer à 1 click les requêtes vers le serveur lorsque la personne clique sur le bouton de suppression rouge.
     const [isDeleteRequestProcessed, setIsDeleteRequestProcessed] = useState(false);
-
-    //Défini si la carte est visible ou non (utilisé pour supprimer la carte)
-    const [isPostItVisible, setIsPostItVisible] = useState(true);
 
     //Dès que postIt.size change, on va mettre à jour la taille du postIt en fonction de si c'est "small", "medium" ou "large"
     useEffect(() => {
@@ -109,12 +106,10 @@ const PostIt = React.memo(({ title, color, content, deadline, positionX, positio
         {
             setIsDeleteRequestProcessed(true);
 
-            //TODO: supprimer le post-it de l'array d'objects Post-It sinon la sidebar reste (et par la même occasion il y aura surement plus besoin de fairesetIsPostItVisible(false) )
-            
             axios.delete('/api/post-it/delete/'+uuid)
             .then(function(response){
-              
-                setIsPostItVisible(false);
+                //On supprime le postIt (de la page et de la sidebar)
+                deletePostIt(uuid)
                 toast.success("Post-it removed successfully!")
             })
             .catch(function(error){
@@ -144,7 +139,7 @@ const PostIt = React.memo(({ title, color, content, deadline, positionX, positio
             //Disable drag on icons
             cancel='svg'
         >
-            <div className="panning-disabled post-it-container" style={{width: dimensions.postItDimensions.width+'px', display: (isPostItVisible ? 'block' : 'none')}}>
+            <div className="panning-disabled post-it-container" style={{width: dimensions.postItDimensions.width+'px'}}>
 
                 <div className={`panning-disabled header header-${color}`} style={{height: dimensions.innerDimensions.headerHeight+'px'}}>
                     <SettingsIcon onClick={() => openPostItMenu(uuid)} fontSize="medium" className="panning-disabled edit-icon" />

@@ -1,5 +1,6 @@
 
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 /**
  * Mettre à jour la taille de la sizeBar
