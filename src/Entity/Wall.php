@@ -27,12 +27,6 @@ class Wall
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $backgroundColor = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $borderColor = null;
-
     #[Groups(['get-post-its'])]
     #[ORM\ManyToOne(inversedBy: 'walls')]
     #[ORM\JoinColumn(nullable: false)]
@@ -69,30 +63,6 @@ class Wall
     public function setName(string $name): static
     {
         $this->name = $name;
-
-        return $this;
-    }
-
-    public function getBackgroundColor(): ?string
-    {
-        return $this->backgroundColor;
-    }
-
-    public function setBackgroundColor(?string $backgroundColor): static
-    {
-        $this->backgroundColor = $backgroundColor;
-
-        return $this;
-    }
-
-    public function getBorderColor(): ?string
-    {
-        return $this->borderColor;
-    }
-
-    public function setBorderColor(?string $borderColor): static
-    {
-        $this->borderColor = $borderColor;
 
         return $this;
     }

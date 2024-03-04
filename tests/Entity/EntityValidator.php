@@ -1,0 +1,22 @@
+<?php
+
+namespace App\Tests\Entity;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+
+abstract class EntityValidator extends KernelTestCase
+{
+    private $validator;
+
+    protected function setUp(): void
+    {
+        //self::bootKernel();
+        $this->validator = static::getContainer()->get('validator');
+    }
+    
+    //Méthode pour compter le nombre d'erreurs dans l'entité
+    protected function countErrors($entity, $expectedErrors)
+    {
+        $errors = $this->validator->validate($entity);
+        $this->assertCount($expectedErrors, $errors);
+    }
+}
