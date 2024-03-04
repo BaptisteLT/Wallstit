@@ -69,7 +69,7 @@ class PostIt
     #[Assert\NotBlank]
     #[ORM\ManyToOne(inversedBy: 'postIts')]
     #[ORM\JoinColumn(nullable: false)]
-    private Wall $wall;
+    private ?Wall $wall;
 
     #[Groups(['get-post-its'])]
     #[Assert\Choice(['small', 'medium', 'large'])]
@@ -158,7 +158,7 @@ class PostIt
         return $this->wall;
     }
 
-    public function setWall(Wall $wall): static
+    public function setWall(?Wall $wall): static
     {
         $this->wall = $wall;
 

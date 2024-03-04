@@ -17,6 +17,7 @@ abstract class EntityValidator extends KernelTestCase
     protected function countErrors($entity, $expectedErrors)
     {
         $errors = $this->validator->validate($entity);
+
         $this->assertCount($expectedErrors, $errors);
     }
 }

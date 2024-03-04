@@ -31,9 +31,80 @@ class WallTest extends EntityValidator
         $this->countErrors($this->getValidWall(), 0);
     }
 
-    //TODO: tester name longueur de plus de 255 et 50 et null //en réalité il faudrait genre 50 caractères max
-    //TODO: tester user null ou non
-    //TODO: tester description longueur de plus de 100 et 50 et null
-    //TODO: tester la collection de postits qui contient plusieurs éléments, ajout et suppression, tester quand collection vide
-    //TODO: tester le background qui peut être null ou 'bricks', 'cork-board', 'flowers-colorful', 'flowers-dark', 'grouted-natural-stone', 'multi-coloured-tiles', 'wood', 'grid'
+    public function testName()
+    {
+        //Test si longueur 40
+        $wall = $this->getValidWall()->setName('DJpCSZx8AAj1hIyguQmctmfZgnPCyiuftkFwvHAi');
+        $this->countErrors($wall, 0);
+
+        $longName = 'Hf5PYEZptIpZUGGwC4FU6EXCGciazniZS9l0Quq8YnLkQjtuuvFxDi2kRXE4Wkb7UsJbnMFDguDtBljNYKTuZEcE18vw391u2oEHcCebmc2oEds6Wcl3kdTtkf7AdVb4MuCUFuWms3IANREhHBivvv4SfCGxUJgR2N9QMhxctRy2M7dTtIEiacaafLB525wLE9gBDc9JvqZ5YOP2c4fe36dF5Ghx5UPwTvGEMipzlMZsUb2k76DlYrOgxHA24meJzOVJtfxKsYl0LaknTB1Tz7eeyB6LMZ3ZkgohIMaMh7RV';
+        //Test si longueur 300 (renvoie une erreur car longueur supérieur à 50 caractères)
+        $wall->setName($longName);
+        $this->countErrors($wall, 1);
+
+        //Test de récupération de la donnée
+        $this->assertEquals($longName, $wall->getName());
+    }
+
+    public function testDescription()
+    {
+        //Test si null
+        $wall = $this->getValidWall()->setDescription(null);
+        $this->countErrors($wall, 0);
+
+        //Test si longueur 40
+        $wall->setDescription('DJpCSZx8AAj1hIyguQmctmfZgnPCyiuftkFwvHAi');
+        $this->countErrors($wall, 0);
+
+        //Test si longueur 300 (renvoie une erreur car longueur supérieur à 50 caractères)
+        $longDesc = 'Hf5PYEZptIpZUGGwC4FU6EXCGciazniZS9l0Quq8YnLkQjtuuvFxDi2kRXE4Wkb7UsJbnMFDguDtBljNYKTuZEcE18vw391u2oEHcCebmc2oEds6Wcl3kdTtkf7AdVb4MuCUFuWms3IANREhHBivvv4SfCGxUJgR2N9QMhxctRy2M7dTtIEiacaafLB525wLE9gBDc9JvqZ5YOP2c4fe36dF5Ghx5UPwTvGEMipzlMZsUb2k76DlYrOgxHA24meJzOVJtfxKsYl0LaknTB1Tz7eeyB6LMZ3ZkgohIMaMh7RV';
+        $wall->setDescription($longDesc);
+        $this->countErrors($wall, 1);
+
+        //Test de récupération de la donnée
+        $this->assertEquals($longDesc, $wall->getDescription());
+    }
+
+    public function testBackground()
+    {
+        //Test si null
+        $wall = $this->getValidWall()->setBackground(null);
+        $this->countErrors($wall, 0);
+
+        //Test avec option valide
+        $wall->setBackground('bricks');
+        $this->countErrors($wall, 0);
+
+        //Test avec option invalide
+        $wall->setBackground('not_authaurized_value');
+        $this->countErrors($wall, 1);
+
+        //Test de récupération de la donnée
+        $this->assertEquals('not_authaurized_value', $wall->getBackground());
+    }
+
+    function testUser()
+    {
+        $wall = $this->getValidWall();
+        $this->assertInstanceOf(User::class, $wall->getUser());
+    }
+
+    public function testPostIt()
+    {
+        $wall = $this->getValidWall();
+
+        $postIt = new PostIt();
+
+        //Ajout de deux postIts
+        $wall->addPostIt($postIt);
+
+        //Vérification qu'on a bien les 2 PostIts
+        $this->assertCount(2, $wall->getPostIts());
+
+        //Vérification que la suppression fonctionne
+        $wall->removePostIt($postIt);
+
+        //Vérification que la suppression a bien fonctionné
+        $this->assertCount(1, $wall->getPostIts());
+    }
 }

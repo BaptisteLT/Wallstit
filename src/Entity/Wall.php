@@ -23,8 +23,12 @@ class Wall
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Assert\Length(
+        max: 50,
+        maxMessage: 'The wall name be longer than {{ limit }} characters',
+    )]
     #[Groups(['get-walls', 'get-post-its'])]
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 50)]
     private ?string $name = null;
 
     #[Groups(['get-post-its'])]
@@ -32,6 +36,10 @@ class Wall
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 
+    #[Assert\Length(
+        max: 100,
+        maxMessage: 'The wall description be longer than {{ limit }} characters',
+    )]
     #[Groups(['get-walls', 'get-post-its'])]
     #[ORM\Column(length: 100, nullable: true)]
     private ?string $description = null;
@@ -72,7 +80,7 @@ class Wall
         return $this->user;
     }
 
-    public function setUser(?User $user): static
+    public function setUser(User $user): static
     {
         $this->user = $user;
 
@@ -111,11 +119,10 @@ class Wall
 
     public function removePostIt(PostIt $postIt): static
     {
-        if ($this->postIts->removeElement($postIt)) {
-            // set the owning side to null (unless already changed)
-            if ($postIt->getWall() === $this) {
-                $postIt->setWall(null);
-            }
+
+        if ($this->postIts->contains($postIt)) {
+            $this->postIts->removeElement($postIt);
+            $postIt->setWall(null);
         }
 
         return $this;
