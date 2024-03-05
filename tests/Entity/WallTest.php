@@ -5,7 +5,6 @@ namespace App\Tests\Entity;
 use App\Entity\User;
 use App\Entity\Wall;
 use App\Entity\PostIt;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class WallTest extends EntityValidator
 {

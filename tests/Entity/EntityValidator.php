@@ -18,6 +18,11 @@ abstract class EntityValidator extends KernelTestCase
     {
         $errors = $this->validator->validate($entity);
 
+        if(count($errors) <> $expectedErrors)
+        {
+            dump($errors);
+        }
+
         $this->assertCount($expectedErrors, $errors);
     }
 }

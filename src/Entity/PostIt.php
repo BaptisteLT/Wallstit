@@ -82,6 +82,10 @@ class PostIt
 
     #[Groups(['get-post-its'])]
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Length(
+        max: 255,
+        maxMessage: 'The title cannot be longer than {{ limit }} characters',
+    )]
     private ?string $title = null;
 
     #[Groups(['get-post-its'])]
