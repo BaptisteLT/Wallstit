@@ -108,3 +108,5 @@ class PostItTest extends EntityValidator
         $this->assertInstanceOf(Uuid::class, $postIt->getUuid());
     }
 }
+
+//TODO: test created_at, etc

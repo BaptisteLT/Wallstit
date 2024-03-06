@@ -6,6 +6,7 @@ use App\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Traits\CreateUpdateTrait;
 use App\Repository\RefreshTokenRepository;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\HasLifecycleCallbacks]
 #[ORM\Entity(repositoryClass: RefreshTokenRepository::class)]
@@ -24,6 +25,8 @@ class RefreshToken extends Token
     #[ORM\Column]
     protected \DateTimeImmutable $expiresAt;
 
+    #[Assert\NotBlank]
+    #[ORM\JoinColumn(nullable: false)]
     #[ORM\OneToOne(inversedBy: 'refreshToken', cascade: ['persist', 'remove'])]
     private ?User $user = null;
 
@@ -61,7 +64,7 @@ class RefreshToken extends Token
         return $this->user;
     }
 
-    public function setUser(?User $user): static
+    public function setUser(User $user): static
     {
         $this->user = $user;
 

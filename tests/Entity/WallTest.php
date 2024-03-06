@@ -107,3 +107,5 @@ class WallTest extends EntityValidator
         $this->assertCount(1, $wall->getPostIts());
     }
 }
+
+//TODO: test created_at, etc
