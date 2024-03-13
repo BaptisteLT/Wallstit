@@ -28,7 +28,7 @@ jobs:
           character set server: 'utf8' # Optional, default value is 'utf8mb4'. The '--character-set-server' option for mysqld
           collation server: 'utf8_general_ci' # Optional, default value is 'utf8mb4_general_ci'. The '--collation-server' option for mysqld
           mariadb version: '10.6.5' # Optional, default value is "latest". The version of the MariaDB
-          #mysql database: 'some_test' # Optional, default value is "test". The specified database which will be create
+          mysql database: 'wallstit_test' # Optional, default value is "test". The specified database which will be create
           mysql root password:  #{{ secrets.RootPassword }} # Required if "mysql user" is empty, default is empty. The root superuser password
           #mysql user: 'developer' # Required if "mysql root password" is empty, default is empty. The superuser for the specified database. Can use secrets, too
           #mysql password: '' #Required if "mysql user" exists. The password for the "mysql user"
@@ -37,6 +37,6 @@ jobs:
         run: php -r "file_exists('.env.test.local') || copy('.env.test', '.env.test.local');"
       
       - name: Setup test database
-        run: php bin/console doctrine:database:create --env=TEST && php bin/console d:m:m --env=TEST
+        run: php bin/console d:m:m --env=TEST
 
       - run: vendor/bin/phpunit
