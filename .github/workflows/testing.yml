@@ -56,6 +56,6 @@ jobs:
         run: sleep 15
 
       - name: Setup test database
-        run: "php bin/console doctrine:schema:update --env=TEST --force -n"
+        run: "php bin/console doctrine:schema:update --env=TEST --force -n --complete"
 
       - run: vendor/bin/phpunit
