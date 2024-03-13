@@ -10,4 +10,5 @@ jobs:
     runs-on: ubuntu-20.04
 
     steps:
+      - run: composer install
       - run: vendor/bin/phpunit
