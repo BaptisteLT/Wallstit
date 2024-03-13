@@ -13,7 +13,7 @@ jobs:
       mariadb:
         image: mariadb:10.6.5
         env:
-          MYSQL_ROOT_PASSWORD: ""
+          MYSQL_ROOT_PASSWORD: root
           #MYSQL_USER: developer
           #MYSQL_PASSWORD: test
           #MYSQL_DATABASE: wallstit
