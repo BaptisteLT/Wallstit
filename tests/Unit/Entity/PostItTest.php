@@ -1,5 +1,5 @@
 <?php
-namespace App\Tests\Entity;
+namespace App\Tests\Unit\Entity;
 
 use App\Entity\Wall;
 use App\Entity\PostIt;

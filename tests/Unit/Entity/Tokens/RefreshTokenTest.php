@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Tests\Entity\Tokens;
+namespace App\Tests\Unit\Entity\Tokens;
 
 use App\Entity\User;
 use DateTimeImmutable;
 use App\Entity\Tokens\RefreshToken;
-use App\Tests\Entity\EntityValidator;
+use App\Tests\Unit\Entity\EntityValidator;
 
 class RefreshTokenTest extends EntityValidator
 {

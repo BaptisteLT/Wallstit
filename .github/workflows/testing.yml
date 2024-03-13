@@ -1,0 +1,6 @@
+name: PHP Unit Testing
+
+on:
+  push:
+    branches:
+      - 'main'
