@@ -56,6 +56,6 @@ jobs:
         run: sleep 60
 
       - name: Setup test database
-        run:  php bin/console doctrine:database:create && php bin/console doctrine:migrations:migrate -n
+        run:  php bin/console doctrine:database:create && php bin/console doctrine:schema:update --force -n
 
       - run: vendor/bin/phpunit
