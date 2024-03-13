@@ -1,6 +1,13 @@
-name: PHP Unit Testing
+name: CI
 
 on:
   push:
     branches:
       - 'main'
+
+jobs:
+  phpunit:
+    runs-on: ubuntu-latest
+
+    steps:
+      - run: vendor/bin/phpunit
