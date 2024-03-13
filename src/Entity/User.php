@@ -25,6 +25,10 @@ class User implements UserInterface
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Assert\Length(
+        max: 180,
+        maxMessage: 'The email cannot be longer than {{ limit }} characters',
+    )]
     #[ORM\Column(length: 180, nullable: true)]
     private ?string $email = null;
 
@@ -33,10 +37,6 @@ class User implements UserInterface
 
     #[Groups(['get-user'])]
     #[ORM\Column(length: 255)]
-    #[Assert\Length(
-        max: 30,
-        maxMessage: 'The username cannot be longer than {{ limit }} characters',
-    )]
     private ?string $name = null;
 
     #[Groups(['get-user'])]
@@ -79,7 +79,7 @@ class User implements UserInterface
         return $this->email;
     }
 
-    public function setEmail(string $email): static
+    public function setEmail(?string $email): static
     {
         $this->email = $email;
 

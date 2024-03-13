@@ -64,7 +64,7 @@ class RefreshToken extends Token
         return $this->user;
     }
 
-    public function setUser(User $user): static
+    public function setUser(?User $user): static
     {
         $this->user = $user;
 
