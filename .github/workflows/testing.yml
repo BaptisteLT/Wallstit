@@ -9,32 +9,16 @@ jobs:
   phpunit:
     runs-on: ubuntu-20.04
 
-    services:
-      mariadb:
-        image: mariadb:latest
-        ports:
-          - 3307
-        env:
-          MYSQL_USER: user
-          MYSQL_PASSWORD: password
-          MYSQL_DATABASE: test
-          MYSQL_ROOT_PASSWORD: password
-        options: --health-cmd="mysqladmin ping" --health-interval=5s --health-timeout=2s --health-retries=3
 
     steps:
+      - uses: ankane/setup-mariadb@v1
+        with:
+          mariadb-version: "10.6"
       #- name: Setup PHP
       #  uses: shivammathur/setup-php@v2
       #  with:
       #    php-version: 8.1
-
-      - name: Verify MariaDB connection
-        env:
-          PORT: ${{ job.services.mariadb.ports[3307] }}
-        run: |
-          while ! mysqladmin ping -h"127.0.0.1" -P"$PORT" --silent; do
-            sleep 1
-          done          
-
+        
       - uses: actions/checkout@v3
 
       - uses: php-actions/composer@v6
