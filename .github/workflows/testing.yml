@@ -13,7 +13,7 @@ jobs:
       mariadb:
         image: mariadb:10.6.5
         env:
-          MYSQL_ROOT_PASSWORD: root
+          MYSQL_ROOT_PASSWORD: ""
           #MYSQL_USER: developer
           #MYSQL_PASSWORD: test
           #MYSQL_DATABASE: wallstit
@@ -52,8 +52,8 @@ jobs:
       #- name: Copy .env.test.local
       #  run: php -r "file_exists('.env.test.local') || copy('.env.test', '.env.test.local');"
       
-      - name: Wait for MySQL
-        run: sleep 60
+      - name: Wait for MariaDB
+        run: sleep 15
 
       - name: Setup test database
         run:  php bin/console doctrine:database:create && php bin/console doctrine:schema:update --force -n
