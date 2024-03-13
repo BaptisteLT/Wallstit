@@ -13,7 +13,7 @@ jobs:
       mariadb:
         image: mariadb:10.6.5
         env:
-          MYSQL_ROOT_PASSWORD: root
+          MYSQL_ROOT_PASSWORD: false
           #MYSQL_USER: developer
           #MYSQL_PASSWORD: test
           MYSQL_DATABASE: wallstit_test
@@ -24,10 +24,6 @@ jobs:
 
 
     steps:
-
-      - name: Copy .env.test.local
-        run: php -r "copy('.env.test', '.env');"
-      
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -53,6 +49,8 @@ jobs:
           #mysql password: 'test' #Required if "mysql user" exists. The password for the "mysql user"
 
       
+      #- name: Copy .env.test.local
+      #  run: php -r "file_exists('.env.test.local') || copy('.env.test', '.env.test.local');"
       
       - name: Wait for MariaDB
         run: sleep 15
