@@ -23,7 +23,7 @@ class WallTest extends KernelTestCase
     {
         $wall = new Wall();
         $this->em->persist($wall);
-        $this->em->flush();
+        //$this->em->flush();
         //dump($wall->getCreatedAt());
         //dump($wall->getUpdatedAt());//TODO:
     }
