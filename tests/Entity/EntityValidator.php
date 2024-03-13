@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Tests\Entity;
+
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 abstract class EntityValidator extends KernelTestCase

@@ -5,6 +5,7 @@ namespace App\Tests\Entity;
 use App\Entity\User;
 use App\Entity\Wall;
 use App\Entity\PostIt;
+use DateTimeImmutable;
 
 class WallTest extends EntityValidator
 {
@@ -106,6 +107,18 @@ class WallTest extends EntityValidator
         //Vérification que la suppression a bien fonctionné
         $this->assertCount(1, $wall->getPostIts());
     }
-}
 
-//TODO: test created_at, etc
+    public function testCreatedAt()
+    {
+        $wall = $this->getValidWall();
+        $wall->setCreatedAt();
+        $this->assertInstanceOf(DateTimeImmutable::class, $wall->getCreatedAt());
+    }
+
+    public function testUpdatedAt()
+    {
+        $wall = $this->getValidWall();
+        $wall->setUpdatedAt();
+        $this->assertInstanceOf(DateTimeImmutable::class, $wall->getUpdatedAt());
+    }
+}

@@ -137,7 +137,17 @@ class UserTest extends EntityValidator
         $this->assertEquals('google_1a2c34r5r67e8e9r7', $user->getOAuth2Provider().'_'. $user->getOAuth2ProviderId());
     }
 
+    public function testCreatedAt()
+    {
+        $user = $this->getValidUser();
+        $user->setCreatedAt();
+        $this->assertInstanceOf(DateTimeImmutable::class, $user->getCreatedAt());
+    }
 
+    public function testUpdatedAt()
+    {
+        $user = $this->getValidUser();
+        $user->setUpdatedAt();
+        $this->assertInstanceOf(DateTimeImmutable::class, $user->getUpdatedAt());
+    }
 }
-
-//TODO: test created_at, etc

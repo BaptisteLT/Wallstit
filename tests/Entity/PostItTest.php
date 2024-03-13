@@ -107,6 +107,18 @@ class PostItTest extends EntityValidator
         $postIt = $this->getValidPostIt();
         $this->assertInstanceOf(Uuid::class, $postIt->getUuid());
     }
-}
 
-//TODO: test created_at, etc
+    public function testUpdatedAt()
+    {
+        $postIt = $this->getValidPostIt();
+        $postIt->setUpdatedAt();
+        $this->assertInstanceOf(DateTimeImmutable::class, $postIt->getUpdatedAt());
+    }
+
+    public function testCreatedAt()
+    {
+        $postIt = $this->getValidPostIt();
+        $postIt->setCreatedAt();
+        $this->assertInstanceOf(DateTimeImmutable::class, $postIt->getCreatedAt());
+    }
+}

@@ -41,4 +41,18 @@ class RefreshTokenTest extends EntityValidator
         $refreshToken = $this->getValidRefreshToken();
         $this->assertInstanceOf(User::class, $refreshToken->getUser());
     }
+
+    public function testUpdatedAt()
+    {
+        $refreshToken = $this->getValidRefreshToken();
+        $refreshToken->setUpdatedAt();
+        $this->assertInstanceOf(DateTimeImmutable::class, $refreshToken->getUpdatedAt());
+    }
+
+    public function testCreatedAt()
+    {
+        $refreshToken = $this->getValidrefReshToken();
+        $refreshToken->setCreatedAt();
+        $this->assertInstanceOf(DateTimeImmutable::class, $refreshToken->getCreatedAt());
+    }
 }
