@@ -16,7 +16,7 @@ jobs:
           MYSQL_ROOT_PASSWORD: root
           #MYSQL_USER: developer
           #MYSQL_PASSWORD: test
-          #MYSQL_DATABASE: wallstit
+          MYSQL_DATABASE: wallstit_test
         ports:
           - 3307:3306
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
@@ -56,6 +56,6 @@ jobs:
         run: sleep 15
 
       - name: Setup test database
-        run:  php bin/console doctrine:database:create --env=TEST && php bin/console doctrine:schema:update --env=TEST --force -n
+        run: php bin/console doctrine:schema:update --env=TEST --force -n
 
       - run: vendor/bin/phpunit
