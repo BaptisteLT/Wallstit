@@ -34,8 +34,9 @@ jobs:
           #mysql password: '' #Required if "mysql user" exists. The password for the "mysql user"
 
       - name: Copy .env.test.local
-        run: php -r "file_exists('.env.test.local') || copy('.env.test', '.env.test.local');
+        run: php -r "file_exists('.env.test.local') || copy('.env.test', '.env.test.local');"
       
-      - run: php bin/console doctrine:database:create --env=TEST
-      - run: php bin/console d:m:m --env=TEST
+      - name: Setup test database
+        run: php bin/console doctrine:database:create --env=TEST && php bin/console d:m:m --env=TEST
+
       - run: vendor/bin/phpunit
