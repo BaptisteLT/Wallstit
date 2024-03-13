@@ -37,6 +37,6 @@ jobs:
         run: php -r "file_exists('.env.test.local') || copy('.env.test', '.env.test.local');"
       
       - name: Setup test database
-        run: php bin/console d:m:m --env=TEST
+        run: php bin/console d:m:m
 
       - run: vendor/bin/phpunit
