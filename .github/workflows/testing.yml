@@ -11,12 +11,14 @@ jobs:
 
     services:
       mariadb:
-        image: mariadb:10.6.5
+        image: mariadb:latest
         ports:
           - 3307
         env:
-          MYSQL_DATABASE: wallstit_test
-          MYSQL_ROOT_PASSWORD: 
+          MYSQL_USER: user
+          MYSQL_PASSWORD: password
+          MYSQL_DATABASE: test
+          MYSQL_ROOT_PASSWORD: password
         options: --health-cmd="mysqladmin ping" --health-interval=5s --health-timeout=2s --health-retries=3
 
     steps:
