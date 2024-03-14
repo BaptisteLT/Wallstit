@@ -5,6 +5,9 @@ Une application qui vous permet de créer simplement des murs de post-its.
 
 ## Configuration
 
+-Copier le .env en .env.local et configurez les variables
+-Copier le .env.test en .env.test.local et configurez les variables
+
 ### Google oauth2
 
 1) Pour configurer google oauth2, il faut dans un premier temps créer un projet depuis cet URL:
