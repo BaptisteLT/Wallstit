@@ -16,7 +16,7 @@ jobs:
       mariadb:
         image: mariadb:10.6.5
         env:
-          MYSQL_ROOT_PASSWORD: roott
+          MYSQL_ROOT_PASSWORD: rootpassword
           MYSQL_DATABASE: wallstit_test
         ports:
           - 3307:3306
@@ -43,10 +43,8 @@ jobs:
 
       - name: Setup test database
         env:
-          DATABASE_URL: mysql://root:root@127.0.0.1:3307/wallstit_test?serverVersion=10.6.5-MariaDB&charset=utf8mb4
+          DATABASE_URL: mysql://root:rootpassword@127.0.0.1:3307/wallstit_test?serverVersion=10.6.5-MariaDB&charset=utf8mb4
         run: php bin/console doctrine:schema:update --env=TEST --force --no-interaction --complete
 
       - name: Run tests
-        env:
-          DATABASE_URL: mysql://root:root@127.0.0.1:3307/wallstit_test?serverVersion=10.6.5-MariaDB&charset=utf8mb4
         run: vendor/bin/phpunit
