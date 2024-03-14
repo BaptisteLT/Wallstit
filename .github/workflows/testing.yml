@@ -56,9 +56,10 @@ jobs:
         run: sleep 5
 
 
-      - name: Setup test database
+      - name: Setup test database & run tests
         env:
-          DATABASE_URL: mysql://root:roott@127.0.0.1:3307/wallstit_test?serverVersion=10.6.5-MariaDB&charset=utf8mb4
-        run: "php bin/console doctrine:schema:update --env=TEST --force --no-interaction --complete"
+          DATABASE_URL: mysql://root:root@127.0.0.1:3307/wallstit_test?serverVersion=10.6.5-MariaDB&charset=utf8mb4
+        run: php bin/console doctrine:schema:update --env=TEST --force --no-interaction --complete  && \
+          vendor/bin/phpunit
 
-      - run: vendor/bin/phpunit
+      #- run: 
