@@ -24,37 +24,22 @@ jobs:
 
 #TODO: enlever le mdp root
     steps:
+      - name: Wait for MariaDB service to start
+        run: sleep 5
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: 8.1
 
-      - uses: actions/checkout@v3
+      - name: Cloning main repository
+        uses: actions/checkout@v3
 
-      - uses: php-actions/composer@v6
+      - name: Installing composer with PHP 8.1 version
+        uses: php-actions/composer@v6
         with:
           php_version: 8.1
-
-      #- uses: getong/mariadb-action@v1.1
-        #with:
-          #host port: 3306 # Optional, default value is 3306. The port of host
-          #container port: 3306 # Optional, default value is 3306. The port of container
-          #character set server: 'utf8' # Optional, default value is 'utf8mb4'. The '--character-set-server' option for mysqld
-          #collation server: 'utf8mb4' # Optional, default value is 'utf8mb4_general_ci'. The '--collation-server' option for mysqld
-          #mariadb version: '10.6.5' # Optional, default value is "latest". The version of the MariaDB
-          #mysql database: 'wallstit' # Optional, default value is "test". The specified database which will be create
-          #mysql root password: 'root' #{{ secrets.RootPassword }} # Required if "mysql user" is empty, default is empty. The root superuser password
-          #mysql user: 'developer' # Required if "mysql root password" is empty, default is empty. The superuser for the specified database. Can use secrets, too
-          #mysql password: 'test' #Required if "mysql user" exists. The password for the "mysql user"
-
       
-      #- name: Copy .env.test.local
-      #  run: php -r "file_exists('.env.test.local') || copy('.env.test', '.env.test.local');"
-      
-      - name: Wait for MariaDB
-        run: sleep 5
-
 
       - name: Setup test database & run tests
         env:
