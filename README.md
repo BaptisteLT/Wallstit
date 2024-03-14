@@ -5,8 +5,8 @@ Une application qui vous permet de créer simplement des murs de post-its.
 
 ## Configuration
 
--Copier le .env en .env.local et configurez les variables
--Copier le .env.test en .env.test.local et configurez les variables
+-Copier le .env en .env.local et configurez les variables.
+-Copier le .env.test en .env.test.local et configurez les variables.
 
 ### Google oauth2
 
