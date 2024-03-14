@@ -2,7 +2,9 @@
 
 namespace App\Tests\Functional\Entity;
 
+use App\Entity\User;
 use App\Entity\Wall;
+use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
@@ -22,8 +24,28 @@ class WallTest extends KernelTestCase
     function testCreateAndUpdate()
     {
         $wall = new Wall();
+        $user = new User();
+        $user->setName('Test user');
+        $user->setOAuth2Provider('google');
+        $user->setOAuth2ProviderId('1fa2c3f4r5r6f7e8e9r79');
+
+        $wall->setName('My Wall');
+        $wall->setUser($user);
+        $wall->setDescription('My Description.');
+        //$wall->addPostIt($postIt);
+        $wall->setBackground('bricks');
+
+
         $this->em->persist($wall);
-        //$this->em->flush();
+        $this->em->persist($user);
+        $this->em->flush();
+        $this->assertInstanceOf(DateTimeImmutable::class, $wall->getCreatedAt());
+        
+        $wall->setName('My Wall Edited');
+        $this->em->persist($wall);
+        $this->em->flush();
+        $this->assertInstanceOf(DateTimeImmutable::class, $wall->getUpdatedAt());
+        
         //dump($wall->getCreatedAt());
         //dump($wall->getUpdatedAt());//TODO:
     }
