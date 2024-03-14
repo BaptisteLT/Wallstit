@@ -46,3 +46,9 @@ jobs:
 
       - name: Run tests
         run: vendor/bin/phpunit
+
+      - name: Prevent PR merge on test failure
+        if: ${{ failure() }}
+        run: |
+          echo "Tests failed. This PR cannot be merged." >&2
+          exit 1
