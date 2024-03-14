@@ -50,7 +50,9 @@ jobs:
       #  run: php -r "file_exists('.env.test.local') || copy('.env.test', '.env.test.local');"
       
       - name: Wait for MariaDB
-        run: sleep 15
+        run: sleep 5
+
+      - run: export APP_ENV=test
 
       - name: Setup test database
         run: "php bin/console doctrine:schema:update --env=TEST --force -n --complete"
