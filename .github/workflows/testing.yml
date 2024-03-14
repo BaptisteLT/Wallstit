@@ -14,15 +14,12 @@ jobs:
         image: mariadb:10.6.5
         env:
           MYSQL_ROOT_PASSWORD: root
-          #MYSQL_USER: developer
-          #MYSQL_PASSWORD: test
           MYSQL_DATABASE: wallstit_test
         ports:
           - 3307:3306
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
-
-
+#TODO: enlever le mdp root
     steps:
 
       - name: Setup PHP
