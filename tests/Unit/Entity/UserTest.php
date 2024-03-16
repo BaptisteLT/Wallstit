@@ -22,8 +22,6 @@ class UserTest extends EntityValidator
         $user->setOAuth2Provider('google');
         $user->setOAuth2ProviderId('1a2c34r5r67e8e9r7');
 
-        //TODO: user factory
-
         return $user;
     }
 
