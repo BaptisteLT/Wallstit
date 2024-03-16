@@ -32,7 +32,6 @@ class WallTest extends KernelTestCase
         $wall->setName('My Wall');
         $wall->setUser($user);
         $wall->setDescription('My Description.');
-        //$wall->addPostIt($postIt);
         $wall->setBackground('bricks');
 
 
@@ -45,8 +44,5 @@ class WallTest extends KernelTestCase
         $this->em->persist($wall);
         $this->em->flush();
         $this->assertInstanceOf(DateTimeImmutable::class, $wall->getUpdatedAt());
-        
-        //dump($wall->getCreatedAt());
-        //dump($wall->getUpdatedAt());//TODO:
     }
 }

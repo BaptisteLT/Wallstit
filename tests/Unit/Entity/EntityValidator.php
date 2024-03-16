@@ -10,7 +10,6 @@ abstract class EntityValidator extends KernelTestCase
 
     protected function setUp(): void
     {
-        //self::bootKernel();
         $this->validator = static::getContainer()->get('validator');
     }
     

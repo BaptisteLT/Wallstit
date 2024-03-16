@@ -25,7 +25,7 @@ class UserRepository extends ServiceEntityRepository implements UserLoaderInterf
     /**
      * L'identifiant de l'utilisateur est custom car il contient le nom du provider + l'id du compte du provider, ils sont tous les deux séparés par @@@
      *
-     * @param string $userIdentifier ex: google_4v6qb4c4fbzebxdw4ippmpg5jq6ho4
+     * @param string $userIdentifier ex: google@@@4v6qb4c4fbzebxdw4ippmpg5jq6ho4
      * @return User|null
      */
     public function loadUserByIdentifier(string $userIdentifier): ?User
