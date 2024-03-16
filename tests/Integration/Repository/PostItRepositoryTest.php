@@ -16,7 +16,7 @@ class PostItRepositoryTest extends KernelTestCase
 
     public function testLoadUserByIdentifier(): void
     {
-        $onePostIt = $this->em->getRepository(PostIt::class)->findOneBy(['wall' => 1]);
+        $onePostIt = $this->em->getRepository(PostIt::class)->findAll()[0];
         $postIt = $this->em->getRepository(PostIt::class)->findOneByUserAndUuid($onePostIt->getWall()->getUser(), $onePostIt->getUuid());
         $this->assertInstanceOf(PostIt::class, $postIt);
     }
