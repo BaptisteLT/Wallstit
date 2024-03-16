@@ -45,7 +45,7 @@ jobs:
       - name: Setup test database
         env:
           DATABASE_URL: mysql://root:rootpassword@127.0.0.1:3307/wallstit_test?serverVersion=10.6.5-MariaDB&charset=utf8mb4
-        run: php bin/console doctrine:schema:update --env=TEST --force --no-interaction --complete && php bin/console --env=test doctrine:fixtures:load
+        run: php bin/console doctrine:schema:update --env=TEST --force --no-interaction --complete && php bin/console doctrine:fixtures:load
 
       - name: Run tests
         run: vendor/bin/phpunit
