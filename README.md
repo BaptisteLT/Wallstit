@@ -10,11 +10,11 @@ Une application qui vous permet de créer simplement des murs de post-its.
 
 ## Testing
 
-1) Faire l'étape "Configuration du dessus"
-2) Créer la base de données de test avec "php bin/console d:d:b --env=test"
-3) Créer le schéma de la base de données avec "php bin/console doctrine:schema:update --env=test"
-4) Lancer les fixtures pour mettre à jour la base de données de test avec "php bin/console --env=test doctrine:fixtures:load"
-5) Pour tester, lancer la commande "php bin/phpunit" (et pour filter, ajouter "php bin/phpunit --filter UserRepositoryTest")
+1) Faire l'étape "Configuration du dessus".
+2) Créer la base de données de test avec "php bin/console d:d:b --env=test".
+3) Créer le schéma de la base de données avec "php bin/console doctrine:schema:update --env=test".
+4) Lancer les fixtures pour mettre à jour la base de données de test avec "php bin/console --env=test doctrine:fixtures:load".
+5) Pour tester, lancer la commande "php bin/phpunit" (et pour filter, ajouter "php bin/phpunit --filter UserRepositoryTest").
 
 ### Google oauth2
 
