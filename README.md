@@ -21,7 +21,7 @@ Une application qui vous permet de créer simplement des murs de post-its.
 1) Pour configurer google oauth2, il faut dans un premier temps créer un projet depuis cet URL:
 https://console.developers.google.com/apis/dashboard
 
-2) Dans un second temps il faut activer "Google People API" pour pouvoir récupérer les informations de l'utilisateur
+2) Dans un second temps il faut activer "Google People API" pour pouvoir récupérer les informations de l'utilisateur.
 
 3) Configurer l'écran de consentement OAuth
 
