@@ -1,8 +1,7 @@
 <?php
+namespace App\Tests\Functional\Repository;
 
 use App\Entity\User;
-use App\DataFixtures\UserFixtures;
-use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class UserRepositoryTest extends KernelTestCase
