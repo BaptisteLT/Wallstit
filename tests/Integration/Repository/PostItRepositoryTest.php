@@ -1,4 +1,5 @@
 <?php
+namespace App\Tests\Functional\Repository;
 
 use App\Entity\PostIt;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;

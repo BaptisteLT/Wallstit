@@ -1,8 +1,6 @@
 <?php
-
 namespace App\Tests\Functional\Entity\Traits;
 
-use App\Entity\User;
 use App\Entity\Wall;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
@@ -36,7 +34,7 @@ class CreateUpdateTraitTest extends KernelTestCase
         $refreshToken = $user->getRefreshToken();
         $this->assertInstanceOf(DateTimeImmutable::class, $refreshToken->getCreatedAt());
         
-        
+
         /*Test updatedAt*/
 
         //updating user

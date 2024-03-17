@@ -1,7 +1,7 @@
 <?php
 namespace App\Service\Validator;
 
-use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class ValidatorService
@@ -26,8 +26,9 @@ class ValidatorService
             $propertyName = $error->getPropertyPath();
             //La valeur renseignée par l'utilisateur
             $providedValue = $error->getParameters()['{{ value }}'] ? 'Your provided value is ' . $error->getParameters()['{{ value }}'] : null;
-            //$errorMessage = 'You provided the value { ' +  + ' }'
-            throw new HttpException(400, $error->getMessage() . ' for the property '. $propertyName . '. ' . $providedValue);
+
+            //HTTP 400
+            throw new BadRequestException($error->getMessage() . ' for the property '. $propertyName . '. ' . $providedValue);
         }
     }
 }
