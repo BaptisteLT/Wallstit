@@ -13,8 +13,7 @@ use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 class TokenCookieService
 {
     public function __construct(
-        private UserRepository $userRepository,
-        private TokenManagerService $tokenManagerService
+        private UserRepository $userRepository
     ){}
 
     /**
@@ -28,8 +27,8 @@ class TokenCookieService
      */
     public function createAuthCookies(JwtToken $jwtToken, RefreshToken $refreshToken, JsonResponse $response)
     {
-        $response->headers->setCookie(new Cookie('jwtToken', $jwtToken->getValue(), $jwtToken->getExpiresAt()->getTimestamp(), '/', null, true, true));
-        $response->headers->setCookie(new Cookie('refreshToken', $refreshToken->getValue(), $refreshToken->getExpiresAt()->getTimestamp(), '/', null, true, true));
+        $response->headers->setCookie(new Cookie('jwtToken', $jwtToken->getValue(), $jwtToken->getExpiresAt()->getTimestamp(), '/', null, true, true, false, Cookie::SAMESITE_STRICT));
+        $response->headers->setCookie(new Cookie('refreshToken', $refreshToken->getValue(), $refreshToken->getExpiresAt()->getTimestamp(), '/', null, true, true, false, Cookie::SAMESITE_STRICT));
 
         return $response;
     }

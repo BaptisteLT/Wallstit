@@ -1,10 +1,11 @@
 <?php
-namespace App\Service\Authentication\UserRegistration;
+namespace App\Tests\Unit\Service\Authentication\UserRegistration;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use App\Service\Authentication\UserRegistration\UserManagerService;
 
 class UserManagerServiceTest extends KernelTestCase
 {
