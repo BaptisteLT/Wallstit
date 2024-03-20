@@ -1,0 +1,7 @@
+services:
+  _defaults:
+    public: true
+  
+  #Exemple pour ajouter un service en mode public dans l'environnement de TEST uniquement:
+  #test.TokenCookieService: '@App\Service\Authentication\Tokens\TokenCookieService'
+  test.OAuthApiFactory: '@App\Service\Authentication\OAuth\OAuthApi\Factory\OAuthApiFactory'

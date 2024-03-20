@@ -1,32 +1,44 @@
 <?php
 namespace App\Service\Authentication\OAuth\OAuthApi\Factory;
 
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use App\Service\Authentication\OAuth\OAuthApi\OAuthApiInterface;
+use App\Service\Authentication\OAuth\OAuthApi\Providers\GoogleOAuthApiService;
+use App\Service\Authentication\OAuth\OAuthApi\Providers\DiscordOAuthApiService;
 
 /**
  * Permet de register automatiquement les impléments de OAuthApiInterface
  */
-final class OAuthApiFactory
+final class OAuthApiFactoryTest extends KernelTestCase
 {
-  private iterable $providers;
+  private OAuthApiFactory $factory;
 
-  public function __construct(
-    iterable $providers
-  )
+  public function setUp(): void
   {
-    $this->providers = $providers;
+    $this->factory = static::getContainer()->get('test.OAuthApiFactory');
   }
 
-  public function create(string $providerName): OAuthApiInterface
+  /**
+   * create() method with valid provider, and invalid
+   *
+   * @return void
+   */
+  public function testCreate(): void
   {
-    
-    foreach($this->providers as $provider) {
-      //Is gonna find the class that matches the $providerName
-      if (strpos(strtolower(get_class($provider)), strtolower($providerName)) !== false) {
-        return $provider;
-      }
-    }
+    $provider = $this->factory->create('GOogLe');
+    $this->assertInstanceOf(GoogleOAuthApiService::class, $provider, 'Expected to get GoogleOAuthApiService when provider is "GOogLe".');
 
-    throw new \InvalidArgumentException('Unknown provider given.');
+    //Valid
+    $provider = $this->factory->create('google');
+    $this->assertInstanceOf(GoogleOAuthApiService::class, $provider, 'Expected to get GoogleOAuthApiService when provider is "google".');
+
+    //Valid
+    $provider = $this->factory->create('discord');
+    $this->assertInstanceOf(DiscordOAuthApiService::class, $provider, 'Expected to get DiscordOAuthApiService when provider is "discord".');
+
+    //Invalid
+    $this->expectException(\InvalidArgumentException::class, 'Expected to get an exception when the provider is invalid.');
+    $this->expectExceptionMessage('Unknown provider given.');
+    $this->factory->create('InvalidProvider');
   }
 }
