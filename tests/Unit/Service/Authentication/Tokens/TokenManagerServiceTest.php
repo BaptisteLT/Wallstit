@@ -1,5 +1,5 @@
 <?php
-namespace App\Service\Authentication\Tokens;
+namespace App\Tests\Unit\Service\Authentication\Tokens;
 
 use DateInterval;
 use App\Entity\User;

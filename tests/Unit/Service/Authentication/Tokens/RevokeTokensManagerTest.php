@@ -1,5 +1,5 @@
 <?php
-namespace App\Service\Authentication\Tokens;
+namespace App\Tests\Unit\Service\Authentication\Tokens;
 
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Response;

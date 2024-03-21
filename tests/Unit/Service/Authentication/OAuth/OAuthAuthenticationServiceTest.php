@@ -1,5 +1,5 @@
 <?php
-namespace App\Service\Authentication\OAuth;
+namespace App\Tests\Unit\Service\Authentication\OAuth;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Service\Authentication\Tokens\TokenManagerService;

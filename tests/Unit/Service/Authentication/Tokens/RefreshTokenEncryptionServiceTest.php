@@ -1,55 +1,49 @@
 <?php
-namespace App\Service\Authentication\Tokens;
+namespace App\Tests\Unit\Service\Authentication\Tokens;
 
 use Exception;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use App\Service\Authentication\Tokens\RefreshTokenEncryptionService;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
-class RefreshTokenEncryptionService
+class RefreshTokenEncryptionServiceTest extends KernelTestCase
 {
-    public function __construct(
-        private ParameterBagInterface $params, 
-    ){}
+    private RefreshTokenEncryptionService $refreshTokenEncryptionService;
+
+    public function setUp(): void
+    {
+        $this->refreshTokenEncryptionService = static::getContainer()->get('test.RefreshTokenEncryptionService');
+    }
 
     /**
-     * Encrypt or decrypt the refresh token
+     * Test encryptAndDecrypt() method
      *
-     * @param string $token
-     * @param string $method ('encrypt' or 'decrypt')
-     * @return string | false
+     * @return void
      */
-    public function encryptOrDecrypt(string $token, string $method): string |false
+    public function testEncryptAndDecrypt()
     {
-        // Encode the token using HMAC with the pepper
-        $passphrase = $this->params->get('refresh.token.encoding.passphrase');
-        //$passphrase devrait être généré précédemment d'une manière cryptographique, tel que openssl_random_pseudo_bytes
+        $value = 'token';
+        $encrypted = $this->refreshTokenEncryptionService->encryptOrDecrypt($value, 'encrypt');
+        $this->assertIsString($encrypted);
 
-        $cipher = "aes-256-gcm";
-
-        if (in_array($cipher, openssl_get_cipher_methods()))
-        {
-            if($method === 'encrypt')
-            {
-                $ivlen = openssl_cipher_iv_length($cipher);
-                // Generate a random IV
-                $iv = openssl_random_pseudo_bytes($ivlen);
-   
-                // Encrypt the token
-                $encryptedToken = openssl_encrypt($token, $cipher, $passphrase, 0, $iv, $tag);
-
-                $token = base64_encode($encryptedToken . '::' . $iv . '::' . $tag);
-            }
-            else
-            {
-                [$token, $iv, $tag] = explode('::', base64_decode($token), 3);
-                //Le token décrypté
-                $token = openssl_decrypt($token, $cipher, $passphrase, $options=0, $iv, $tag);
-            }
-        }
-        else
-        {
-            throw new Exception('openssl is not installed.');
-        }
-
-        return $token;
+        $decrypted = $this->refreshTokenEncryptionService->encryptOrDecrypt($encrypted, 'decrypt');
+        $this->assertEquals($value, $decrypted, "Decrypt failed, expected value is '$value'.");
     }
+
+    /*public function testInvalidCypher()
+    {
+        $value = 'token';
+
+
+        // Mock openssl_get_cipher_methods to return an invalid cipher
+        $opensslMock = $this->getMockBuilder('overload')
+                            ->setMethods(['openssl_get_cipher_methods'])
+                            ->getMock();
+        $opensslMock->expects($this->any())->method('openssl_get_cipher_methods')->willReturn(['invalid_cypher']);
+
+        //$this->expectException(\Exception::class);
+
+        dump($this->refreshTokenEncryptionService->encryptOrDecrypt($value, 'encrypt'));die;
+
+    }*/
 }

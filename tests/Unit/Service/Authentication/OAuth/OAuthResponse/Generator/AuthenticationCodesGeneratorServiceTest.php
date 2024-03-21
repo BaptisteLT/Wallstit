@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service\Authentication\OAuth\OAuthResponse\Generator;
+namespace App\Tests\Unit\Service\Authentication\OAuth\OAuthResponse\Generator;
 
 use App\Service\Authentication\OAuth\OAuthSession\OAuthSessionHandlerService;
 use Symfony\Component\Uid\Uuid;

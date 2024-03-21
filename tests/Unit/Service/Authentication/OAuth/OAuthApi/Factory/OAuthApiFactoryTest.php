@@ -1,8 +1,9 @@
 <?php
-namespace App\Service\Authentication\OAuth\OAuthApi\Factory;
+namespace App\Tests\Unit\Service\Authentication\OAuth\OAuthApi\Factory;
 
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use App\Service\Authentication\OAuth\OAuthApi\OAuthApiInterface;
+use App\Service\Authentication\OAuth\OAuthApi\Factory\OAuthApiFactory;
 use App\Service\Authentication\OAuth\OAuthApi\Providers\GoogleOAuthApiService;
 use App\Service\Authentication\OAuth\OAuthApi\Providers\DiscordOAuthApiService;
 

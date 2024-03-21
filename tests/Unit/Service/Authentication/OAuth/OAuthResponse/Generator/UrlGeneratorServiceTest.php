@@ -1,5 +1,5 @@
 <?php
-namespace App\Service\Authentication\OAuth\OAuthResponse\Generator;
+namespace App\Tests\Unit\Service\Authentication\OAuth\OAuthResponse\Generator;
 
 class UrlGeneratorService{
 

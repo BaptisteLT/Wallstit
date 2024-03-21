@@ -1,5 +1,5 @@
 <?php
-namespace App\Service\Authentication\OAuth\OAuthResponse;
+namespace App\Tests\Unit\Service\Authentication\OAuth\OAuthResponse;
 
 use App\Entity\Tokens\JwtToken;
 use App\Entity\Tokens\RefreshToken;

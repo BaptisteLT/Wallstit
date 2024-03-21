@@ -1,27 +1,52 @@
 <?php
-namespace App\Service\Authentication\OAuth\OAuthSession;
+namespace App\Tests\Unit\Service\Authentication\OAuth\OAuthSession;
 
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use App\Service\Authentication\OAuth\OAuthSession\OAuthSessionHandlerService;
 
-class OAuthSessionHandlerService
+class OAuthSessionHandlerServiceTest extends KernelTestCase
 {
-    private SessionInterface $session;
+    private OAuthSessionHandlerService $oAuthSessionHandlerService;
 
-    public function __construct(
-        RequestStack $requestStack
-    )
+    private RequestStack $requestStackMock;
+
+    private SessionInterface $sessionMock;
+
+    public function setUp(): void
     {
-        $this->session = $requestStack->getSession();
+        $this->sessionMock = $this->createMock(SessionInterface::class);
+        $this->requestStackMock = $this->createMock(RequestStack::class);
+        $this->requestStackMock
+            ->method('getSession')
+            ->willReturn($this->sessionMock);
+
+        $this->oAuthSessionHandlerService = new OAuthSessionHandlerService($this->requestStackMock);
     }
 
-    public function setState($state)
+    public function testSetState(): void
     {
-        $this->session->set('state', $state);
+        $value = 'someState';
+
+        $this->sessionMock
+            ->expects($this->once())
+            ->method('set')
+            ->with('state', $value);
+
+        $this->oAuthSessionHandlerService->setState($value);
     }
 
-    public function setOriginalPCKE($originalPCKE)
+
+    public function testSetOriginalPCKE(): void
     {
-        $this->session->set('original_PCKE', $originalPCKE);
+        $value = 'somePCKE';
+
+        $this->sessionMock
+            ->expects($this->once())
+            ->method('set')
+            ->with('original_PCKE', $value);
+
+        $this->oAuthSessionHandlerService->setOriginalPCKE($value);
     }
 }
