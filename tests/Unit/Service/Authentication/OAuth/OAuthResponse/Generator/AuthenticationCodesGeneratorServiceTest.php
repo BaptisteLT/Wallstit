@@ -2,48 +2,42 @@
 
 namespace App\Tests\Unit\Service\Authentication\OAuth\OAuthResponse\Generator;
 
-use App\Service\Authentication\OAuth\OAuthSession\OAuthSessionHandlerService;
 use Symfony\Component\Uid\Uuid;
+use App\Service\Authentication\OAuth\OAuthSession\OAuthSessionHandlerService;
+use App\Service\Authentication\OAuth\OAuthResponse\Generator\AuthenticationCodesGeneratorService;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-class AuthenticationCodesGeneratorService{
+class AuthenticationCodesGeneratorServiceTest extends KernelTestCase
+{
+    private AuthenticationCodesGeneratorService $authenticationCodesGeneratorService;
 
-    public function __construct(
-        private OAuthSessionHandlerService $sessionHandler
-    )
-    {}
+    private OAuthSessionHandlerService $sessionHandlerMock;
 
-    /**
-     * Génération du state qui sera réutilisé au moment du callback
-     *
-     * @return string
-     */
-    public function generateState()
+    public function setUp(): void
     {
-        // Génération d'un Uuid random que le provider nous renverra et que l'on vérifiera par la suite
-        $state = (Uuid::v1())->__toString();
-
-        /* Mise en session, state sera réutilisé au moment du callback */
-        $this->sessionHandler->setState($state);
-
-        return $state;
+        $this->sessionHandlerMock = $this->createMock(OAuthSessionHandlerService::class);
+        $this->authenticationCodesGeneratorService = new AuthenticationCodesGeneratorService($this->sessionHandlerMock);
     }
 
-    /**
-     * Used by some providers to add another layer of security (optional)
-     *
-     * @return string
-     */
-    public function generateCodeChallenge()
+    public function testGenerateState()
     {
-        // Génération d'un code_verifier aléatoire
-        $codeVerifier = bin2hex(random_bytes(32));
+        $this->sessionHandlerMock->expects($this->once())
+                                  ->method('setState')
+                                  ->willReturn(null);
 
-        /* Mise en session, original_PCKE sera réutilisé au moment du callback */
-        $this->sessionHandler->setOriginalPCKE($codeVerifier);
+        $state = $this->authenticationCodesGeneratorService->generateState();
 
-        // Génération du PCKE, qui est une clé que l'on envoie dans un premier temps hashé, puis en clair lors de la deuxième étape afin que le provider s'assure de notre identité
-        $codeChallenge = rtrim(strtr(base64_encode(hash('sha256', $codeVerifier, true)), '+/', '-_'), '=');
-     
-        return $codeChallenge;
+        $this->assertIsString($state);
+    }
+
+    public function testGenerateCodeChallenge()
+    {
+        $this->sessionHandlerMock->expects($this->once())
+        ->method('setOriginalPCKE')
+        ->willReturn(null);
+
+        $codeChallenge = $this->authenticationCodesGeneratorService->generateCodeChallenge();
+
+        $this->assertIsString($codeChallenge);
     }
 }

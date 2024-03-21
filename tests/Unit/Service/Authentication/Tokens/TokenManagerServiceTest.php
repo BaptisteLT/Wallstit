@@ -4,33 +4,80 @@ namespace App\Tests\Unit\Service\Authentication\Tokens;
 use DateInterval;
 use App\Entity\User;
 use DateTimeImmutable;
-use Symfony\Component\Uid\Uuid;
-use App\Repository\UserRepository;
-use App\Entity\Tokens\RefreshToken;
 use App\Entity\Tokens\JwtToken;
+use Symfony\Component\Uid\Uuid;
+use App\Entity\Tokens\RefreshToken;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\RefreshTokenRepository;
-use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use App\Service\Authentication\Tokens\TokenManagerService;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
+use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
-class TokenManagerService
+class TokenManagerServiceTest extends KernelTestCase
 {
-    public function __construct(
-        private JWTTokenManagerInterface $JWTManager,
-        private ParameterBagInterface $params, 
-        private EntityManagerInterface $em,
-        private RefreshTokenRepository $refreshTokenRepository,
-        private UserRepository $userRepository,
-        private RefreshTokenEncryptionService $refreshTokenEncryptionService
-    ){}
+    private TokenManagerService $tokenManagerService;
 
-    public function generateJWTToken(User $user): JwtToken
+    private RefreshTokenRepository $refreshTokenRepository;
+
+    public function setUp(): void
+    {
+        $jwtTokenManagerInterface = static::getContainer()->get('lexik_jwt_authentication.jwt_manager');
+        $parameterBagInterface = static::getContainer()->get('parameter_bag');
+        $entityManagerInterface = static::getContainer()->get('doctrine.orm.default_entity_manager');
+        $refreshTokenEncryptionService = static::getContainer()->get('test.RefreshTokenEncryptionService');
+
+        $this->refreshTokenRepository = $this->createMock(RefreshTokenRepository::class);
+
+        $this->tokenManagerService = new TokenManagerService($jwtTokenManagerInterface, $parameterBagInterface, $entityManagerInterface, $this->refreshTokenRepository, $refreshTokenEncryptionService);
+    }
+
+    /*public function testGenerateJWTToken(): void
+    {
+        $user = $this->createMock(User::class);
+        
+        $user->method('getId')->willReturn(1);
+        $user->method('getEmail')->willReturn('test@test.fr');
+        
+        $user->method('getUserIdentifier')->willReturn('%s_%s');
+        $user->method('getUsername')->willReturn('ff@@@ff');
+        $user->method('getName')->willReturn('test');
+        //$user->method('getPicture')->willReturn('pic');
+
+        //TODO: le pb est que le JwtCreatedListener est triggered donc je pense que le plus simple c'est de faire un test d'intégration
+
+
+
+   
+
+        $jwtToken = $this->tokenManagerService->generateJWTToken($user);
+        
+        dump($jwtToken);die;
+    } */
+
+
+    /*public function generateJWTToken(User $user): JwtToken
     {
         $jwtToken = $this->JWTManager->create($user);
         return new JwtToken($jwtToken);
-    }
+    }*/
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
     public function refreshTokens(string $refreshToken): array
     {
         $refreshToken = $this->refreshTokenRepository->findOneBy(['value' => $refreshToken]);
@@ -88,5 +135,5 @@ class TokenManagerService
         $this->em->flush();
 
         return $refreshToken;
-    }
+    }*/
 }
