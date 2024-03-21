@@ -1,5 +1,5 @@
 <?php
-namespace App\Service\Authentication\OAuth\OAuthApi;
+namespace App\Tests\Unit\Service\Authentication\OAuth\OAuthApi;
 
 interface OAuthApiInterface{
 

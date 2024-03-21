@@ -1,5 +1,5 @@
 <?php
-namespace App\Service\Authentication\OAuth\OAuthApi\Providers;
+namespace App\Tests\Unit\Service\Authentication\OAuth\OAuthApi\Providers;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
