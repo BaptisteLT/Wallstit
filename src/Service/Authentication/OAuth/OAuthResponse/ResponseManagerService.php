@@ -5,15 +5,11 @@ use App\Entity\Tokens\JwtToken;
 use App\Entity\Tokens\RefreshToken;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Service\Authentication\Tokens\TokenCookieService;
-use App\Service\Authentication\Tokens\TokenManagerService;
-use App\Service\Authentication\UserRegistration\UserManagerService;
 use App\Service\Authentication\OAuth\OAuthResponse\Generator\UrlGeneratorService;
 
 class ResponseManagerService{
 
     public function __construct(
-        private UserManagerService $userManager,
-        private TokenManagerService $tokenManagerService,
         private TokenCookieService $tokenCookieService,
         private UrlGeneratorService $urlGenerator
     ){}
