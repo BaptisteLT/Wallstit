@@ -5,7 +5,6 @@ use DateInterval;
 use App\Entity\User;
 use DateTimeImmutable;
 use Symfony\Component\Uid\Uuid;
-use App\Repository\UserRepository;
 use App\Entity\Tokens\RefreshToken;
 use App\Entity\Tokens\JwtToken;
 use Doctrine\ORM\EntityManagerInterface;
@@ -21,7 +20,6 @@ class TokenManagerService
         private ParameterBagInterface $params, 
         private EntityManagerInterface $em,
         private RefreshTokenRepository $refreshTokenRepository,
-        private UserRepository $userRepository,
         private RefreshTokenEncryptionService $refreshTokenEncryptionService
     ){}
 

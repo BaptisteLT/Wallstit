@@ -34,7 +34,6 @@ class RefreshTokenEncryptionServiceTest extends KernelTestCase
     {
         $value = 'token';
 
-
         // Mock openssl_get_cipher_methods to return an invalid cipher
         $opensslMock = $this->getMockBuilder('overload')
                             ->setMethods(['openssl_get_cipher_methods'])

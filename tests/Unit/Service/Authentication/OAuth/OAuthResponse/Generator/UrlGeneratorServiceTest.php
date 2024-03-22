@@ -1,50 +1,77 @@
 <?php
 namespace App\Tests\Unit\Service\Authentication\OAuth\OAuthResponse\Generator;
 
-class UrlGeneratorService{
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use App\Service\Authentication\OAuth\OAuthResponse\Generator\UrlGeneratorService;
+use App\Service\Authentication\OAuth\OAuthResponse\Generator\AuthenticationCodesGeneratorService;
 
-    public function __construct(
-        private AuthenticationCodesGeneratorService $codesGenerator
-    )
-    {}
+class UrlGeneratorServiceTest extends KernelTestCase
+{
+    private UrlGeneratorService $urlGeneratorService;
+    private AuthenticationCodesGeneratorService $codesGeneratorMock;
 
-    public function generateProviderLoginUrl(array $providerData): string
+    public function setUp(): void
     {
-        //Génère à la volée le state
-        $providerData['state'] = $this->codesGenerator->generateState();
-        
-        //Génère à la volée le code_challenge s'il est disponible pour le provider en question
-        if(isset($providerData['code_challenge']))
-        {
-            $providerData['code_challenge'] = $this->codesGenerator->generateCodeChallenge();
-        }
-
-        // splitting the URL
-        ['scheme' => $scheme, 'host' => $host, 'path' => $path, 'query' => $query] = parse_url($providerData['base_login_url']);
-
-        // Extract the query parameters into array $queryParams
-        parse_str($query, $queryParams);
-
-        //Populate the query params with the provider data
-        $queryParams = $this->populateParams($queryParams, $providerData);
-
-        // Rebuilding the query string with actual values
-        $uri = $scheme . '://' . $host . $path . '?' .http_build_query($queryParams);
-
-        return $uri;
+        $this->codesGeneratorMock = $this->createMock(AuthenticationCodesGeneratorService::class);
+        $this->urlGeneratorService = new UrlGeneratorService($this->codesGeneratorMock);
     }
 
-    private function populateParams(array $queryParams, array $providerData): array
-    {
-        foreach($queryParams as $key => $param)
-        {
-            if(!isset($providerData[$key]))
-            {
-                throw new \InvalidArgumentException('Missing url parameter "' .$key . '"');
-            }
-            $queryParams[$key] = $providerData[$key];
-        }
+    /**
+     * Test valid testGenerateProviderLoginUrl()
+     *
+     * @return void
+     */
+    public function testValidGenerateProviderLoginUrl(): void
+    {   
+        $providerData = [
+            'base_login_url' => 'https://discord.com/api/oauth2/authorize?client_id=&response_type=&redirect_uri=&scope=&state=',
+            'client_id' => 'client_id_value',
+            'redirect_uri' => 'redirect_uri_value',
+            'response_type' => 'code',
+            'scope' => 'identify',
+            'code_challenge' => 'some_code_challenge_value'
+        ];
 
-        return $queryParams;
+        $this->codesGeneratorMock->expects($this->once())
+                                 ->method('generateCodeChallenge')
+                                 ->willReturn('someCodeChallengeValue');
+
+        $this->codesGeneratorMock->expects($this->once())
+                                 ->method('generateState')
+                                 ->willReturn('someStateValue');
+
+        $url = $this->urlGeneratorService->generateProviderLoginUrl($providerData);
+        $this->assertSame('https://discord.com/api/oauth2/authorize?client_id=client_id_value&response_type=code&redirect_uri=redirect_uri_value&scope=identify&state=someStateValue', $url, 'generated url is wrong');
+    }
+
+    
+    /**
+     * Test missing param in providerData testGenerateProviderLoginUrl()
+     *
+     * @return void
+     */
+    public function testMissingParameterInUrl(): void
+    {   
+        $providerData = [
+            'base_login_url' => 'https://discord.com/api/oauth2/authorize?client_id=&response_type=&redirect_uri=&scope=&state=',
+            'client_id' => 'client_id_value',
+            'redirect_uri' => 'redirect_uri_value',
+            'response_type' => 'code',
+            //'scope' => 'identify', Missing "scope"
+            'code_challenge' => 'some_code_challenge_value'
+        ];
+
+        $this->codesGeneratorMock->expects($this->once())
+                                 ->method('generateCodeChallenge')
+                                 ->willReturn('someCodeChallengeValue');
+
+        $this->codesGeneratorMock->expects($this->once())
+                                 ->method('generateState')
+                                 ->willReturn('someStateValue');
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Missing url parameter "scope"');
+        
+        $this->urlGeneratorService->generateProviderLoginUrl($providerData);
     }
 }
