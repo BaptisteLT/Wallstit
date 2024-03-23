@@ -36,16 +36,12 @@ class OAuthAuthenticationServiceTest extends KernelTestCase
         $state = 'someStateValue';
         $provider = 'google';
         $bearerToken = 'someBearerToken';
-
+    
         $oAuthApiInterface = $this->createMock(OAuthApiInterface::class);
-
-        //Test de la méthode getBearerToken()
-        $oAuthApiInterface->expects($this->once())
-        ->method('getBearerToken')
-        ->with($code, $state)
-        ->willReturn($bearerToken);
-
-        //Test de la méthode retrieveUserData()
+        $jsonResponse = $this->createMock(JsonResponse::class);
+        $user = $this->createMock(User::class);
+        $jwtToken = $this->createMock(JwtToken::class);
+        $refreshToken = $this->createMock(RefreshToken::class);
         $userData = [
             'id' => 'some_id_value',
             'email' => 'some_email_value',
@@ -53,39 +49,41 @@ class OAuthAuthenticationServiceTest extends KernelTestCase
             'picture' => 'some_picture_value',
             'locale' => 'some_locale_value'
         ];
+    
+        // Expectations
         $oAuthApiInterface->expects($this->once())
-        ->method('retrieveUserData')
-        ->with($bearerToken)
-        ->willReturn($userData);
-
-        //Test de la méthode getOrCreateUser()
-        $user = $this->createMock(User::class);
+            ->method('getBearerToken')
+            ->with($code, $state)
+            ->willReturn($bearerToken);
+    
+        $oAuthApiInterface->expects($this->once())
+            ->method('retrieveUserData')
+            ->with($bearerToken)
+            ->willReturn($userData);
+    
         $this->userManagerMock->expects($this->once())
-        ->method('getOrCreateUser')
-        ->with($userData, $provider)
-        ->willReturn($user);
-
-        //Test de la méthode generateJWTToken()
-        $jwtToken = $this->createMock(JwtToken::class);
+            ->method('getOrCreateUser')
+            ->with($userData, $provider)
+            ->willReturn($user);
+    
         $this->tokenManagerMock->expects($this->once())
-        ->method('generateJWTToken')
-        ->with($user)
-        ->willReturn($jwtToken);
-  
-        //Test de la méthode generateRefreshToken()
-        $refreshToken = $this->createMock(RefreshToken::class);
+            ->method('generateJWTToken')
+            ->with($user)
+            ->willReturn($jwtToken);
+    
         $this->tokenManagerMock->expects($this->once())
-        ->method('generateRefreshToken')
-        ->with($user)
-        ->willReturn($refreshToken);
-
-        //Test de la méthode authenticationResponse()
-        $jsonResponse = $this->createMock(JsonResponse::class);
+            ->method('generateRefreshToken')
+            ->with($user)
+            ->willReturn($refreshToken);
+    
         $this->responseManagerMock->expects($this->once())
-        ->method('authenticationResponse')
-        ->with($jwtToken, $refreshToken)
-        ->willReturn($jsonResponse);
+            ->method('authenticationResponse')
+            ->with($jwtToken, $refreshToken)
+            ->willReturn($jsonResponse);
+    
 
         $jsonResponse = $this->oAuthAuthenticationService->prepareAuthenticationResponse($oAuthApiInterface, $provider, $code, $state);
+
+        $this->assertInstanceOf(JsonResponse::class, $jsonResponse);
     }
 }
