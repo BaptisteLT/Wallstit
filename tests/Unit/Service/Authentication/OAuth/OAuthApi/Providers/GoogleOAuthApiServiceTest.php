@@ -1,14 +1,11 @@
 <?php
 namespace App\Tests\Unit\Service\Authentication\OAuth\OAuthApi\Providers;
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use App\Service\Authentication\OAuth\OAuthApi\OAuthApiInterface;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use App\Service\Authentication\OAuth\OAuthApi\Providers\GoogleOAuthApiService;

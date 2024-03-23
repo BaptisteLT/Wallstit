@@ -2,94 +2,156 @@
 namespace App\Tests\Unit\Service\Authentication\OAuth\OAuthApi\Providers;
 
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Contracts\HttpClient\ResponseInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
-use App\Service\Authentication\OAuth\OAuthApi\OAuthApiInterface;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use App\Service\Authentication\OAuth\OAuthApi\Providers\DiscordOAuthApiService;
 
 
-final class DiscordOAuthApiService implements OAuthApiInterface
+final class DiscordOAuthApiServiceTest extends KernelTestCase
 {
-    public function __construct(
-        private ParameterBagInterface $params, 
-        private RequestStack $requestStack, 
-        private HttpClientInterface $httpClient
-    ){}
+    private ParameterBagInterface $paramsMock;
+    private RequestStack $requestStackMock;
+    private HttpClientInterface $httpClientMock;
 
+    private DiscordOAuthApiService $discordOAuthApiService;
+    
+    public function setUp(): void
+    {
+        $this->paramsMock = $this->createMock(ParameterBagInterface::class); 
+        $this->requestStackMock = $this->createMock(RequestStack::class); 
+        $this->httpClientMock = $this->createMock(HttpClientInterface::class); 
+        $this->discordOAuthApiService = new DiscordOAuthApiService($this->paramsMock, $this->requestStackMock, $this->httpClientMock);
+    }
 
     
     /**
-     * Return bearer token from Google Request
-     *
-     * @param Request $request
-     * @return string Bearer token
+     * test getBearerToken() method with valid data
      */
-    public function getBearerToken(string $code, string $state): string
+    public function testGetBearerToken(): void
     {
-        $session = $this->requestStack->getSession();
+        $code = 'codeValue';
+        $clientIdValue = 'client_id_value';   
+        $secretValue = 'secret_value';              
+        $redirectUri = 'some_redirect_url';
 
-        //Destructuring the array into variables
-        //['state' => $state, 'code' => $code, 'scope' => $scope, 'authuser' => $authuser, 'prompt' => $prompt] = $request->query->all();
+        $session = $this->createMock(SessionInterface::class);
+        $session->expects($this->exactly(1))
+        ->method('get')
+        ->willReturnCallback(
+            fn ($key) => match ($key) {
+                'state' => 'stateValue',
+                default => throw new \InvalidArgumentException("Unexpected key: $key")
+            }
+        );
 
-        //On vérifie que le state est le même qu'en session. Si ce n'est pas le cas, alors la requête n'est pas authentique ne vient pas de Google
-        if(!($state === $session->get('state')))
-        {
-            throw new AccessDeniedHttpException('State in session doesn\'t match with what google sent back.');
-        }
+        $this->requestStackMock->expects($this->once())
+                               ->method('getSession')
+                               ->willReturn($session);
+
+        $this->paramsMock->expects($this->exactly(3))
+        ->method('get')
+        ->willReturnCallback(
+            // On définit que le paramètre doit correspondre à une valeur spécifique
+            fn ($key) => match ($key) {
+                'discord.oauth2.client_id' => $clientIdValue,
+                'discord.oauth2.secret' => $secretValue,
+                'discord.oauth2.redirect_uri' => $redirectUri,
+                //Si $key n'est pas trouvé on retournera une erreur
+                default => throw new \InvalidArgumentException("Unexpected key: $key")
+            }
+        );
+
+        $responseMock = $this->createMock(ResponseInterface::class);
+        $responseMock->expects($this->once())
+        //On définit ce qui sera retourné par Google
+        ->method('getContent')
+        ->willReturn('{
+            "access_token": "accessTokenValue"
+        }');
 
         // Define the request parameters
         $url = "https://discord.com/api/oauth2/token";
         $data = [
-            'code' => $code,//OK
-            'grant_type' => 'authorization_code',//OK
-            'redirect_uri' => $this->params->get('discord.oauth2.redirect_uri'),//OK
+            'code' => $code,
+            'grant_type' => 'authorization_code',
+            'redirect_uri' => $redirectUri,
         ];
 
         // Create the Authorization header with Basic Authentication
-        $authHeader = base64_encode($this->params->get('discord.oauth2.client_id') . ':' . $this->params->get('discord.oauth2.secret'));
+        $authHeader = base64_encode($clientIdValue . ':' . $secretValue);
 
-        // Send a POST request
-        $response = $this->httpClient->request('POST', $url, [
+        $this->httpClientMock->expects($this->once())
+        ->method('request')
+        ->with('POST', $url, [
             'headers' => [
                 'Content-Type' => 'application/x-www-form-urlencoded',
                 'Authorization' => 'Basic ' . $authHeader
             ],
             'body' => $data,
-        ]);
+        ])
+        ->willReturn($responseMock);
 
+        $accessToken = $this->discordOAuthApiService->getBearerToken('codeValue', 'stateValue');
         
-
-        // Get the response content
-        $content = json_decode($response->getContent());
-
-        // Retrieve user data from Google OAuth service
-        return $content->access_token;
+        $this->assertEquals('accessTokenValue', $accessToken, 'Le token d\'accès ne correspond pas à celui attendu.');
     }
 
     /**
-     * Récupére les informations de l'utilisateur Google depuis l'api OAuth2
-     *
-     * @param string $bearerToken
-     * @return array
+     * test getBearerToken() method with invalid state
      */
-    public function retrieveUserData($bearerToken): array
+    public function testGetBearerTokenWithInvalidState(): void
     {
-        // Define the request parameters
+        $session = $this->createMock(SessionInterface::class);
+
+        $this->requestStackMock->expects($this->once())
+                               ->method('getSession')
+                               ->willReturn($session);
+
+        $this->expectException(AccessDeniedHttpException::class);
+        $this->expectExceptionMessage('State in session doesn\'t match with what discord sent back.');
+
+        $accessToken = $this->discordOAuthApiService->getBearerToken('codeValue', 'invalidStateValue');
+        
+        $this->assertEquals('accessTokenValue', $accessToken, 'Le token d\'accès ne correspond pas à celui attendu.');
+    }
+
+    /**
+     * Test testRetrieveUserData()
+     */
+    public function testRetrieveUserData(): void
+    {
+        $bearerToken = 'someBearerTokenValue';
+        
+        $responseMock = $this->createMock(ResponseInterface::class);
+        $responseMock->expects($this->once())
+                 ->method('getContent')
+                 ->willReturn('{
+                    "user":
+                    {
+                        "id": "id_value",
+                        "global_name": "global_name_value",
+                        "avatar": "avatar_value"
+                    }
+                }');
+
         $url = "https://discord.com/api/oauth2/@me";
-        // Send a POST request
-        $response = $this->httpClient->request('GET', $url, [
+        $this->httpClientMock->expects($this->once())
+        ->method('request')
+        ->with('GET', $url, [
             'headers' => [
                 'Authorization' => "Bearer $bearerToken"
             ]
-        ]);
+        ])
+        ->willReturn($responseMock);
 
-        $userData = json_decode($response->getContent());
-
-        return [
-            'id' => $userData->user->id,
-            'name' => $userData->user->global_name,
-            'picture' =>  'https://cdn.discordapp.com/avatars/'.$userData->user->id.'/'.$userData->user->avatar,
-        ];
+        $userData = $this->discordOAuthApiService->retrieveUserData($bearerToken);
+        
+        $this->assertSame('id_value', $userData['id']);
+        $this->assertSame('global_name_value', $userData['name']);
+        $this->assertSame('https://cdn.discordapp.com/avatars/'.'id_value'.'/'.'avatar_value', $userData['picture']);
     }
-
 }
