@@ -19,7 +19,7 @@ final class DiscordOAuthApiService implements OAuthApiInterface
 
     
     /**
-     * Return bearer token from Google Request
+     * Return bearer token from Discord Request
      *
      * @param Request $request
      * @return string Bearer token
@@ -31,18 +31,18 @@ final class DiscordOAuthApiService implements OAuthApiInterface
         //Destructuring the array into variables
         //['state' => $state, 'code' => $code, 'scope' => $scope, 'authuser' => $authuser, 'prompt' => $prompt] = $request->query->all();
 
-        //On vérifie que le state est le même qu'en session. Si ce n'est pas le cas, alors la requête n'est pas authentique ne vient pas de Google
+        //On vérifie que le state est le même qu'en session. Si ce n'est pas le cas, alors la requête n'est pas authentique ne vient pas de Discord
         if(!($state === $session->get('state')))
         {
-            throw new AccessDeniedHttpException('State in session doesn\'t match with what google sent back.');
+            throw new AccessDeniedHttpException('State in session doesn\'t match with what discord sent back.');
         }
 
         // Define the request parameters
         $url = "https://discord.com/api/oauth2/token";
         $data = [
-            'code' => $code,//OK
-            'grant_type' => 'authorization_code',//OK
-            'redirect_uri' => $this->params->get('discord.oauth2.redirect_uri'),//OK
+            'code' => $code,
+            'grant_type' => 'authorization_code',
+            'redirect_uri' => $this->params->get('discord.oauth2.redirect_uri'),
         ];
 
         // Create the Authorization header with Basic Authentication
@@ -62,12 +62,12 @@ final class DiscordOAuthApiService implements OAuthApiInterface
         // Get the response content
         $content = json_decode($response->getContent());
 
-        // Retrieve user data from Google OAuth service
+        // Retrieve user data from Discord OAuth service
         return $content->access_token;
     }
 
     /**
-     * Récupére les informations de l'utilisateur Google depuis l'api OAuth2
+     * Récupére les informations de l'utilisateur Discord depuis l'api OAuth2
      *
      * @param string $bearerToken
      * @return array
