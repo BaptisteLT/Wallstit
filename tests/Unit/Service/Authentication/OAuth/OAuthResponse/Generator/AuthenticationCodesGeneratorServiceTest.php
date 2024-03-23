@@ -2,7 +2,6 @@
 
 namespace App\Tests\Unit\Service\Authentication\OAuth\OAuthResponse\Generator;
 
-use Symfony\Component\Uid\Uuid;
 use App\Service\Authentication\OAuth\OAuthSession\OAuthSessionHandlerService;
 use App\Service\Authentication\OAuth\OAuthResponse\Generator\AuthenticationCodesGeneratorService;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
