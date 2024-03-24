@@ -30,7 +30,7 @@ class RefreshTokenEncryptionServiceTest extends KernelTestCase
         $this->assertEquals($value, $decrypted, "Decrypt failed, expected value is '$value'.");
     }
 
-    /*public function testInvalidCypher()
+    public function testInvalidCypher()
     {
         $value = 'token';
 
@@ -40,9 +40,10 @@ class RefreshTokenEncryptionServiceTest extends KernelTestCase
                             ->getMock();
         $opensslMock->expects($this->any())->method('openssl_get_cipher_methods')->willReturn(['invalid_cypher']);
 
-        //$this->expectException(\Exception::class);
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('OpenSSL is not installed or cipher doesn\'t exist.');
 
-        dump($this->refreshTokenEncryptionService->encryptOrDecrypt($value, 'encrypt'));die;
-
-    }*/
+        $this->refreshTokenEncryptionService->setCipher('invalidCypher');
+        $this->refreshTokenEncryptionService->encryptOrDecrypt($value, 'encrypt');
+    }
 }

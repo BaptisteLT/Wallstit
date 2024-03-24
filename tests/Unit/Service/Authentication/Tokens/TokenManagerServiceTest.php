@@ -1,19 +1,10 @@
 <?php
 namespace App\Tests\Unit\Service\Authentication\Tokens;
 
-use DateInterval;
-use App\Entity\User;
-use DateTimeImmutable;
-use App\Entity\Tokens\JwtToken;
-use Symfony\Component\Uid\Uuid;
-use App\Entity\Tokens\RefreshToken;
-use Doctrine\ORM\EntityManagerInterface;
+
 use App\Repository\RefreshTokenRepository;
 use App\Service\Authentication\Tokens\TokenManagerService;
-use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
-use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 class TokenManagerServiceTest extends KernelTestCase
 {

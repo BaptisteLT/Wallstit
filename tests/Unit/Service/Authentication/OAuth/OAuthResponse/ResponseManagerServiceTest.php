@@ -10,6 +10,7 @@ use App\Service\Authentication\Tokens\TokenManagerService;
 use App\Service\Authentication\UserRegistration\UserManagerService;
 use App\Service\Authentication\OAuth\OAuthResponse\ResponseManagerService;
 use App\Service\Authentication\OAuth\OAuthResponse\Generator\UrlGeneratorService;
+use DateTimeImmutable;
 
 class ResponseManagerServiceTest extends KernelTestCase
 {
@@ -43,16 +44,28 @@ class ResponseManagerServiceTest extends KernelTestCase
         $this->assertSame(200, $response->getStatusCode());
     }
 
-    //TODO: 
+    /**
+     * test authenticationResponse()
+     */
     public function testAuthenticationResponse()
     {
-        /*$response = new JsonResponse([
-            'refreshTokenExpiresAt' => $refreshToken->getExpiresAt()->getTimestamp(), 
-            'jwtToken' => $jwtToken->decode()
-        ], 200);
+        $refreshToken = $this->createMock(RefreshToken::class);
+        $refreshToken->expects($this->once())
+                     ->method('getExpiresAt')
+                     ->willReturn(new DateTimeImmutable());
 
-        $response = $this->tokenCookieService->createAuthCookies($jwtToken, $refreshToken, $response);
-        
-        return $response;*/
+        $jwtToken = $this->createMock(JwtToken::class);
+        $jwtToken->expects($this->once())
+                 ->method('decode')
+                 ->willReturn(['someData'=>'someDataValue']);
+
+        $this->tokenCookieServiceMock->expects($this->once())
+                                     ->method('createAuthCookies')
+                                     ->with($jwtToken, $refreshToken, $this->isInstanceOf(JsonResponse::class))
+                                     ->willReturn(new JsonResponse());
+
+        $response = $this->responseManagerService->authenticationResponse($jwtToken, $refreshToken);
+
+        $this->assertInstanceOf(JsonResponse::class, $response);
     }
 }
