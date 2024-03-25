@@ -2,9 +2,6 @@
 namespace App\Tests\Functional\Service\Authentication\Tokens;
 
 use App\Entity\User;
-use App\Entity\Tokens\JwtToken;
-use Doctrine\ORM\EntityManager;
-use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\RefreshTokenRepository;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
