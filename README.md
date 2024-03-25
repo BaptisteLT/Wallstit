@@ -7,6 +7,7 @@ Une application qui vous permet de créer simplement des murs de post-its.
 
 -Copier le .env en .env.local et configurez les variables.
 -Copier le .env.test en .env.test.local et configurez les variables.
+(attention le JWT_PASSPHRASE= doit être le même entre le .env.test.local et le .env.local)
 
 ## Testing
 
