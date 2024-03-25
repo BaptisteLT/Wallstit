@@ -42,6 +42,9 @@ jobs:
         with:
           php_version: 8.1
       
+      - name: Generate JWT key pair
+        run: php bin/console lexik:jwt:generate-keypair
+
       - name: Setup test database
         env:
           DATABASE_URL: mysql://root:rootpassword@127.0.0.1:3307/wallstit_test?serverVersion=10.6.5-MariaDB&charset=utf8mb4

@@ -1,19 +1,11 @@
 <?php
-namespace App\Tests\Unit\Service\Authentication\Tokens;
+namespace App\Tests\Functional\Service\Authentication\Tokens;
 
-use DateInterval;
 use App\Entity\User;
-use DateTimeImmutable;
-use App\Entity\Tokens\JwtToken;
-use Symfony\Component\Uid\Uuid;
-use App\Entity\Tokens\RefreshToken;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\RefreshTokenRepository;
-use App\Service\Authentication\Tokens\TokenManagerService;
-use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
-use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use App\Service\Authentication\Tokens\TokenManagerService;
 
 class TokenManagerServiceTest extends KernelTestCase
 {
@@ -21,47 +13,44 @@ class TokenManagerServiceTest extends KernelTestCase
 
     private RefreshTokenRepository $refreshTokenRepository;
 
+    private EntityManagerInterface $entityManagerInterface;
+
     public function setUp(): void
     {
         $jwtTokenManagerInterface = static::getContainer()->get('lexik_jwt_authentication.jwt_manager');
         $parameterBagInterface = static::getContainer()->get('parameter_bag');
-        $entityManagerInterface = static::getContainer()->get('doctrine.orm.default_entity_manager');
+        $this->entityManagerInterface = static::getContainer()->get('doctrine.orm.default_entity_manager');
         $refreshTokenEncryptionService = static::getContainer()->get('test.RefreshTokenEncryptionService');
 
         $this->refreshTokenRepository = $this->createMock(RefreshTokenRepository::class);
 
-        $this->tokenManagerService = new TokenManagerService($jwtTokenManagerInterface, $parameterBagInterface, $entityManagerInterface, $this->refreshTokenRepository, $refreshTokenEncryptionService);
+        $this->tokenManagerService = new TokenManagerService($jwtTokenManagerInterface, $parameterBagInterface, $this->entityManagerInterface, $this->refreshTokenRepository, $refreshTokenEncryptionService);
     }
 
-    /*public function testGenerateJWTToken(): void
-    {
-        $user = $this->createMock(User::class);
-        
-        $user->method('getId')->willReturn(1);
-        $user->method('getEmail')->willReturn('test@test.fr');
-        
-        $user->method('getUserIdentifier')->willReturn('%s_%s');
-        $user->method('getUsername')->willReturn('ff@@@ff');
-        $user->method('getName')->willReturn('test');
-        //$user->method('getPicture')->willReturn('pic');
+    /**
+     * Test generateJWTToken() avec le JwtCreatedListener
+     *
+     * @return void
+     */
+    public function testGenerateJWTToken(): void
+    {   
+        $user = $this->entityManagerInterface->getRepository(User::class)->findOneBy(['email'=>'test@test.com']);
 
-        //TODO: le pb est que le JwtCreatedListener est triggered donc je pense que le plus simple c'est de faire un test d'intégration
-
-
-
-   
-
+        //A ce moment là, le JwtCreatedListener est triggered et il va rajouter l'image d'avatar
         $jwtToken = $this->tokenManagerService->generateJWTToken($user);
-        
-        dump($jwtToken);die;
-    } */
+        $decodedJwtToken = $jwtToken->decode();
 
+        //Test JWT Header
+        $this->assertSame('JWT', $decodedJwtToken['jwtHeader']->typ);
+        $this->assertSame('RS256', $decodedJwtToken['jwtHeader']->alg);
 
-    /*public function generateJWTToken(User $user): JwtToken
-    {
-        $jwtToken = $this->JWTManager->create($user);
-        return new JwtToken($jwtToken);
-    }*/
+        //Test JWT Payload
+        $this->assertIsInt($decodedJwtToken['jwtPayload']->iat);
+        $this->assertIsInt($decodedJwtToken['jwtPayload']->exp);
+        $this->assertSame('ROLE_USER', $decodedJwtToken['jwtPayload']->roles[0]);
+        $this->assertSame('google@@@89748948918919', $decodedJwtToken['jwtPayload']->username);
+        $this->assertSame('https://website/picture_url.fr', $decodedJwtToken['jwtPayload']->avatarImg);
+    } 
 
 
 
