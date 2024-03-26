@@ -1,11 +1,15 @@
 <?php
 namespace App\Tests\Functional\Service\Authentication\Tokens;
 
+use App\Entity\Tokens\RefreshToken;
 use App\Entity\User;
+use Symfony\Component\Uid\Uuid;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\RefreshTokenRepository;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use App\Service\Authentication\Tokens\TokenManagerService;
+use App\Service\Authentication\Tokens\RefreshTokenEncryptionService;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 class TokenManagerServiceTest extends KernelTestCase
 {
@@ -15,16 +19,20 @@ class TokenManagerServiceTest extends KernelTestCase
 
     private EntityManagerInterface $entityManagerInterface;
 
+    private RefreshTokenEncryptionService $refreshTokenEncryptionServiceMock;
+
+    private ParameterBagInterface $parameterBagInterface;
+
     public function setUp(): void
     {
         $jwtTokenManagerInterface = static::getContainer()->get('lexik_jwt_authentication.jwt_manager');
-        $parameterBagInterface = static::getContainer()->get('parameter_bag');
+        $this->parameterBagInterface = $this->createMock(ParameterBagInterface::class);
         $this->entityManagerInterface = static::getContainer()->get('doctrine.orm.default_entity_manager');
-        $refreshTokenEncryptionService = static::getContainer()->get('test.RefreshTokenEncryptionService');
+        $this->refreshTokenEncryptionServiceMock = $this->createMock(RefreshTokenEncryptionService::class);
 
         $this->refreshTokenRepository = $this->createMock(RefreshTokenRepository::class);
 
-        $this->tokenManagerService = new TokenManagerService($jwtTokenManagerInterface, $parameterBagInterface, $this->entityManagerInterface, $this->refreshTokenRepository, $refreshTokenEncryptionService);
+        $this->tokenManagerService = new TokenManagerService($jwtTokenManagerInterface, $this->parameterBagInterface, $this->entityManagerInterface, $this->refreshTokenRepository, $this->refreshTokenEncryptionServiceMock);
     }
 
     /**
@@ -57,72 +65,83 @@ class TokenManagerServiceTest extends KernelTestCase
 
 
 
-
-
-
-
-
-
-
-
-
-/*
-    public function refreshTokens(string $refreshToken): array
+    /**
+     * test de generateRefreshToken() quand aucun refresh token n'est établi sur User
+     *
+     * @return void
+     */
+    public function testGenerateRefreshTokenWhenNullOnUser(): void
     {
-        $refreshToken = $this->refreshTokenRepository->findOneBy(['value' => $refreshToken]);
-        
-        if(!$refreshToken){
-            throw new UnauthorizedHttpException('Refresh token not found or has expired.');
-        }
-        //Je fais ça pour récupérer le User car sinon User est un proxy et la génération du JWT ne fonctionne pas, je pourrais passer l'entité en Eager mais ça ne serait pas opti pour le reste de l'appli qui récupère User sans avoir besoin de ses propriétés
-        $user = $refreshToken->getUser();
+        $encryptedToken = 'encryptedToken';
 
-        $expiresAtDateTime = $refreshToken->getExpiresAt();
-        $currentDateTime = new DateTimeImmutable('now');
+        $user = new User();
+        $user->setEmail('test@test.com');
+        $user->setRoles(['ROLE_USER', 'ROLE_ADMIN']);
+        $user->setName('Test user');
+        $user->setPicture('https://website/picture_url.fr');
+        $user->setLocale('fr');
+        $user->setOAuth2Provider('google');
+        $user->setOAuth2ProviderId('89748948918919');
 
-        if($expiresAtDateTime < $currentDateTime)
-        {
-            throw new UnauthorizedHttpException('Token has expired.');
-        }
+        //generateRefreshToken(User $user)
+        $this->refreshTokenEncryptionServiceMock->expects($this->once())
+                                                ->method('encryptOrDecrypt')
+                                                ->with($this->isType('string'), 'encrypt')
+                                                ->willReturn($encryptedToken);
 
-        $decryptedToken = $this->refreshTokenEncryptionService->encryptOrDecrypt($refreshToken->getValue(), 'decrypt');
+        $this->parameterBagInterface->expects($this->once())
+                                    ->method('get')
+                                    ->with('refresh.token.expiration.seconds')
+                                    //7 days
+                                    ->willReturn(604800);
 
-        //Si le token a bien été généré et n'est pas égal à false
-        if(!$decryptedToken)
-        {
-            throw new UnauthorizedHttpException('Failed to decrypt refresh token.');
-        }
+        $refreshToken = $this->tokenManagerService->generateRefreshToken($user);
 
-        return [
-            'jwtToken' => $this->generateJWTToken($user), 
-            'refreshToken' => $this->generateRefreshToken($user)
-        ];
+        //Test si le token a bien été inséré en BDD
+        $refreshTokenFromDB = $this->entityManagerInterface->getRepository(RefreshToken::class)->findOneBy(['value' => $encryptedToken]);
+        $this->assertInstanceOf(RefreshToken::class, $refreshTokenFromDB);
+
+        $this->assertSame($refreshToken, $refreshTokenFromDB, 'Le token retourné et celui inséré en base de données ne sont pas équivalents.');
     }
 
-    public function generateRefreshToken(User $user): RefreshToken
+    
+    /**
+     * test de generateRefreshToken() avec update de l'entité RefreshToken associée au User
+     *
+     * @return void
+     */
+    public function testGenerateRefreshTokenWhenNotNullOnUser(): void
     {
-        // Generate a random token
-        $token = (Uuid::v1())->__toString();
-        $encryptedToken = $this->refreshTokenEncryptionService->encryptOrDecrypt($token, 'encrypt');
+        $encryptedToken = 'encryptedToken';
 
-        //Define the expiration date
-        $expirationInSeconds = $this->params->get('refresh.token.expiration.seconds');
-        $expiresAt = (new DateTimeImmutable('now'))->add(DateInterval::createFromDateString($expirationInSeconds.' seconds'));
+        $user = new User();
+        $user->setEmail('test@test.com');
+        $user->setRoles(['ROLE_USER', 'ROLE_ADMIN']);
+        $user->setName('Test user');
+        $user->setPicture('https://website/picture_url.fr');
+        $user->setLocale('fr');
+        $user->setOAuth2Provider('google');
+        $user->setOAuth2ProviderId('89748948918919');
+        $user->setRefreshToken(new RefreshToken);
 
-        //Create the token (or update it with the new value)
-        $refreshToken = $user->getRefreshToken();
-        if(!$refreshToken)
-        {
-            $refreshToken = new RefreshToken();
-            $user->setRefreshToken($refreshToken);
-        }
-        $refreshToken->setValue($encryptedToken)
-                     ->setExpiresAt($expiresAt);
-        
-        $this->em->persist($refreshToken);
-        $this->em->persist($user);
-        $this->em->flush();
+        //generateRefreshToken(User $user)
+        $this->refreshTokenEncryptionServiceMock->expects($this->once())
+                                                ->method('encryptOrDecrypt')
+                                                ->with($this->isType('string'), 'encrypt')
+                                                ->willReturn($encryptedToken);
 
-        return $refreshToken;
-    }*/
+        $this->parameterBagInterface->expects($this->once())
+                                    ->method('get')
+                                    ->with('refresh.token.expiration.seconds')
+                                    //7 days
+                                    ->willReturn(604800);
+
+        $refreshToken = $this->tokenManagerService->generateRefreshToken($user);
+
+        //Test si le token a bien été inséré en BDD
+        $refreshTokenFromDB = $this->entityManagerInterface->getRepository(RefreshToken::class)->findOneBy(['value' => $encryptedToken]);
+        $this->assertInstanceOf(RefreshToken::class, $refreshTokenFromDB);
+
+        $this->assertSame($refreshToken, $refreshTokenFromDB, 'Le token retourné et celui inséré en base de données ne sont pas équivalents.');
+    }
 }

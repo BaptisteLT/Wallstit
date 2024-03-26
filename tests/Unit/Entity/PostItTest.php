@@ -20,7 +20,6 @@ class PostItTest extends EntityValidator
         $postIt->setWall(new Wall());
         $postIt->setSize('small');
         $postIt->setDeadline(new DateTimeImmutable());
-        //TODO test get de tous les getters
       
         return $postIt;
     }
