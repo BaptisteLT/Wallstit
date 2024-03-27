@@ -1,10 +1,8 @@
 <?php
 namespace App\Tests\Unit\Service\Authentication\Tokens;
 
-use Exception;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use App\Service\Authentication\Tokens\RefreshTokenEncryptionService;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 class RefreshTokenEncryptionServiceTest extends KernelTestCase
 {

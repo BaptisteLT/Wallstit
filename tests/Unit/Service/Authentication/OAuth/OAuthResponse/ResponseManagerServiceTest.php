@@ -6,8 +6,6 @@ use App\Entity\Tokens\RefreshToken;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use App\Service\Authentication\Tokens\TokenCookieService;
-use App\Service\Authentication\Tokens\TokenManagerService;
-use App\Service\Authentication\UserRegistration\UserManagerService;
 use App\Service\Authentication\OAuth\OAuthResponse\ResponseManagerService;
 use App\Service\Authentication\OAuth\OAuthResponse\Generator\UrlGeneratorService;
 use DateTimeImmutable;

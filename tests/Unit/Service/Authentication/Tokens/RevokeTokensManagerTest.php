@@ -1,14 +1,12 @@
 <?php
 namespace App\Tests\Unit\Service\Authentication\Tokens;
 
-use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use App\Service\Authentication\Tokens\RevokeTokensManager;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-class RevokeTokensManagerTest extends WebTestCase
+class RevokeTokensManagerTest extends KernelTestCase
 {
     private RevokeTokensManager $revokeTokensManager;
 
@@ -17,47 +15,32 @@ class RevokeTokensManagerTest extends WebTestCase
         $this->revokeTokensManager = new RevokeTokensManager();
     }
 
-    /*function revokeAuthTokens(Response $response)
+    function revokeAuthTokens(Response $response)
     {
         $response->headers->clearCookie('jwtToken');
         $response->headers->clearCookie('refreshToken');
         $response->headers->clearCookie('PHPSESSID');
 
         return $response;
-    }*/
+    }
 
-    /*function testRevokeAuthTokens()
+    function testRevokeAuthTokens()
     {
-        // Create a client for making requests
-        $client = static::createClient();
+        $headers = $this->createMock(ResponseHeaderBag::class);
+        $headers->expects($this->exactly(3))
+        ->method('clearCookie')
+        ->willReturnCallback(
+            fn ($key) => match ($key) {
+                'jwtToken' => null,
+                'refreshToken' => null,
+                'PHPSESSID' => null,
+                default => throw new \InvalidArgumentException("Unexpected key: $key")
+            }
+        );
 
-        $client->getCookieJar()->set(new \Symfony\Component\BrowserKit\Cookie('jwtToken', 'someValue'));
-        $client->getCookieJar()->set(new \Symfony\Component\BrowserKit\Cookie('refreshToken', 'someValue'));
-        $client->getCookieJar()->set(new \Symfony\Component\BrowserKit\Cookie('PHPSESSID', 'someValue'));
-        
-        // Make a request to a specific URL
-        $crawler = $client->request('GET', '/');
+        $response = $this->createMock(Response::class);
+        $response->headers = $headers;
 
-        // Get the response object
-        $response = $client->getResponse();
-
-
-
-        /*$response = $this->createMock(Response::class);
-        $response->headers = new ResponseHeaderBag;
-        $response->headers->setCookie(new Cookie('jwtToken', 'someValue'));
-        $response->headers->setCookie(new Cookie('refreshToken', 'someValue'));
-        $response->headers->setCookie(new Cookie('PHPSESSID', 'someValue'));*/
-        
-        //$this->assertCount(3, $response->headers->getCookies());
-  
-        /*$newResponse = $this->revokeTokensManager->revokeAuthTokens($response);
-        
-
-        dump($client->getCookieJar()->all());die;
-
-        dump($newResponse);die;
-
-        
-    }*/
+        $this->revokeTokensManager->revokeAuthTokens($response);
+    }
 }

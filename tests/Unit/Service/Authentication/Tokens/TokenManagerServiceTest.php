@@ -44,8 +44,6 @@ class TokenManagerServiceTest extends KernelTestCase
     }
 
 
-    //TODO: UnauthorizedHttpException('Failed to decrypt refresh token.');
-
     public function testRefreshTokens()
     {
         $refreshTokenValue = 'someRefreshTokenValue';
