@@ -1,21 +1,59 @@
 version: '3'
 
-services:
-###> doctrine/doctrine-bundle ###
-  database:
-    image: postgres:${POSTGRES_VERSION:-15}-alpine
-    environment:
-      POSTGRES_DB: ${POSTGRES_DB:-app}
-      # You should definitely change the password in production
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-!ChangeMe!}
-      POSTGRES_USER: ${POSTGRES_USER:-app}
-    volumes:
-      - database_data:/var/lib/postgresql/data:rw
-      # You may use a bind-mounted host directory instead, so that it is harder to accidentally remove the volume and lose all your data!
-      # - ./docker/db/data:/var/lib/postgresql/data:rw
-###< doctrine/doctrine-bundle ###
+networks:
+  nginx-php81-mariadb106-adminer:
 
-volumes:
-###> doctrine/doctrine-bundle ###
-  database_data:
-###< doctrine/doctrine-bundle ###
+services:
+  nginx-service:
+    image: nginx:stable-alpine
+    container_name: nginx-container
+    ports:
+      - "8081:80"
+    volumes:
+      #Ici on copie toute l'application symfony vers /var/www/project dans le conteneur
+      - .:/var/www/project
+      #Ici ./nginx/default.conf est un chemin et non un nom
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      #On dit que php et mariadb doivent démarrer avant le service nginx
+      - php81-service
+      - mariadb106-service
+    networks:
+      - nginx-php81-mariadb106-adminer
+  
+  php81-service:
+    build:
+      context: .
+      dockerfile: ./php/Dockerfile
+    container_name: php81-container
+    ports:
+      - "9000:9000"
+    volumes:
+      #.fait référence au projet
+      - .:/var/www/project
+    networks:
+      - nginx-php81-mariadb106-adminer
+
+  mariadb106-service:
+    image: mariadb:10.6
+    restart: always
+    container_name: mariadb106-container
+    volumes:
+      #Ici mariadb est juste un nom
+      - ./mariadb:/var/lib/mariadb
+    environment:
+      MARIADB_ROOT_PASSWORD: root
+    networks:
+      - nginx-php81-mariadb106-adminer
+
+  adminer-service:
+    image: adminer
+    restart: always
+    container_name: adminer-container
+    ports:
+      - 9090:8080
+    networks:
+      - nginx-php81-mariadb106-adminer
+
+
+

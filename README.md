@@ -48,3 +48,5 @@ JWT_PUBLIC_KEY=%kernel.project_dir%/config/jwt/public.pem
 JWT_PASSPHRASE=YOUR_STRONG_PASSPHRASE
 ###< lexik/jwt-authentication-bundle ###
 
+Puis executer la commande suivante pour générer les clés: php bin/console lexik:jwt:generate-keypair
+
