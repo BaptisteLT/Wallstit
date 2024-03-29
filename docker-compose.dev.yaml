@@ -1,7 +1,7 @@
 version: '3'
 
 networks:
-  nginx-php81-mariadb106-adminer:
+  nginx-php81-mariadb106-adminer-node:
 
 services:
   nginx-service:
@@ -19,7 +19,7 @@ services:
       - php81-service
       - mariadb106-service
     networks:
-      - nginx-php81-mariadb106-adminer
+      - nginx-php81-mariadb106-adminer-node
   
   php81-service:
     build:
@@ -32,7 +32,7 @@ services:
       #.fait référence au projet
       - .:/var/www/project
     networks:
-      - nginx-php81-mariadb106-adminer
+      - nginx-php81-mariadb106-adminer-node
 
   mariadb106-service:
     image: mariadb:10.6
@@ -44,7 +44,7 @@ services:
     environment:
       MARIADB_ROOT_PASSWORD: root
     networks:
-      - nginx-php81-mariadb106-adminer
+      - nginx-php81-mariadb106-adminer-node
 
   adminer-service:
     image: adminer
@@ -53,7 +53,14 @@ services:
     ports:
       - 9090:8080
     networks:
-      - nginx-php81-mariadb106-adminer
+      - nginx-php81-mariadb106-adminer-node
 
-
+  node-service:
+    image: node:latest
+    container_name: node-container
+    volumes: 
+      - .:/var/www/project
+    working_dir: /var/www/project
+    networks:
+      - nginx-php81-mariadb106-adminer-node
 

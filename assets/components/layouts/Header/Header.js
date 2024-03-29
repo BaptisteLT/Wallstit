@@ -7,7 +7,7 @@ import Separator from '../../layouts/Header/Separator';
 import NavigationLink from './NavigationLink';
 import AccountMenu from './AccountMenu';
 
-import '../../../styles/header/header.css';
+import '../../../styles/Header/header.css';
 import RoleChecker from '../../RoleChecker';
 
 

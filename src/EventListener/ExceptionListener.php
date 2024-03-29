@@ -30,6 +30,7 @@ class ExceptionListener
             $response->headers->replace($exception->getHeaders());
             $response->setData(['error' => $exception->getMessage()]);
         } else {
+            //dump($exception->getMessage());die;
             $response->setStatusCode(JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
             $response->setData(['error' => 'Internal server error.']);
             $this->logger->error($exception->getMessage());

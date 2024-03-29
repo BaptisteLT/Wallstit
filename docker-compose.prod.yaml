@@ -1,0 +1,78 @@
+version: '3'
+
+networks:
+  nginx-php81-mariadb106-adminer-node:
+
+services:
+  nginx-service:
+    image: nginx:stable-alpine
+    container_name: nginx-container
+    ports:
+      - "8081:80"
+    volumes:
+      #Ici on copie toute l'application symfony vers /var/www/project dans le conteneur
+      - .:/var/www/project
+      #Ici ./nginx/default.conf est un chemin et non un nom
+      - ./nginx/default.prod.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      #On dit que php et mariadb doivent démarrer avant le service nginx
+      - php81-service
+      - mariadb106-service
+    networks:
+      - nginx-php81-mariadb106-adminer-node
+  
+  php81-service:
+    volumes:
+    
+      - /var/www/project/node_modules
+      #Permet de préserver vendor, autrement il serait écrasé
+      - /var/www/project/vendor
+      #.fait référence au projet
+      - .:/var/www/project
+    build:
+      context: .
+      dockerfile: ./php/Dockerfile
+    container_name: php81-container
+    ports:
+      - "9000:9000"
+    networks:
+      - nginx-php81-mariadb106-adminer-node
+    #command: composer install --no-dev --optimize-autoloader --no-interaction
+
+  mariadb106-service:
+    image: mariadb:10.6
+    restart: always
+    container_name: mariadb106-container
+    volumes:
+      - ./mariadb:/var/lib/mariadb
+    environment:
+      MARIADB_ROOT_PASSWORD: root
+    networks:
+      - nginx-php81-mariadb106-adminer-node
+
+  adminer-service:
+    image: adminer
+    restart: always
+    container_name: adminer-container
+    ports:
+      - 9090:8080
+    networks:
+      - nginx-php81-mariadb106-adminer-node
+
+  #node-service:
+    #image: node:latest
+    #container_name: node-container
+    #environment:
+    #  - NODE_ENV=production
+    #volumes: 
+      #- /var/www/project/public/build
+      #Permet de préserver le dossier node_modules afin qu'il ne soit pas écrasé
+      #- /var/www/project/node_modules
+      #- .:/var/www/project
+    #build:
+      #context: .
+      #dockerfile: ./node/Dockerfile
+    #working_dir: /var/www/project
+    #networks:
+      #- nginx-php81-mariadb106-adminer-node
+

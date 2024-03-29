@@ -50,3 +50,21 @@ JWT_PASSPHRASE=YOUR_STRONG_PASSPHRASE
 
 Puis executer la commande suivante pour générer les clés: php bin/console lexik:jwt:generate-keypair
 
+### Mise en prod
+
+Cloner le projet sur la machine (idéalement dans /var/www/) avec git: clone https://github.com/BaptisteLT/Wallstit
+Une fois le projet installé il faudra créer un .env.local et mettre en mode prod
+
+Installer docker sur le serveur Linux (https://docs.docker.com/engine/install/debian/)
+Ensuite run: docker-compose -f docker-compose.prod.yaml up -d --build
+
+Puis installer les dépendances PHP en faisant les commandes suivantes:
+1) docker-compose -f docker-compose.prod.yaml exec php81-service /bin/bash
+2) cd ..
+3) cd project
+4) composer install
+
+Puis installer les packages et build le javascript:
+docker-compose -f docker-compose.prod.yaml run --rm node-service npm install --production
+et 
+docker-compose -f docker-compose.prod.yaml run --rm node-service npm run build
