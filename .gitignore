@@ -34,3 +34,7 @@ yarn-error.log
 ###> lexik/jwt-authentication-bundle ###
 /config/jwt/*.pem
 ###< lexik/jwt-authentication-bundle ###
+
+###> Docker Lets encrypt ###
+certbot/
+###< Docker Lets encrypt ###
