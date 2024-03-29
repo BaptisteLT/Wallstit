@@ -58,12 +58,11 @@ Une fois le projet installé il faudra créer un .env.local et mettre en mode pr
 Installer docker sur le serveur Linux (https://docs.docker.com/engine/install/debian/)
 Ensuite run: docker-compose -f docker-compose.prod.yaml up -d --build
 
-Puis installer les dépendances PHP en faisant les commandes suivantes:
-1) docker-compose -f docker-compose.prod.yaml exec php81-service /bin/bash
-2) cd ..
-3) cd project
-4) composer install
+Les dépendances composer, npm seront déjà installées, et le Javascript sera build.
 
+Pour le certificat SSL il faut executer la commande:
+docker-compose -f docker-compose.prod.yaml run --rm certbot certonly --webroot --webroot-path /var/www/certbot/ --dry-run -d wallstit.com
+(enlever le --dry-run si il n'y a pas de message d'erreur)
 Puis installer les packages et build le javascript:
 docker-compose -f docker-compose.prod.yaml run --rm node-service npm install --production
 et 
