@@ -8,7 +8,8 @@ services:
     image: nginx:stable-alpine
     container_name: nginx-container
     ports:
-      - "80:80"
+      #Vu que j'ai apache2 qui tourne déjà sur le port 80, je vais forwarder wallstit.com depuis apache2 vers le port 8081
+      - "8081:80"
     volumes:
       #Ici on copie toute l'application symfony vers /var/www/project dans le conteneur
       - .:/var/www/project
