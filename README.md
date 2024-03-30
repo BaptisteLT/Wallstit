@@ -50,20 +50,43 @@ JWT_PASSPHRASE=YOUR_STRONG_PASSPHRASE
 
 Puis executer la commande suivante pour générer les clés: php bin/console lexik:jwt:generate-keypair
 
-### Mise en prod
+# Mise en prod
 
-Cloner le projet sur la machine (idéalement dans /var/www/) avec git: clone https://github.com/BaptisteLT/Wallstit
-Une fois le projet installé il faudra créer un .env.local et mettre en mode prod
+## Clone du projet et configuration
 
-Installer docker sur le serveur Linux (https://docs.docker.com/engine/install/debian/)
-Ensuite run: docker-compose -f docker-compose.prod.yaml up -d --build
+1) Cloner le projet sur la machine (idéalement dans /var/www/) avec: git clone https://github.com/BaptisteLT/Wallstit
+2) Une fois le projet installé il faudra créer un .env.local et mettre en mode prod
 
-Les dépendances composer, npm seront déjà installées, et le Javascript sera build.
+## Installation de docker
+
+1) Installer docker sur le serveur Linux (https://docs.docker.com/engine/install/debian/)
+2) Ensuite run: docker-compose -f docker-compose.prod.yaml up -d --build
+Les dépendances composer et npm seront déjà installées dans le build docker, et les assets du projets auront été automatiquement build.
+
+
+
+## Redirection de Wallstit.com:80 depuis Apache vers le port 8081
+
+1) Ajouter la configuration suivante pour rediriger les requêtes depuis apache vers le service nginx sur le port 8081 (car Apache a déjà le port 80 attribué):
+
+#/etc/apache2/sites-available/wallstit-reverse-proxy.conf
+<VirtualHost *:80>
+    ServerAdmin webmaster@wallstit.com
+    ServerName wallstit.com
+    ProxyPass / http://127.0.0.1:8081/
+    ProxyPassReverse / http://127.0.0.1:8081/
+</VirtualHost>
+
+2) Activer la configuration apache avec la commande afin de passer dans sites-enabled: a2ensite wallstit-reverse-proxy.conf
+
+## Certificat SSL
+
 
 Pour le certificat SSL il faut executer la commande:
 docker-compose -f docker-compose.prod.yaml run --rm certbot certonly --webroot --webroot-path /var/www/certbot/ --dry-run -d wallstit.com
 (enlever le --dry-run si il n'y a pas de message d'erreur)
-Puis installer les packages et build le javascript:
-docker-compose -f docker-compose.prod.yaml run --rm node-service npm install --production
-et 
-docker-compose -f docker-compose.prod.yaml run --rm node-service npm run build
+
+TODO: optimiser les packages en prod et le build
+TODO: mettre en place lets-encrypt
+TODO: Config la base de données
+TODO: Mettre le droit d'écriture sur le cache et les logs
