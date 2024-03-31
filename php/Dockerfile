@@ -79,5 +79,8 @@ WORKDIR /var/www/project
 # Copy package.json and package-lock.json
 COPY package*.json ./
 
+#On installe dans un premier temps tous les packages, même ceux de dev car on a besoin de encore pour le build
 RUN npm install
 RUN npm run build
+#Puis une fois que le build est fait on remet les packages de prod
+RUN npm install --production
