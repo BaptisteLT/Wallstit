@@ -38,6 +38,8 @@ RUN mkdir -p /var/www/project/var/cache /var/www/project/var/log && \
     chown -R www-data:www-data /var/www/project/var && \
     chmod -R 775 /var/www/project/var
 
+# RUN chmod -R 777 var
+
 
 # Copy startup script to set permissions
 #COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
@@ -83,4 +85,4 @@ COPY package*.json ./
 RUN npm install
 RUN npm run build
 #Puis une fois que le build est fait on remet les packages de prod
-RUN npm install --production
+#RUN npm install --production
