@@ -89,4 +89,3 @@ docker-compose -f docker-compose.prod.yaml run --rm certbot certonly --webroot -
 TODO: optimiser les packages en prod et le build
 TODO: mettre en place lets-encrypt
 TODO: Config la base de données
-TODO: Mettre le droit d'écriture sur le cache et les logs
