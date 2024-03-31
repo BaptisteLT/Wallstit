@@ -34,6 +34,8 @@ services:
   php81-service:
     volumes:  
       # Permet de présever var afin qu'il ne soit pas supprimé
+      - /var/www/project/public/build
+      # Permet de présever var afin qu'il ne soit pas supprimé
       - /var/www/project/var
       # Permet de présever node_modules afin qu'ils ne soient pas supprimés à la fin du build dans le Dockerfile
       - /var/www/project/node_modules
