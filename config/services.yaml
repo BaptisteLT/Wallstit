@@ -62,7 +62,9 @@ services:
             - { name: kernel.event_listener, event: lexik_jwt_authentication.on_jwt_created, method: onJWTCreated }
 
 
-
+    
+    App\Service\Authentication\Tokens\TokenCookieService:
+        autowire: true
     #App\Service\Authentication\OAuth\OAuthAuthenticationService:
     #    autowire: true
 
