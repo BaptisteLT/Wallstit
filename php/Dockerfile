@@ -25,28 +25,11 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 RUN wget https://get.symfony.com/cli/installer -O - | bash && \
     mv /root/.symfony5/bin/symfony /usr/local/bin/symfony
 
-# Set correct permissions for the var directory
-#RUN mkdir -p var/cache var/logs && \
-#    chmod -R 755 var && \
-#    chmod -R 777 var/cache var/logs
-
-# Copy application files
 COPY . .
-
 
 RUN mkdir -p /var/www/project/var/cache /var/www/project/var/log && \
     chown -R www-data:www-data /var/www/project/var && \
     chmod -R 775 /var/www/project/var
-
-# RUN chmod -R 777 var
-
-
-# Copy startup script to set permissions
-#COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
-#RUN chmod +x /usr/local/bin/docker-entrypoint.sh
-
-# Set entrypoint
-#ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 
 
 ENV COMPOSER_ALLOW_SUPERUSER=1
@@ -58,22 +41,20 @@ RUN composer dump-autoload --optimize --no-dev
 # Initialize Symfony application (create cache and logs directories)
 RUN php bin/console cache:clear --no-debug --env=prod
 
-#fonctiuonne:  docker-compose -f docker-compose.prod.yaml exec php81-service /bin/bash
-#puis chmod -R 777 var 
-#TODO: mettre dans un script avec aussi php bin/console cache:clear et composer install --no-dev --optimize-autoloader --no-interaction
 
-
-
-
-
-
-
-
-
-
-####INSTALLATION DES DEPENDANCES JS ET BUILD DU JS#####
+####INSTALLING DEPENDENCIES JS AND BUILD JS ASSETS#####
 # Install Node.js and npm
-RUN apt-get update && apt-get install -yqq nodejs npm
+#RUN apt-get update && apt-get install -yqq nodejs npm
+ENV NODE_VERSION=20.11.0
+RUN apt install -y curl
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
+ENV NVM_DIR=/root/.nvm
+RUN . "$NVM_DIR/nvm.sh" && nvm install ${NODE_VERSION}
+RUN . "$NVM_DIR/nvm.sh" && nvm use v${NODE_VERSION}
+RUN . "$NVM_DIR/nvm.sh" && nvm alias default v${NODE_VERSION}
+ENV PATH="/root/.nvm/versions/node/v${NODE_VERSION}/bin/:${PATH}"
+RUN node --version
+RUN npm --version
 
 # Définit le répertoire de travail dans le conteneur
 WORKDIR /var/www/project
