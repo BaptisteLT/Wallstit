@@ -38,7 +38,7 @@ RUN composer install --no-dev --optimize-autoloader --no-interaction
 
 RUN composer dump-autoload --optimize --no-dev
 
-# Initialize Symfony application (create cache and logs directories)
+# Initialize Symfony application
 RUN php bin/console cache:clear --no-debug --env=prod
 
 
