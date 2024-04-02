@@ -64,7 +64,6 @@ class GoogleOAuthController extends AbstractController
         catch(\Exception $e)
         {
             //TODO: log $e
-            //dump($e);die;
             throw new \Exception('An error occurred during the OAuth authentication.');
         }
 
