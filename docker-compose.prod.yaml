@@ -7,6 +7,7 @@ services:
   nginx-service:
     image: nginx:stable-alpine
     container_name: nginx-container
+    restart: always
     ports:
       #Vu que j'ai apache2 qui tourne déjà sur le port 80, je vais forwarder wallstit.com depuis apache2 vers le port 8081
       - "8081:80"
@@ -49,6 +50,7 @@ services:
       context: .
       dockerfile: ./php/Dockerfile
     container_name: php81-container
+    restart: always
     ports:
       - "9000:9000"
     networks:
