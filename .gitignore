@@ -37,4 +37,7 @@ yarn-error.log
 
 ###> Docker Lets encrypt ###
 certbot/
-###< Docker Lets encrypt ###
+###< Docker Lets encrypt ####
+
+#Docker log
+database_create.log
