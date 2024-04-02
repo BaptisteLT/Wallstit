@@ -59,7 +59,7 @@ services:
     working_dir: /var/www/project
     # Génère la base de données, lance les migrations et crée le private et public JWT
     command: >
-      /bin/bash -c "php bin/console doctrine:database:create --if-not-exists && php bin/console doctrine:migrations:migrate > /var/www/project/database_create.log 2>&1 && php-fpm"
+      /bin/bash -c "([ ! -f config/jwt/private.pem ] && [ ! -f config/jwt/public.pem ] && php bin/console lexik:jwt:generate-keypair --overwrite) || true && php bin/console doctrine:database:create --if-not-exists && php bin/console doctrine:migrations:migrate > /var/www/project/database_create.log 2>&1 && php-fpm"
 
   mariadb106-service:
     image: mariadb:10.6
