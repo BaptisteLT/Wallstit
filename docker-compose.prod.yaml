@@ -57,10 +57,14 @@ services:
       #On dit que php et mariadb doivent démarrer avant le service nginx
       - mariadb106-service
     working_dir: /var/www/project
+    #CMD: ["php", "bin/console", "doctrine:database:create"]
     command: >
-      /bin/bash -c "php bin/console doctrine:database:create && php bin/console doctrine:migrations:migrate && php-fpm"
+      /bin/bash -c "php bin/console doctrine:database:create --if-not-exists && php bin/console doctrine:migrations:migrate > /var/www/project/database_create.log 2>&1 && php-fpm"
+    #command: >
+    #  /bin/bash -c "php bin/console doctrine:database:create && php bin/console doctrine:migrations:migrate"
     #command: composer install --no-dev --optimize-autoloader --no-interaction 
     #/bin/bash -c "php bin/console doctrine:database:create > /var/www/project/database_create.log 2>&1 && php-fpm"
+    #/bin/bash -c "php bin/console doctrine:database:create && php bin/console doctrine:migrations:migrate && php-fpm"
 
   mariadb106-service:
     image: mariadb:10.6
