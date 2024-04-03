@@ -73,9 +73,25 @@ Les dépendances composer et npm seront déjà installées dans le build docker,
 <VirtualHost *:80>
     ServerAdmin webmaster@wallstit.com
     ServerName wallstit.com
-    ProxyPass / http://127.0.0.1:8081/
-    ProxyPassReverse / http://127.0.0.1:8081/
+    Redirect permanent / https://wallstit.com/
+    #ProxyPass / http://127.0.0.1:444/
+    #ProxyPassReverse / http://127.0.0.1:444/
 </VirtualHost>
+
+<VirtualHost *:443>
+    ServerAdmin webmaster@wallstit.com
+    ServerName wallstit.com
+
+    # SSL configuration
+    SSLEngine on
+    SSLCertificateFile /var/www/Wallstit/certbot/conf/live/wallstit.com/cert.pem
+    SSLCertificateKeyFile /var/www/Wallstit/certbot/conf/live/wallstit.com/privkey.pem
+    SSLCertificateChainFile /var/www/Wallstit/certbot/conf/live/wallstit.com/chain.pem
+
+    ProxyPass / http://127.0.0.1:444/
+    ProxyPassReverse / http://127.0.0.1:444/
+</VirtualHost>
+
 
 2) Activer la configuration apache avec la commande afin de passer dans sites-enabled: a2ensite wallstit-reverse-proxy.conf
 

@@ -11,6 +11,7 @@ services:
     ports:
       #Vu que j'ai apache2 qui tourne déjà sur le port 80, je vais forwarder wallstit.com depuis apache2 vers le port 8081
       - "8081:80"
+      - "444:443"
     volumes:
       - js_build:/var/www/project/public/build  # Use the js_build volume
       #Ici on copie toute l'application symfony vers /var/www/project dans le conteneur
@@ -18,7 +19,8 @@ services:
       #Ici ./nginx/default.conf est un chemin et non un nom
       - ./nginx/default.prod.conf:/etc/nginx/conf.d/default.conf
       #Pour lets encrypt
-      - ./certbot/www/:/var/www/certbot/:ro
+      - ./certbot/conf/:/etc/letsencrypt/:ro
+
 
     depends_on:
       #On dit que php et mariadb doivent démarrer avant le service nginx
