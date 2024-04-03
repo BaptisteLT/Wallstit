@@ -28,7 +28,7 @@ services:
       - mariadb106-service
     networks:
       - nginx-php81-mariadb106-adminer-node
-  
+
   #Lets encrypt, tutorial suivi: https://phoenixnap.com/kb/letsencrypt-docker
   certbot:
     image: certbot/certbot:latest
@@ -37,7 +37,7 @@ services:
       - ./certbot/conf/:/etc/letsencrypt/:rw
 
   php81-service:
-    volumes:  
+    volumes:
       # Permet de présever var afin qu'il ne soit pas supprimé
       - js_build:/var/www/project/public/build
       # Permet de présever var afin qu'il ne soit pas supprimé
