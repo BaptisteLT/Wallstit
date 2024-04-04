@@ -108,5 +108,3 @@ services:
 volumes:
   js_build:
   mariadb_data:
-    #Il faudra le créer avec: docker volume create mariadb_data
-    external: true
