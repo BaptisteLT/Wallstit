@@ -108,3 +108,4 @@ services:
 volumes:
   js_build:
   mariadb_data:
+    external: true
