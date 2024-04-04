@@ -72,7 +72,7 @@ services:
     ports:
       - "3307:3306"
     volumes:
-      - ./mariadb:/var/lib/mariadb
+      - mariadb_data:/var/lib/mariadb
     environment:
       MARIADB_ROOT_PASSWORD: root
     networks:
@@ -107,3 +107,4 @@ services:
 
 volumes:
   js_build:
+  mariadb_data:
