@@ -190,21 +190,21 @@ class PostItController extends AbstractController
     }
 
 
-        //suppression
-        #[Route('/post-it/delete/{uuid}', name: 'delete-post-it', methods: ['DELETE'])]
-        public function deletePostIt(string $uuid, Request $request): JsonResponse
+    //suppression
+    #[Route('/post-it/delete/{uuid}', name: 'delete-post-it', methods: ['DELETE'])]
+    public function deletePostIt(string $uuid, Request $request): JsonResponse
+    {
+        $user = $this->tokenCookieService->findUserInRequest($request);
+
+        $postIt = $this->postItRepository->findOneByUserAndUuid($user->getId(), $uuid);
+
+        if(!$postIt)
         {
-            $user = $this->tokenCookieService->findUserInRequest($request);
-    
-            $postIt = $this->postItRepository->findOneByUserAndUuid($user->getId(), $uuid);
-    
-            if(!$postIt)
-            {
-                throw new NotFoundHttpException('Post-it not found.');
-            }
-            $this->em->remove($postIt);
-            $this->em->flush();
-    
-            return new JsonResponse('ok', Response::HTTP_OK);
+            throw new NotFoundHttpException('Post-it not found.');
         }
+        $this->em->remove($postIt);
+        $this->em->flush();
+
+        return new JsonResponse('ok', Response::HTTP_OK);
+    }
 }
