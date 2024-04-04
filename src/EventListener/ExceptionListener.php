@@ -1,4 +1,5 @@
 <?php
+
 namespace App\EventListener;
 
 use Psr\Log\LoggerInterface;
@@ -29,14 +30,41 @@ class ExceptionListener
             $response->setStatusCode($exception->getStatusCode());
             $response->headers->replace($exception->getHeaders());
             $response->setData(['error' => $exception->getMessage()]);
-        } else {
-            //dump($exception->getMessage());die;
+            // sends the modified response object to the event
+            $event->setResponse($response);
+        } 
+        elseif ($this->isWarning($exception)) 
+        {
+            $response->setStatusCode(JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+            $response->setData(['error' => 'Internal server error due to a PHP warning.']);
+            $this->logger->warning($exception->getMessage());
+        } 
+        else 
+        {
             $response->setStatusCode(JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
             $response->setData(['error' => 'Internal server error.']);
             $this->logger->error($exception->getMessage());
+            // sends the modified response object to the event
+            $event->setResponse($response);
         }
+    }
 
-        // sends the modified response object to the event
-        $event->setResponse($response);
+    /**
+     * Check if the exception is a PHP warning.
+     *
+     * @param \Throwable $exception
+     * @return bool
+     */
+    private function isWarning(\Throwable $exception): bool
+    {
+        $warningCodes = [
+            E_WARNING,
+            E_CORE_WARNING,
+            E_COMPILE_WARNING,
+            E_USER_WARNING,
+            E_RECOVERABLE_ERROR
+        ];
+
+        return in_array($exception->getCode(), $warningCodes, true);
     }
 }
