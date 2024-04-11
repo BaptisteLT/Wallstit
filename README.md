@@ -55,7 +55,8 @@ Puis executer la commande suivante pour générer les clés: php bin/console lex
 ## Clone du projet et configuration
 
 1) Cloner le projet sur la machine (idéalement dans /var/www/) avec: git clone https://github.com/BaptisteLT/Wallstit
-2) Une fois le projet installé il faudra créer un .env.local et mettre en mode prod
+2) Une fois le projet installé il faudra créer un .env.local et mettre en mode prod et bien mettre TEST_USE_SAVEPOINTS=true (pour éviter une dépréciation)
+
 
 ## Installation de docker
 
