@@ -9,6 +9,7 @@ header{
     z-index: 3;
     position: relative;
     background: white;
+    overflow-x: auto;
 }
 
 header > nav{
@@ -17,7 +18,10 @@ header > nav{
     justify-content: space-between;
     align-items: center;
     margin: 0px 20px;
-    
+}
+
+header > nav > div:nth-child(2){
+    margin-left: 20px;
 }
 
 header > nav > div{
