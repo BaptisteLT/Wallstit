@@ -107,4 +107,5 @@ services:
 
 volumes:
   js_build:
+    external: false
   mariadb_data:
