@@ -1,4 +1,10 @@
-#gitHubLogo {
+@media screen and (max-width: 770px) {
+    .gitHubLogo_wrapper {
+        display: none !important;
+    }
+}
+
+.gitHubLogo {
     height: 20px;
 }
 
