@@ -56,6 +56,8 @@ Puis executer la commande suivante pour générer les clés: php bin/console lex
 
 1) Cloner le projet sur la machine (idéalement dans /var/www/) avec: git clone https://github.com/BaptisteLT/Wallstit
 2) Une fois le projet installé il faudra créer un .env.local et mettre en mode prod et bien mettre TEST_USE_SAVEPOINTS=true (pour éviter une dépréciation)
+3) Mettre la connexion à la base de données en utilisant le service mariadb: 
+DATABASE_URL="mysql://root:root@mariadb106-container:3306/wallstit?serverVersion=10.6.5-MariaDB&charset=utf8mb4"
 
 
 ## Installation de docker
