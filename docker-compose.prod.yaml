@@ -19,7 +19,7 @@ services:
       #Ici ./nginx/default.conf est un chemin et non un nom
       - ./nginx/default.prod.conf:/etc/nginx/conf.d/default.conf
       #Pour lets encrypt
-      #- ./certbot/conf/:/etc/letsencrypt/:ro
+      - ./certbot/www/:/var/www/certbot/:ro
 
 
     depends_on:
@@ -30,11 +30,12 @@ services:
       - nginx-php81-mariadb106-adminer-node
 
   #Lets encrypt, tutorial suivi: https://phoenixnap.com/kb/letsencrypt-docker
-  #certbot:
-  #  image: certbot/certbot:latest
-  #  volumes:
-  #    - ./certbot/www/:/var/www/certbot/:rw
-  #    - ./certbot/conf/:/etc/letsencrypt/:rw
+  certbot:
+    image: certbot/certbot:latest
+    volumes:
+      - ./certbot/www/:/var/www/certbot/:rw
+      - ./certbot/conf/:/etc/letsencrypt/:rw
+
 
   php81-service:
     volumes:
